@@ -251,6 +251,10 @@ public Set getFormat(Record record){
     // check the Leader at position 7
     leaderBit = leader.charAt(7);
     switch (Character.toUpperCase(leaderBit)) {
+        // Article
+        case 'A':
+            result.add("Article");
+            break;
         // Monograph
         case 'M':
             if (formatCode == 'C') {
