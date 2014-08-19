@@ -1,0 +1,277 @@
+import org.marc4j.marc.Record;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.*;
+
+import java.util.Arrays;
+
+
+/**
+ * get the ISILs from LOK-tagged fields
+ *
+ * Typical LOK-Section below a Marc21 - Title-Set of a record:
+ * LOK             |0 000 xxxxxnu a22 zn 4500
+ * LOK             |0 001 000001376
+ * LOK             |0 003 DE-576
+ * LOK             |0 004 000000140
+ * LOK             |0 005 20020725000000
+ * LOK             |0 008 020725||||||||||||||||ger|||||||
+ * LOK             |0 014   |a 000001368  |b DE-576
+ * LOK             |0 541   |e 76.6176
+ * LOK             |0 852   |a DE-Sp3
+ * LOK             |0 852 1  |c B IV 529  |9 00
+ *
+ * LOK = Field
+ * |0 852 = Subfield
+ * |a DE-Sp3 = Subfield with ISIL
+ *
+ *
+ * @param  Record  record
+ * @return Set of   isils
+ */
+public Set getIsils(Record record) {
+    Set isils = new LinkedHashSet();
+    List fields = record.getVariableFields("LOK");
+    Iterator fieldsIter = fields.iterator();
+    String dataString;
+    String codeString;
+    String pseudotag = "";
+    String data = "";
+    char formatCode = ' ';
+    if (fields != null) {
+        DataField lokfield;
+        while(fieldsIter.hasNext()) {
+            lokfield = (DataField) fieldsIter.next();
+            List subfields = lokfield.getSubfields();
+            Iterator subfieldsIter = subfields.iterator();
+            if (subfields != null) {
+                Subfield subfield;
+                while (subfieldsIter.hasNext()) {
+                	subfield = (Subfield) subfieldsIter.next();
+
+                	codeString = subfield.getCode().toString(); // |0
+                	formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+
+                	dataString = subfield.getData().toUpperCase(); // 852
+
+//                	System.out.print("subfieldcode: " + subfield.getCode() + "  " );
+//                	System.out.println("subfielddata: " + subfield.getData() );
+
+                	// Looking for 852-Tag
+                	if (formatCode == '0' && dataString.equals("852  ")) {
+                		pseudotag =  subfield.getData(); // dataString 852
+                	}
+//                	System.out.println("pseudotag: " + pseudotag);
+
+                	//Looking for ISIL
+                	if (formatCode == 'a' && pseudotag.equals("852  ")) {
+                		data =  subfield.getData();
+                		isils.add(data);
+//                		System.out.print("  | " + data + " [" + pseudotag + "] ");
+               			data = "";
+               			pseudotag = "";
+                	}
+                }
+
+            }
+
+//        System.out.println("");
+//        System.out.println("--- New LOK Line----");
+//        System.out.println("");
+        }
+//     System.out.println("");
+//     System.out.println("");
+//     System.out.println("=== New Record ===");
+//     System.out.println("");
+
+    }
+
+
+    // Nothing worked!
+    if (isils.isEmpty()) {
+        isils.add("Unknown");
+        System.out.println("Unknown added");
+    }
+
+    return isils;
+}
+
+
+
+/**
+ * get the local signature from LOK-tagged fields
+ * prefix with isil 
+ *    
+ * nicht bei signatur="Einzel*"
+ *
+ * LOK = Field
+ * |0 852 = Subfield
+ * |a DE-Sp3 = Subfield with ISIL
+ * |c B IV 529 = Subfield with local signature
+ *
+ *
+ * @param  Record  record
+ * @return Set of  local signatures with isil prefix "(DE-Sp3)B IV 529"
+ */
+public Set getLocalSignaturesIsil(Record record) {
+    Set localsignatures = new LinkedHashSet();
+    List fields = record.getVariableFields("LOK");
+    Iterator fieldsIter = fields.iterator();
+    String dataString;
+    String codeString;
+    String pseudotag = "";
+    String data = "";
+    String isil = "";
+    
+    char formatCode = ' ';
+    if (fields != null) {
+        DataField lokfield;
+        while(fieldsIter.hasNext()) {
+            lokfield = (DataField) fieldsIter.next();
+            List subfields = lokfield.getSubfields();
+            Iterator subfieldsIter = subfields.iterator();
+            if (subfields != null) {
+                Subfield subfield;
+                while (subfieldsIter.hasNext()) {
+                	subfield = (Subfield) subfieldsIter.next();
+
+                	codeString = subfield.getCode().toString(); 
+                	formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' '; // |0 |a | c
+
+                	dataString = subfield.getData().toUpperCase(); // xxxind1ind2
+
+                	//System.out.print("subfieldcode: " + subfield.getCode() + "  " );
+                	//System.out.println("subfielddata: " + subfield.getData() );
+
+                	// Looking for 852-Tag and subfield 0
+                	if (formatCode == '0' && dataString.equals("852  ")) {
+                		pseudotag =  subfield.getData(); // dataString 852
+                	}
+                	//System.out.println("pseudotag: " + pseudotag);
+
+                    //Looking for ISIL
+                	if (formatCode == 'a' && pseudotag.equals("852  ")) {
+                		isil =  subfield.getData();
+                    }
+                    
+                	//Looking for local signature
+                	if (formatCode == 'c' && pseudotag.equals("852  ")) {
+                		data =  subfield.getData();
+                		if (!data.contains("Einzel")) {
+                			localsignatures.add(data);
+                			localsignatures.add(isil + ": " + data);
+	        				//System.out.println("localsig: " + isil + ": " + data);
+                		}
+						data = "";
+        				isil = "";
+        				pseudotag = "";
+        			}
+                }
+
+            }
+
+        //System.out.println("");
+        //System.out.println("--- New LOK Line----");
+        //System.out.println("");
+        }
+     //System.out.println("");
+     //System.out.println("");
+     //System.out.println("=== New Record ===");
+     //System.out.println("");
+
+    }
+
+
+    // Nothing worked!
+    if (localsignatures.isEmpty()) {
+        localsignatures.add("Unknown");
+        //System.out.println("Unknown added");
+    }
+
+    return localsignatures;
+}
+
+
+/**
+ * get the local subjects from LOK-tagged fields
+ *
+ *
+ * LOK = Field
+ * |0 689 = Subfield
+ * |a Imperialismus = Subfield with local subject
+ *
+ *
+ * @param  Record  record
+ * @return Set of local subjects
+ */
+public Set getLocalSubjects(Record record) {
+    Set localsubjects = new LinkedHashSet();
+    List fields = record.getVariableFields("LOK");
+    Iterator fieldsIter = fields.iterator();
+    String dataString;
+    String codeString;
+    String pseudotag = "";
+    String data = "";
+    char formatCode = ' ';
+    if (fields != null) {
+        DataField lokfield;
+        while(fieldsIter.hasNext()) {
+            lokfield = (DataField) fieldsIter.next();
+            List subfields = lokfield.getSubfields();
+            Iterator subfieldsIter = subfields.iterator();
+            if (subfields != null) {
+                Subfield subfield;
+                while (subfieldsIter.hasNext()) {
+                	subfield = (Subfield) subfieldsIter.next();
+
+                	codeString = subfield.getCode().toString(); // |0
+                	formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+
+                	dataString = subfield.getData().toUpperCase(); // 689
+
+//                	System.out.print("subfieldcode: " + subfield.getCode() + "  " );
+//                	System.out.println("subfielddata: " + subfield.getData() );
+
+                	// Looking for 689-Tag
+                	if (formatCode == '0' && dataString.equals("689  ")) {
+                		pseudotag =  subfield.getData(); // dataString 689
+                	}
+//                	System.out.println("pseudotag:--" + pseudotag + "--");
+
+                	//Looking for local subject
+                	if (formatCode == 'a' && pseudotag.equals("689  ")) {
+                		data =  subfield.getData();
+//                		System.out.println("-> 689|a:--" + data + "--");
+//                		if (!data.equals("a") && !data.equals("g") && !data.equals("f") && !data.equals("s") && !data.equals("p") && !data.equals("k") && !data.equals("z") && !data.equals("c")) {
+                		if (data.length() > 1) {
+                			localsubjects.add(data);
+                			// System.out.println("Schlagwort: " + data );
+               				data = "";
+               				pseudotag = "";
+               			}
+                	}
+                }
+
+            }
+
+//        System.out.println("");
+//        System.out.println("--- New LOK Line----");
+//        System.out.println("");
+        }
+//     System.out.println("");
+//     System.out.println("");
+//     System.out.println("=== New Record ===");
+//     System.out.println("");
+
+    }
+
+
+    // Nothing worked!
+//    if (localsubjects.isEmpty()) {
+//        localsubjects.add("Unknown");
+//        System.out.println("Unknown added");
+//    }
+
+    return localsubjects;
+}
+
