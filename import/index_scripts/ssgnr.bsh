@@ -1,0 +1,50 @@
+import org.marc4j.marc.Record;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.*;
+
+
+/**
+ * get the Number from SSG-field
+ *
+ *
+ * 084|a = Number (0, 1, ...)
+ * 084|2 = Type of Number (ssgn, rvkn, ...
+ *
+ *
+ * @param  Record  record
+ * @return Set of  numbers
+ */
+
+public Set getSsgnr(Record record) {
+	Set result = new LinkedHashSet();
+	String code_string="";
+	
+    // Check 084 subfield a and 2
+    List fields = record.getVariableFields("084");
+    Iterator fieldsIter = fields.iterator();
+    if (fields != null) {
+        DataField field;
+        while(fieldsIter.hasNext()) {
+            field = (DataField) fieldsIter.next();
+            if (field.getSubfield('a') != null) {
+               //System.out.println("084|a: " + field.getSubfield('a').getData());
+               code_string = field.getSubfield('2').getData();
+               if (code_string.equals("ssgn")) {
+               		// System.out.print("084|2: " + field.getSubfield('2').getData() + "  ");
+           			List subfields = field.getSubfields('a');
+		            Iterator subfieldsIter = subfields.iterator();
+            		if (subfields != null) {
+                		String number;
+                		while (subfieldsIter.hasNext()) {
+                    		number = subfieldsIter.next().getData();
+                    		result.add(number);
+                    		// System.out.println(number);
+                    	}
+                    }
+                }
+            }               		     
+        }
+    }    
+    return result;
+}
