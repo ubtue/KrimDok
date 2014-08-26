@@ -414,7 +414,7 @@ fi
 #####################################################
 if [ "$SOLR_HOME" != "" ]
 then
-  JAVA_OPTIONS="$JAVA_OPTIONS -Dsolr.solr.home=$SOLR_HOME"
+  JAVA_OPTIONS="$JAVA_OPTIONS -Dsolr.solr.home=$SOLR_HOME -Djava.util.logging.config.file=etc/logging.properties"
 fi
 
 #####################################################
