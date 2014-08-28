@@ -25,7 +25,6 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
-import org.apache.commons.lang.StringUtils;
 import java.util.HashMap;
 
 
@@ -65,7 +64,9 @@ public Set getSuperMP(Record record, String fieldnums) {
                     if(fsubany != null) {
                         value=fsubany.getData().trim();
                         id=fw.getData().replaceAll("^\\([^\\)]+\\)","");
-                        score=StringUtils.countMatches(value,",");
+
+			// Count number of commas in "value":
+			score=value.length() - value.replace(",", "").length();
 
                         if(resvalues.containsKey(id)) {
                             cscore=resscores.get(id);
