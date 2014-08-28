@@ -269,6 +269,16 @@
    <field name="local_signature" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="signature" type="signaturestring" indexed="true" stored="true" multiValued="true"/>
    <field name="local_subject" type="text" indexed="true" stored="true" multiValued="true"/>
+   
+   <!--  Multipart  -->
+   <field name="multipart_set" type="string" indexed="true" stored="true"/>
+   <field name="multipart_link" type="string" indexed="true" stored="true" multiValued="true" termVectors="true"/>
+   <field name="multipart_part" type="string" indexed="true" stored="true"  multiValued="true"/>
+   
+   <!-- SWB: Abrufzeichen und Formate -->
+   <field name="abr" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="media" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="content" type="string" indexed="true" stored="true" multiValued="true"/>
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>
