@@ -39,6 +39,15 @@
       </analyzer>
     </fieldType>
 
+    <!-- Search signatures; ignore cases, remove whitespace -->
+    <fieldType name="signaturestring" class="solr.TextField" sortMissingLast="true" >
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="[^\w]+" replacement="" replace="all"/>
+        <filter class="solr.LowerCaseFilterFactory" />
+      </analyzer>
+    </fieldType>
+
     <!-- Topic Field mit Synonymen für Personen im Indexanalyzer -->
     <fieldType name="text-syn-per" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
@@ -148,7 +157,7 @@
    <field name="institution" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="collection" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="building" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="isil" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <field name="isil" type="string" indexed="true" stored="true" multiValued="true"/>
    <!-- Generic Fields -->
    <field name="language" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="format" type="string" indexed="true" stored="true" multiValued="true"/>
@@ -256,6 +265,10 @@
    <dynamicField name="*_txtP_mv" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_random" type="random" />
    <dynamicField name="*_boolean" type="boolean" indexed="true" stored="true"/>
+   <!-- Local Data -->
+   <field name="local_signature" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="signature" type="signaturestring" indexed="true" stored="true" multiValued="true"/>
+   <field name="local_subject" type="text" indexed="true" stored="true" multiValued="true"/>
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>
@@ -285,9 +298,16 @@
  <!-- CopyFields for All Fields -->
  <copyField source="format"    dest="allfields"/>
  <copyField source="format"    dest="allfields_unstemmed"/>
+<<<<<<< HEAD
  <!-- CopyFields for call numbers -->
  <copyField source="dewey-raw" dest="dewey-search"/>
  <copyField source="callnumber-raw" dest="callnumber-search"/>
+=======
+
+ <!--  Local Data -->
+ <copyField source="local_signature" dest="signature"/>
+
+>>>>>>> Integration weiterer Anpassungen von Stefan Winkler vom BSZ.
  <!-- Default Boolean Operator -->
  <solrQueryParser defaultOperator="AND"/>
 </schema>
