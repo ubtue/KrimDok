@@ -33,6 +33,7 @@
   </div>
 </div>
 
+<<<<<<< HEAD
 <? $facetList = is_object($this->results) ? $this->results->getFacetList() : array(); ?>
 <? if (isset($facetList) && is_array($facetList)): ?>
   <div class="row">
@@ -94,7 +95,7 @@ JS;
                 <li><a href="<?=$this->url($advSearch)?>"><strong><?=$this->transEsc("More options")?>...</strong></a></li>
                 <? break; ?>
               <? elseif (!empty($value)): ?>
-                <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
+                <li><a href="<?=$url?>"><?=$this->transEsc($value)?></a></li>
               <? else: $i--; ?>
               <? endif; ?>
             <? endforeach; ?>
