@@ -44,7 +44,7 @@
         <? if ($field == "callnumber-first"): ?>
           <? $i = 0; foreach ($sortedList as $url => $value): ?>
             <? if (!empty($value)): ?>
-              <li><a href="<?=$url?>"><?=$this->transEsc($value)?></a></li>
+              <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
             <? else: $i--; ?>
             <? endif; ?>
             <? if (++$i == 10): ?>
@@ -67,7 +67,7 @@
               <li><a href="<?=$this->url($advSearch)?>"><strong><?=$this->transEsc("More options")?>...</strong></a></li>
               <? break; ?>
             <? elseif (!empty($value)): ?>
-              <li><a href="<?=$url?>"><?=$this->transEsc($value)?></a></li>
+              <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
             <? else: $i--; ?>
             <? endif; ?>
           <? endforeach; ?>
