@@ -44,7 +44,5 @@ public String getTitleSubfield(Record record, String subfield_code) {
     if (subfield_data == null)
         return null;
 
-if (!subfield_data.equals( TrimSlashesAndSpaces(subfield_data)))
-System.out.println("orig: \"" + subfield_data + "\", trimmed: \"" + TrimSlashesAndSpaces(subfield_data) + "\"");
     return TrimSlashesAndSpaces(subfield_data);
 }
