@@ -1,5 +1,5 @@
 /**
- * Custom short title extraction script.
+ * Custom title extraction script.
  *
  * This can be used to override built-in SolrMarc custom functions.  If you change
  * this script, you will need to activate it in import/marc_local.properties before
@@ -27,7 +27,7 @@ String TrimSlashesAndSpaces(String s) {
  * Determine Record Title
  *
  * @param  Record     record
- * @return String     nicely formatted short title
+ * @return String     nicely formatted title
  */
 public String getTitle(Record record){
     DataField title = (DataField) record.getVariableField("245");
@@ -35,7 +35,7 @@ public String getTitle(Record record){
         return null;
 
     String title_a = (title.getSubfield('a') == null) ? null : title.getSubfield('a').getData();
-    String title_b = (title.getSubfield('b') == null) ? null : title.getSubfield('a').getData();
+    String title_b = (title.getSubfield('b') == null) ? null : title.getSubfield('b').getData();
     if (title_a == null && title_b == null)
         return null;
 
