@@ -97,6 +97,106 @@ public Set getIsils(Record record) {
 }
 
 
+HashMap isil_to_department_map = null;
+
+
+void InitIsilToDepartmentMap() {
+    isil_to_department_map = new HashMap();
+
+    isil_to_department_map.put("Unknown", "Unknown");
+    isil_to_department_map.put("DE-21", "Universitätsbibliothek Tübingen");
+    isil_to_department_map.put("DE-21-1", "Universität Tübingen, Klinik für Psychatrie und Psychologie");
+    isil_to_department_map.put("DE-21-3", "Universität Tübingen, Institut für Toxikologie und Pharmakologie");
+    isil_to_department_map.put("DE-21-10", "Universitätsbibliothek Tübingen, Bereichsbibliothek Geowissenschaften");
+    isil_to_department_map.put("DE-21-11", "Universitätsbibliothek Tübingen, Bereichsbibliothek Schloss Nord");
+    isil_to_department_map.put("DE-21-14", "Universität Tübingen, Institut für Ur- und Frühgeschichte und Archäologie des Mittelalters, Abteilung jüngere Urgeschichte und Frühgeschichte + Abteilung für Archäologie des Mittelalters");
+    isil_to_department_map.put("DE-21-17", "Universität Tübingen, Geographisches Institut");
+    isil_to_department_map.put("DE-21-19", "Universität Tübingen, Wirtschaftswissenschaftliches Seminar");
+    isil_to_department_map.put("DE-21-22", "Universität Tübingen, Kunsthistorisches Institut");
+    isil_to_department_map.put("DE-21-21", "Universität Tübingen, Universitäts-Hals-Nasen-Ohrenklinik, Bibliothek");
+    isil_to_department_map.put("DE-21-24", "Universität Tübingen, Juristisches Seminar");
+    isil_to_department_map.put("DE-21-25", "Universität Tübingen, Musikwissenschaftliches Institut");
+    isil_to_department_map.put("DE-21-28", "Universität Tübingen, Institut für Astronomie und Astrophysik, Abteilung Astronomie");
+    isil_to_department_map.put("DE-21-31", "Universität Tübingen, Evangelisch-theologische Fakultät");
+    isil_to_department_map.put("DE-21-32a", "Universität Tübingen, Historisches Seminar, Abteilung für Alte Geschichte");
+    isil_to_department_map.put("DE-21-32b", "Universität Tübingen, Historisches Seminar, Abteilung für Mittelalterliche Geschichte");
+    isil_to_department_map.put("DE-21-32c", "Universität Tübingen, Historisches Seminar, Abteilung für Neuere Geschichte");
+    isil_to_department_map.put("DE-21-34", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Indologie und Vergleichende Religionswissenschaft");
+    isil_to_department_map.put("DE-21-35", "Universität Tübingen, Katholisch-theologische Fakultät");
+    isil_to_department_map.put("DE-21-39", "Universität Tübingen, Fachbibliothek Mathematik und Physik / Bereich Mathematik");
+    isil_to_department_map.put("DE-21-37", "Universität Tübingen, Institut für Sportwissenschaft");
+    isil_to_department_map.put("DE-21-42", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Orient- uns Islamwissenschaft");
+    isil_to_department_map.put("DE-21-43", "Universität Tübingen, Institut für Erziehungswissenschaft");
+    isil_to_department_map.put("DE-21-45", "Universität Tübingen, Philologisches Seminar");
+    isil_to_department_map.put("DE-21-46", "Universität Tübingen, Philosophisches Seminar");
+    isil_to_department_map.put("DE-21-51", "Universität Tübingen, Psychologisches Institut");
+    isil_to_department_map.put("DE-21-52", "Universität Tübingen, Ludwig-Uhland-Institut für Empirische Kulturwissenschaft");
+    isil_to_department_map.put("DE-21-53", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Ethnologie");
+    isil_to_department_map.put("DE-21-54", "Universität Tübingen, Universitätsklinik für Zahn-, Mund- und Kieferheilkunde");
+    isil_to_department_map.put("DE-21-58", "Universität Tübingen, Institut für Politikwissenschaft");
+    isil_to_department_map.put("DE-21-62", "Universität Tübingen, Institut für Osteuropäische Geschichte und Landeskunde");
+    isil_to_department_map.put("DE-21-63", "Universität Tübingen, Institut für Tropenmedizin");
+    isil_to_department_map.put("DE-21-64", "Universität Tübingen, Institut für Geschichtliche Landeskunde und Historische Hilfswissenschaften");
+    isil_to_department_map.put("DE-21-78", "Universität Tübingen, Institut für Medizinische Biometrie");
+    isil_to_department_map.put("DE-21-85", "Universität Tübingen, Institut für Soziologie");
+    isil_to_department_map.put("DE-21-86", "Universität Tübingen, Zentrum für Datenverarbeitung");
+    isil_to_department_map.put("DE-21-93", "Universität Tübingen, Institut für Ethik und Geschichte der Medizin");
+    isil_to_department_map.put("DE-21-98", "Universität Tübingen, Fachbibliothek Mathematik und Physik / Bereich Physik");
+    isil_to_department_map.put("DE-21-99", "Universität Tübingen, Institut für Ur- und Frühgeschichte und Archäologie des Mittelalters, Abteilung für Ältere Urgeschichteund Quartärökologie");
+    isil_to_department_map.put("DE-21-106", "Universität Tübingen, Seminar für Zeitgeschichte");
+    isil_to_department_map.put("DE-21-108", "Universität Tübingen, Fakultätsbibliothek Neuphilologie");
+    isil_to_department_map.put("DE-21-109", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Sinologie und Koreanistik");
+    isil_to_department_map.put("DE-21-110", "Universität Tübingen, Institut für Kriminologie");
+    isil_to_department_map.put("DE-21-119", "Universität Tübingen, Wilhelm-Schickard-Institut für Informatik");
+    isil_to_department_map.put("DE-21-112", "Universität Tübingen, Fakultät für Biologie, Bibliothek");
+    isil_to_department_map.put("DE-21-121", "Universität Tübingen, Internationales Zentrum für Ethik in den Wissenschaften");
+    isil_to_department_map.put("DE-21-123", "Universität Tübingen, Medizinbibliothek");
+    isil_to_department_map.put("DE-21-203", "Universität Tübingen, Sammlung Werner Schweikert - Archiv der Weltliteratur");
+    isil_to_department_map.put("DE-21-205", "Universität Tübingen, Zentrum für Islamische Theologie");
+}
+
+
+/**
+ * get the collections from LOK-tagged fields
+ *
+ * Typical LOK-Section below a Marc21 - Title-Set of a record:
+ * LOK             |0 000 xxxxxnu a22 zn 4500
+ * LOK             |0 001 000001376
+ * LOK             |0 003 DE-576
+ * LOK             |0 004 000000140
+ * LOK             |0 005 20020725000000
+ * LOK             |0 008 020725||||||||||||||||ger|||||||
+ * LOK             |0 014   |a 000001368  |b DE-576
+ * LOK             |0 541   |e 76.6176
+ * LOK             |0 852   |a DE-Sp3
+ * LOK             |0 852 1  |c B IV 529  |9 00
+ *
+ * LOK = Field
+ * |0 852 = Subfield
+ * |a DE-Sp3 = Subfield with ISIL
+ *
+ *
+ * @param  Record  record
+ * @return Set of  collections
+ */
+public Set getCollections(Record record) {
+    if (isil_to_department_map == null)
+        InitIsilToDepartmentMap();
+
+    Set isils = getIsils(record);
+    Set collections = new HashSet();
+    for (isil : isils) {
+        String collection = isil_to_department_map.get(isil);
+	if (collection == null) {
+            System.out.println("************************ Unbekannt: " + isil);
+            collections.add("Unknown");
+        } else
+            collections.add(collection);
+    }
+
+    return collections;
+}
+
 
 /**
  * get the local signature from LOK-tagged fields
