@@ -107,6 +107,7 @@ void InitIsilToDepartmentMap() {
     isil_to_department_map.put("DE-21", "Universitätsbibliothek Tübingen");
     isil_to_department_map.put("DE-21-1", "Universität Tübingen, Klinik für Psychatrie und Psychologie");
     isil_to_department_map.put("DE-21-3", "Universität Tübingen, Institut für Toxikologie und Pharmakologie");
+    isil_to_department_map.put("DE-21-4", "Universität Tübingen, Universitäts-Augenklinik");
     isil_to_department_map.put("DE-21-10", "Universitätsbibliothek Tübingen, Bereichsbibliothek Geowissenschaften");
     isil_to_department_map.put("DE-21-11", "Universitätsbibliothek Tübingen, Bereichsbibliothek Schloss Nord");
     isil_to_department_map.put("DE-21-14", "Universität Tübingen, Institut für Ur- und Frühgeschichte und Archäologie des Mittelalters, Abteilung jüngere Urgeschichte und Frühgeschichte + Abteilung für Archäologie des Mittelalters");
@@ -187,11 +188,13 @@ public Set getCollections(Record record) {
     Set collections = new HashSet();
     for (isil : isils) {
         String collection = isil_to_department_map.get(isil);
-	if (collection == null) {
-            System.out.println("************************ Unbekannt: " + isil);
-            collections.add("Unknown");
-        } else
+	if (collection != null)
             collections.add(collection);
+    }
+
+    if (collections.isEmpty()) {
+        System.out.println("************************ Unknown: " + isil);
+        collections.add("Unknown");
     }
 
     return collections;
