@@ -112,11 +112,16 @@ void InitIsilToDepartmentMap() {
     isil_to_department_map.put("DE-21-11", "Universitätsbibliothek Tübingen, Bereichsbibliothek Schloss Nord");
     isil_to_department_map.put("DE-21-14", "Universität Tübingen, Institut für Ur- und Frühgeschichte und Archäologie des Mittelalters, Abteilung jüngere Urgeschichte und Frühgeschichte + Abteilung für Archäologie des Mittelalters");
     isil_to_department_map.put("DE-21-17", "Universität Tübingen, Geographisches Institut");
+    isil_to_department_map.put("DE-21-18", "Universität Tübingen, Universitäts-Hautklinik");
     isil_to_department_map.put("DE-21-19", "Universität Tübingen, Wirtschaftswissenschaftliches Seminar");
-    isil_to_department_map.put("DE-21-22", "Universität Tübingen, Kunsthistorisches Institut");
+    isil_to_department_map.put("DE-21-20", "Universität Tübingen, Frauenklinik");
     isil_to_department_map.put("DE-21-21", "Universität Tübingen, Universitäts-Hals-Nasen-Ohrenklinik, Bibliothek");
+    isil_to_department_map.put("DE-21-22", "Universität Tübingen, Kunsthistorisches Institut");
+    isil_to_department_map.put("DE-21-23", "Universität Tübingen, Institut für Pathologie");
     isil_to_department_map.put("DE-21-24", "Universität Tübingen, Juristisches Seminar");
     isil_to_department_map.put("DE-21-25", "Universität Tübingen, Musikwissenschaftliches Institut");
+    isil_to_department_map.put("DE-21-26", "Universität Tübingen, Anatomisches Institut");
+    isil_to_department_map.put("DE-21-27", "Universität Tübingen, Institut für Anthropologie und Humangenetik");
     isil_to_department_map.put("DE-21-28", "Universität Tübingen, Institut für Astronomie und Astrophysik, Abteilung Astronomie");
     isil_to_department_map.put("DE-21-31", "Universität Tübingen, Evangelisch-theologische Fakultät");
     isil_to_department_map.put("DE-21-32a", "Universität Tübingen, Historisches Seminar, Abteilung für Alte Geschichte");
@@ -130,6 +135,7 @@ void InitIsilToDepartmentMap() {
     isil_to_department_map.put("DE-21-43", "Universität Tübingen, Institut für Erziehungswissenschaft");
     isil_to_department_map.put("DE-21-45", "Universität Tübingen, Philologisches Seminar");
     isil_to_department_map.put("DE-21-46", "Universität Tübingen, Philosophisches Seminar");
+    isil_to_department_map.put("DE-21-50", "Universität Tübingen, Physiologisches Institut");
     isil_to_department_map.put("DE-21-51", "Universität Tübingen, Psychologisches Institut");
     isil_to_department_map.put("DE-21-52", "Universität Tübingen, Ludwig-Uhland-Institut für Empirische Kulturwissenschaft");
     isil_to_department_map.put("DE-21-53", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Ethnologie");
@@ -138,20 +144,32 @@ void InitIsilToDepartmentMap() {
     isil_to_department_map.put("DE-21-62", "Universität Tübingen, Institut für Osteuropäische Geschichte und Landeskunde");
     isil_to_department_map.put("DE-21-63", "Universität Tübingen, Institut für Tropenmedizin");
     isil_to_department_map.put("DE-21-64", "Universität Tübingen, Institut für Geschichtliche Landeskunde und Historische Hilfswissenschaften");
+    isil_to_department_map.put("DE-21-65", "Universität Tübingen, Universitäts-Apotheke");
+    isil_to_department_map.put("DE-21-74", "Universität Tübingen, Zentrum für Informations-Technologie");
     isil_to_department_map.put("DE-21-78", "Universität Tübingen, Institut für Medizinische Biometrie");
+    isil_to_department_map.put("DE-21-81", "Universität Tübingen, Inst. f. Astronomie und Astrophysik/Abt. Geschichte der Naturwiss.");
     isil_to_department_map.put("DE-21-85", "Universität Tübingen, Institut für Soziologie");
     isil_to_department_map.put("DE-21-86", "Universität Tübingen, Zentrum für Datenverarbeitung");
+    isil_to_department_map.put("DE-21-89", "Universität Tübingen, Institut für Arbeits- und Sozialmedizin");
+    isil_to_department_map.put("DE-21-92", "Universität Tübingen, Institut für Gerichtliche Medizin");
     isil_to_department_map.put("DE-21-93", "Universität Tübingen, Institut für Ethik und Geschichte der Medizin");
+    isil_to_department_map.put("DE-21-95", "Universität Tübingen, Institut für Hirnforschung");
     isil_to_department_map.put("DE-21-98", "Universität Tübingen, Fachbibliothek Mathematik und Physik / Bereich Physik");
     isil_to_department_map.put("DE-21-99", "Universität Tübingen, Institut für Ur- und Frühgeschichte und Archäologie des Mittelalters, Abteilung für Ältere Urgeschichteund Quartärökologie");
     isil_to_department_map.put("DE-21-106", "Universität Tübingen, Seminar für Zeitgeschichte");
     isil_to_department_map.put("DE-21-108", "Universität Tübingen, Fakultätsbibliothek Neuphilologie");
     isil_to_department_map.put("DE-21-109", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Sinologie und Koreanistik");
     isil_to_department_map.put("DE-21-110", "Universität Tübingen, Institut für Kriminologie");
-    isil_to_department_map.put("DE-21-119", "Universität Tübingen, Wilhelm-Schickard-Institut für Informatik");
     isil_to_department_map.put("DE-21-112", "Universität Tübingen, Fakultät für Biologie, Bibliothek");
+    isil_to_department_map.put("DE-21-116", "Universität Tübingen, Zentrum für Molekularbiologie der Pflanzen, Forschungsgruppe Pflanzenbiochemie");
+    isil_to_department_map.put("DE-21-117", "Universität Tübingen, Institut für Medizinische Informationsverarbeitung");
+    isil_to_department_map.put("DE-21-118", "Universität Tübingen, Universitäts-Archiv");
+    isil_to_department_map.put("DE-21-119", "Universität Tübingen, Wilhelm-Schickard-Institut für Informatik");
+    isil_to_department_map.put("DE-21-120", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Japanologie");
     isil_to_department_map.put("DE-21-121", "Universität Tübingen, Internationales Zentrum für Ethik in den Wissenschaften");
     isil_to_department_map.put("DE-21-123", "Universität Tübingen, Medizinbibliothek");
+    isil_to_department_map.put("DE-21-124", "Universität Tübingen, Institut f. Medizinische Virologie und Epidemiologie d. Viruskrankheiten");
+    isil_to_department_map.put("DE-21-126", "Universität Tübingen, Institut für Medizinische Mikrobiologie und Hygiene");
     isil_to_department_map.put("DE-21-203", "Universität Tübingen, Sammlung Werner Schweikert - Archiv der Weltliteratur");
     isil_to_department_map.put("DE-21-205", "Universität Tübingen, Zentrum für Islamische Theologie");
 }
@@ -190,12 +208,14 @@ public Set getCollections(Record record) {
         String collection = isil_to_department_map.get(isil);
 	if (collection != null)
             collections.add(collection);
+	else {
+            System.out.println("************************ Unknown: " + isil);
+	    System.exit(1);
+        }
     }
 
-    if (collections.isEmpty()) {
-        System.out.println("************************ Unknown: " + isil);
+    if (collections.isEmpty())
         collections.add("Unknown");
-    }
 
     return collections;
 }
@@ -203,8 +223,8 @@ public Set getCollections(Record record) {
 
 /**
  * get the local signature from LOK-tagged fields
- * prefix with isil 
- *    
+ * prefix with isil
+ *
  * nicht bei signatur="Einzel*"
  *
  * LOK = Field
@@ -225,7 +245,7 @@ public Set getLocalSignaturesIsil(Record record) {
     String pseudotag = "";
     String data = "";
     String isil = "";
-    
+
     char formatCode = ' ';
     if (fields != null) {
         DataField lokfield;
@@ -238,7 +258,7 @@ public Set getLocalSignaturesIsil(Record record) {
                 while (subfieldsIter.hasNext()) {
                 	subfield = (Subfield) subfieldsIter.next();
 
-                	codeString = subfield.getCode().toString(); 
+                	codeString = subfield.getCode().toString();
                 	formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' '; // |0 |a | c
 
                 	dataString = subfield.getData().toUpperCase(); // xxxind1ind2
@@ -256,7 +276,7 @@ public Set getLocalSignaturesIsil(Record record) {
                 	if (formatCode == 'a' && pseudotag.equals("852  ")) {
                 		isil =  subfield.getData();
                     }
-                    
+
                 	//Looking for local signature
                 	if (formatCode == 'c' && pseudotag.equals("852  ")) {
                 		data =  subfield.getData();
@@ -377,4 +397,3 @@ public Set getLocalSubjects(Record record) {
 
     return localsubjects;
 }
-
