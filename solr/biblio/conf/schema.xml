@@ -271,6 +271,8 @@
    <field name="local_signature" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="signature" type="signaturestring" indexed="true" stored="true" multiValued="true"/>
    <field name="local_subject" type="text" indexed="true" stored="true" multiValued="true"/>
+   <field name="instituts_systematik1" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="instituts_systematik2" type="string" indexed="true" stored="true" multiValued="true"/>
 
    <!--  Multipart  -->
    <field name="multipart_set" type="string" indexed="true" stored="true"/>

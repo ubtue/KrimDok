@@ -97,6 +97,94 @@ public Set getIsils(Record record) {
 }
 
 
+Set roman_numerals = null;
+
+
+/** Tests whether "s" is a roman numeral in the range I..XX. */
+boolean IsRomanNumeral(String s) {
+     if (roman_numerals == null) {
+         roman_numerals = new HashSet();
+         roman_numerals.add("I");
+         roman_numerals.add("II");
+         roman_numerals.add("III");
+         roman_numerals.add("IV");
+         roman_numerals.add("V");
+         roman_numerals.add("VI");
+         roman_numerals.add("VII");
+         roman_numerals.add("VIII");
+         roman_numerals.add("IX");
+         roman_numerals.add("X");
+         roman_numerals.add("XI");
+         roman_numerals.add("XII");
+         roman_numerals.add("XIII");
+         roman_numerals.add("XIV");
+         roman_numerals.add("XV");
+         roman_numerals.add("XVI");
+         roman_numerals.add("XVII");
+         roman_numerals.add("XVIII");
+         roman_numerals.add("XIX");
+         roman_numerals.add("XX");
+     }
+
+     return roman_numerals.contains(s);
+}
+
+
+final String INSTITUT_SYSTEMATIK_LETTERS = "ABCDEFGHJKLMNOPQX";
+
+
+Set getInstitutsSystematik(Record record, int level) {
+    Set results = new HashSet();
+    Iterator fieldsIter = record.getVariableFields("LOK").iterator();
+    while (fieldsIter.hasNext()) {
+        DataField lokfield = fieldsIter.next();
+        Iterator subfieldsIter = lokfield.getSubfields().iterator();
+        while (subfieldsIter.hasNext()) {
+            Subfield subfield = subfieldsIter.next();
+
+            String codeString = subfield.getCode().toString(); // |0?
+            char formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+
+            String dataString = subfield.getData(); // 852?
+
+            // Looking for 852-Tag
+            if (formatCode != '0' || !dataString.equals("852 1") || !subfieldsIter.hasNext())
+                continue;
+
+            subfield = subfieldsIter.next();
+            codeString = subfield.getCode().toString(); // |c?
+            formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+            if (formatCode != 'c')
+                continue;
+
+            String[] parts = subfield.getData().split(" ");
+            if (parts.length < 2)
+                continue;
+
+            if (INSTITUT_SYSTEMATIK_LETTERS.indexOf(parts[0]) == -1 || !IsRomanNumeral(parts[1]))
+                continue;
+
+            if (level == 1)
+                results.add(parts[0]);
+            else // Assume level == 2.
+                results.add(parts[0] + parts[1]);
+        }
+    }
+
+    return results;
+}
+
+
+public Set getInstitutsSystematik1(Record record) {
+    return getInstitutsSystematik(record, 1);
+}
+
+
+public Set getInstitutsSystematik2(Record record) {
+    return getInstitutsSystematik(record, 2);
+}
+
+
 HashMap isil_to_department_map = null;
 
 
@@ -104,74 +192,74 @@ void InitIsilToDepartmentMap() {
     isil_to_department_map = new HashMap();
 
     isil_to_department_map.put("Unknown", "Unknown");
-    isil_to_department_map.put("DE-21", "UniversitÃ¤tsbibliothek TÃ¼bingen");
-    isil_to_department_map.put("DE-21-1", "UniversitÃ¤t TÃ¼bingen, Klinik fÃ¼r Psychatrie und Psychologie");
-    isil_to_department_map.put("DE-21-3", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Toxikologie und Pharmakologie");
-    isil_to_department_map.put("DE-21-4", "UniversitÃ¤t TÃ¼bingen, UniversitÃ¤ts-Augenklinik");
-    isil_to_department_map.put("DE-21-10", "UniversitÃ¤tsbibliothek TÃ¼bingen, Bereichsbibliothek Geowissenschaften");
-    isil_to_department_map.put("DE-21-11", "UniversitÃ¤tsbibliothek TÃ¼bingen, Bereichsbibliothek Schloss Nord");
-    isil_to_department_map.put("DE-21-14", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Ur- und FrÃ¼hgeschichte und ArchÃ¤ologie des Mittelalters, Abteilung jÃ¼ngere Urgeschichte und FrÃ¼hgeschichte + Abteilung fÃ¼r ArchÃ¤ologie des Mittelalters");
-    isil_to_department_map.put("DE-21-17", "UniversitÃ¤t TÃ¼bingen, Geographisches Institut");
-    isil_to_department_map.put("DE-21-18", "UniversitÃ¤t TÃ¼bingen, UniversitÃ¤ts-Hautklinik");
-    isil_to_department_map.put("DE-21-19", "UniversitÃ¤t TÃ¼bingen, Wirtschaftswissenschaftliches Seminar");
-    isil_to_department_map.put("DE-21-20", "UniversitÃ¤t TÃ¼bingen, Frauenklinik");
-    isil_to_department_map.put("DE-21-21", "UniversitÃ¤t TÃ¼bingen, UniversitÃ¤ts-Hals-Nasen-Ohrenklinik, Bibliothek");
-    isil_to_department_map.put("DE-21-22", "UniversitÃ¤t TÃ¼bingen, Kunsthistorisches Institut");
-    isil_to_department_map.put("DE-21-23", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Pathologie");
-    isil_to_department_map.put("DE-21-24", "UniversitÃ¤t TÃ¼bingen, Juristisches Seminar");
-    isil_to_department_map.put("DE-21-25", "UniversitÃ¤t TÃ¼bingen, Musikwissenschaftliches Institut");
-    isil_to_department_map.put("DE-21-26", "UniversitÃ¤t TÃ¼bingen, Anatomisches Institut");
-    isil_to_department_map.put("DE-21-27", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Anthropologie und Humangenetik");
-    isil_to_department_map.put("DE-21-28", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Astronomie und Astrophysik, Abteilung Astronomie");
-    isil_to_department_map.put("DE-21-31", "UniversitÃ¤t TÃ¼bingen, Evangelisch-theologische FakultÃ¤t");
-    isil_to_department_map.put("DE-21-32a", "UniversitÃ¤t TÃ¼bingen, Historisches Seminar, Abteilung fÃ¼r Alte Geschichte");
-    isil_to_department_map.put("DE-21-32b", "UniversitÃ¤t TÃ¼bingen, Historisches Seminar, Abteilung fÃ¼r Mittelalterliche Geschichte");
-    isil_to_department_map.put("DE-21-32c", "UniversitÃ¤t TÃ¼bingen, Historisches Seminar, Abteilung fÃ¼r Neuere Geschichte");
-    isil_to_department_map.put("DE-21-34", "UniversitÃ¤t TÃ¼bingen, Asien-Orient-Institut, Abteilung fÃ¼r Indologie und Vergleichende Religionswissenschaft");
-    isil_to_department_map.put("DE-21-35", "UniversitÃ¤t TÃ¼bingen, Katholisch-theologische FakultÃ¤t");
-    isil_to_department_map.put("DE-21-39", "UniversitÃ¤t TÃ¼bingen, Fachbibliothek Mathematik und Physik / Bereich Mathematik");
-    isil_to_department_map.put("DE-21-37", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Sportwissenschaft");
-    isil_to_department_map.put("DE-21-42", "UniversitÃ¤t TÃ¼bingen, Asien-Orient-Institut, Abteilung fÃ¼r Orient- uns Islamwissenschaft");
-    isil_to_department_map.put("DE-21-43", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Erziehungswissenschaft");
-    isil_to_department_map.put("DE-21-45", "UniversitÃ¤t TÃ¼bingen, Philologisches Seminar");
-    isil_to_department_map.put("DE-21-46", "UniversitÃ¤t TÃ¼bingen, Philosophisches Seminar");
-    isil_to_department_map.put("DE-21-50", "UniversitÃ¤t TÃ¼bingen, Physiologisches Institut");
-    isil_to_department_map.put("DE-21-51", "UniversitÃ¤t TÃ¼bingen, Psychologisches Institut");
-    isil_to_department_map.put("DE-21-52", "UniversitÃ¤t TÃ¼bingen, Ludwig-Uhland-Institut fÃ¼r Empirische Kulturwissenschaft");
-    isil_to_department_map.put("DE-21-53", "UniversitÃ¤t TÃ¼bingen, Asien-Orient-Institut, Abteilung fÃ¼r Ethnologie");
-    isil_to_department_map.put("DE-21-54", "UniversitÃ¤t TÃ¼bingen, UniversitÃ¤tsklinik fÃ¼r Zahn-, Mund- und Kieferheilkunde");
-    isil_to_department_map.put("DE-21-58", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Politikwissenschaft");
-    isil_to_department_map.put("DE-21-62", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r OsteuropÃ¤ische Geschichte und Landeskunde");
-    isil_to_department_map.put("DE-21-63", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Tropenmedizin");
-    isil_to_department_map.put("DE-21-64", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Geschichtliche Landeskunde und Historische Hilfswissenschaften");
-    isil_to_department_map.put("DE-21-65", "UniversitÃ¤t TÃ¼bingen, UniversitÃ¤ts-Apotheke");
-    isil_to_department_map.put("DE-21-74", "UniversitÃ¤t TÃ¼bingen, Zentrum fÃ¼r Informations-Technologie");
-    isil_to_department_map.put("DE-21-78", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Medizinische Biometrie");
-    isil_to_department_map.put("DE-21-81", "UniversitÃ¤t TÃ¼bingen, Inst. f. Astronomie und Astrophysik/Abt. Geschichte der Naturwiss.");
-    isil_to_department_map.put("DE-21-85", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Soziologie");
-    isil_to_department_map.put("DE-21-86", "UniversitÃ¤t TÃ¼bingen, Zentrum fÃ¼r Datenverarbeitung");
-    isil_to_department_map.put("DE-21-89", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Arbeits- und Sozialmedizin");
-    isil_to_department_map.put("DE-21-92", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Gerichtliche Medizin");
-    isil_to_department_map.put("DE-21-93", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Ethik und Geschichte der Medizin");
-    isil_to_department_map.put("DE-21-95", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Hirnforschung");
-    isil_to_department_map.put("DE-21-98", "UniversitÃ¤t TÃ¼bingen, Fachbibliothek Mathematik und Physik / Bereich Physik");
-    isil_to_department_map.put("DE-21-99", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Ur- und FrÃ¼hgeschichte und ArchÃ¤ologie des Mittelalters, Abteilung fÃ¼r Ã„ltere Urgeschichteund QuartÃ¤rÃ¶kologie");
-    isil_to_department_map.put("DE-21-106", "UniversitÃ¤t TÃ¼bingen, Seminar fÃ¼r Zeitgeschichte");
-    isil_to_department_map.put("DE-21-108", "UniversitÃ¤t TÃ¼bingen, FakultÃ¤tsbibliothek Neuphilologie");
-    isil_to_department_map.put("DE-21-109", "UniversitÃ¤t TÃ¼bingen, Asien-Orient-Institut, Abteilung fÃ¼r Sinologie und Koreanistik");
-    isil_to_department_map.put("DE-21-110", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Kriminologie");
-    isil_to_department_map.put("DE-21-112", "UniversitÃ¤t TÃ¼bingen, FakultÃ¤t fÃ¼r Biologie, Bibliothek");
-    isil_to_department_map.put("DE-21-116", "UniversitÃ¤t TÃ¼bingen, Zentrum fÃ¼r Molekularbiologie der Pflanzen, Forschungsgruppe Pflanzenbiochemie");
-    isil_to_department_map.put("DE-21-117", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Medizinische Informationsverarbeitung");
-    isil_to_department_map.put("DE-21-118", "UniversitÃ¤t TÃ¼bingen, UniversitÃ¤ts-Archiv");
-    isil_to_department_map.put("DE-21-119", "UniversitÃ¤t TÃ¼bingen, Wilhelm-Schickard-Institut fÃ¼r Informatik");
-    isil_to_department_map.put("DE-21-120", "UniversitÃ¤t TÃ¼bingen, Asien-Orient-Institut, Abteilung fÃ¼r Japanologie");
-    isil_to_department_map.put("DE-21-121", "UniversitÃ¤t TÃ¼bingen, Internationales Zentrum fÃ¼r Ethik in den Wissenschaften");
-    isil_to_department_map.put("DE-21-123", "UniversitÃ¤t TÃ¼bingen, Medizinbibliothek");
-    isil_to_department_map.put("DE-21-124", "UniversitÃ¤t TÃ¼bingen, Institut f. Medizinische Virologie und Epidemiologie d. Viruskrankheiten");
-    isil_to_department_map.put("DE-21-126", "UniversitÃ¤t TÃ¼bingen, Institut fÃ¼r Medizinische Mikrobiologie und Hygiene");
-    isil_to_department_map.put("DE-21-203", "UniversitÃ¤t TÃ¼bingen, Sammlung Werner Schweikert - Archiv der Weltliteratur");
-    isil_to_department_map.put("DE-21-205", "UniversitÃ¤t TÃ¼bingen, Zentrum fÃ¼r Islamische Theologie");
+    isil_to_department_map.put("DE-21", "Universitätsbibliothek Tübingen");
+    isil_to_department_map.put("DE-21-1", "Universität Tübingen, Klinik für Psychatrie und Psychologie");
+    isil_to_department_map.put("DE-21-3", "Universität Tübingen, Institut für Toxikologie und Pharmakologie");
+    isil_to_department_map.put("DE-21-4", "Universität Tübingen, Universitäts-Augenklinik");
+    isil_to_department_map.put("DE-21-10", "Universitätsbibliothek Tübingen, Bereichsbibliothek Geowissenschaften");
+    isil_to_department_map.put("DE-21-11", "Universitätsbibliothek Tübingen, Bereichsbibliothek Schloss Nord");
+    isil_to_department_map.put("DE-21-14", "Universität Tübingen, Institut für Ur- und Frühgeschichte und Archäologie des Mittelalters, Abteilung jüngere Urgeschichte und Frühgeschichte + Abteilung für Archäologie des Mittelalters");
+    isil_to_department_map.put("DE-21-17", "Universität Tübingen, Geographisches Institut");
+    isil_to_department_map.put("DE-21-18", "Universität Tübingen, Universitäts-Hautklinik");
+    isil_to_department_map.put("DE-21-19", "Universität Tübingen, Wirtschaftswissenschaftliches Seminar");
+    isil_to_department_map.put("DE-21-20", "Universität Tübingen, Frauenklinik");
+    isil_to_department_map.put("DE-21-21", "Universität Tübingen, Universitäts-Hals-Nasen-Ohrenklinik, Bibliothek");
+    isil_to_department_map.put("DE-21-22", "Universität Tübingen, Kunsthistorisches Institut");
+    isil_to_department_map.put("DE-21-23", "Universität Tübingen, Institut für Pathologie");
+    isil_to_department_map.put("DE-21-24", "Universität Tübingen, Juristisches Seminar");
+    isil_to_department_map.put("DE-21-25", "Universität Tübingen, Musikwissenschaftliches Institut");
+    isil_to_department_map.put("DE-21-26", "Universität Tübingen, Anatomisches Institut");
+    isil_to_department_map.put("DE-21-27", "Universität Tübingen, Institut für Anthropologie und Humangenetik");
+    isil_to_department_map.put("DE-21-28", "Universität Tübingen, Institut für Astronomie und Astrophysik, Abteilung Astronomie");
+    isil_to_department_map.put("DE-21-31", "Universität Tübingen, Evangelisch-theologische Fakultät");
+    isil_to_department_map.put("DE-21-32a", "Universität Tübingen, Historisches Seminar, Abteilung für Alte Geschichte");
+    isil_to_department_map.put("DE-21-32b", "Universität Tübingen, Historisches Seminar, Abteilung für Mittelalterliche Geschichte");
+    isil_to_department_map.put("DE-21-32c", "Universität Tübingen, Historisches Seminar, Abteilung für Neuere Geschichte");
+    isil_to_department_map.put("DE-21-34", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Indologie und Vergleichende Religionswissenschaft");
+    isil_to_department_map.put("DE-21-35", "Universität Tübingen, Katholisch-theologische Fakultät");
+    isil_to_department_map.put("DE-21-39", "Universität Tübingen, Fachbibliothek Mathematik und Physik / Bereich Mathematik");
+    isil_to_department_map.put("DE-21-37", "Universität Tübingen, Institut für Sportwissenschaft");
+    isil_to_department_map.put("DE-21-42", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Orient- uns Islamwissenschaft");
+    isil_to_department_map.put("DE-21-43", "Universität Tübingen, Institut für Erziehungswissenschaft");
+    isil_to_department_map.put("DE-21-45", "Universität Tübingen, Philologisches Seminar");
+    isil_to_department_map.put("DE-21-46", "Universität Tübingen, Philosophisches Seminar");
+    isil_to_department_map.put("DE-21-50", "Universität Tübingen, Physiologisches Institut");
+    isil_to_department_map.put("DE-21-51", "Universität Tübingen, Psychologisches Institut");
+    isil_to_department_map.put("DE-21-52", "Universität Tübingen, Ludwig-Uhland-Institut für Empirische Kulturwissenschaft");
+    isil_to_department_map.put("DE-21-53", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Ethnologie");
+    isil_to_department_map.put("DE-21-54", "Universität Tübingen, Universitätsklinik für Zahn-, Mund- und Kieferheilkunde");
+    isil_to_department_map.put("DE-21-58", "Universität Tübingen, Institut für Politikwissenschaft");
+    isil_to_department_map.put("DE-21-62", "Universität Tübingen, Institut für Osteuropäische Geschichte und Landeskunde");
+    isil_to_department_map.put("DE-21-63", "Universität Tübingen, Institut für Tropenmedizin");
+    isil_to_department_map.put("DE-21-64", "Universität Tübingen, Institut für Geschichtliche Landeskunde und Historische Hilfswissenschaften");
+    isil_to_department_map.put("DE-21-65", "Universität Tübingen, Universitäts-Apotheke");
+    isil_to_department_map.put("DE-21-74", "Universität Tübingen, Zentrum für Informations-Technologie");
+    isil_to_department_map.put("DE-21-78", "Universität Tübingen, Institut für Medizinische Biometrie");
+    isil_to_department_map.put("DE-21-81", "Universität Tübingen, Inst. f. Astronomie und Astrophysik/Abt. Geschichte der Naturwiss.");
+    isil_to_department_map.put("DE-21-85", "Universität Tübingen, Institut für Soziologie");
+    isil_to_department_map.put("DE-21-86", "Universität Tübingen, Zentrum für Datenverarbeitung");
+    isil_to_department_map.put("DE-21-89", "Universität Tübingen, Institut für Arbeits- und Sozialmedizin");
+    isil_to_department_map.put("DE-21-92", "Universität Tübingen, Institut für Gerichtliche Medizin");
+    isil_to_department_map.put("DE-21-93", "Universität Tübingen, Institut für Ethik und Geschichte der Medizin");
+    isil_to_department_map.put("DE-21-95", "Universität Tübingen, Institut für Hirnforschung");
+    isil_to_department_map.put("DE-21-98", "Universität Tübingen, Fachbibliothek Mathematik und Physik / Bereich Physik");
+    isil_to_department_map.put("DE-21-99", "Universität Tübingen, Institut für Ur- und Frühgeschichte und Archäologie des Mittelalters, Abteilung für Ältere Urgeschichteund Quartärökologie");
+    isil_to_department_map.put("DE-21-106", "Universität Tübingen, Seminar für Zeitgeschichte");
+    isil_to_department_map.put("DE-21-108", "Universität Tübingen, Fakultätsbibliothek Neuphilologie");
+    isil_to_department_map.put("DE-21-109", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Sinologie und Koreanistik");
+    isil_to_department_map.put("DE-21-110", "Universität Tübingen, Institut für Kriminologie");
+    isil_to_department_map.put("DE-21-112", "Universität Tübingen, Fakultät für Biologie, Bibliothek");
+    isil_to_department_map.put("DE-21-116", "Universität Tübingen, Zentrum für Molekularbiologie der Pflanzen, Forschungsgruppe Pflanzenbiochemie");
+    isil_to_department_map.put("DE-21-117", "Universität Tübingen, Institut für Medizinische Informationsverarbeitung");
+    isil_to_department_map.put("DE-21-118", "Universität Tübingen, Universitäts-Archiv");
+    isil_to_department_map.put("DE-21-119", "Universität Tübingen, Wilhelm-Schickard-Institut für Informatik");
+    isil_to_department_map.put("DE-21-120", "Universität Tübingen, Asien-Orient-Institut, Abteilung für Japanologie");
+    isil_to_department_map.put("DE-21-121", "Universität Tübingen, Internationales Zentrum für Ethik in den Wissenschaften");
+    isil_to_department_map.put("DE-21-123", "Universität Tübingen, Medizinbibliothek");
+    isil_to_department_map.put("DE-21-124", "Universität Tübingen, Institut f. Medizinische Virologie und Epidemiologie d. Viruskrankheiten");
+    isil_to_department_map.put("DE-21-126", "Universität Tübingen, Institut für Medizinische Mikrobiologie und Hygiene");
+    isil_to_department_map.put("DE-21-203", "Universität Tübingen, Sammlung Werner Schweikert - Archiv der Weltliteratur");
+    isil_to_department_map.put("DE-21-205", "Universität Tübingen, Zentrum für Islamische Theologie");
 }
 
 
