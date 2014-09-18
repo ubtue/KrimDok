@@ -273,6 +273,11 @@
    <field name="local_subject" type="text" indexed="true" stored="true" multiValued="true"/>
    <field name="instituts_systematik1" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="instituts_systematik2" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik1" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik2" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik3" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik4" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik5" type="string" indexed="true" stored="true" multiValued="true"/>
 
    <!--  Multipart  -->
    <field name="multipart_set" type="string" indexed="true" stored="true"/>
