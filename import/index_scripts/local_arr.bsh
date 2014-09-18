@@ -4,7 +4,8 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.*;
 
 import java.util.Arrays;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * get the ISILs from LOK-tagged fields
@@ -182,6 +183,93 @@ public Set getInstitutsSystematik1(Record record) {
 
 public Set getInstitutsSystematik2(Record record) {
     return getInstitutsSystematik(record, 2);
+}
+
+
+Pattern FID_SYSTEMATIK_PATTERN = Pattern.compile("k?\\d+(\\.\\d+)+");
+
+
+Set getFIDSystematik(Record record, int level) {
+    Set results = new HashSet();
+    Iterator fieldsIter = record.getVariableFields("LOK").iterator();
+    while (fieldsIter.hasNext()) {
+        DataField lokfield = fieldsIter.next();
+        Iterator subfieldsIter = lokfield.getSubfields().iterator();
+        while (subfieldsIter.hasNext()) {
+            Subfield subfield = subfieldsIter.next();
+
+            String codeString = subfield.getCode().toString(); // |0?
+            char formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+
+            String dataString = subfield.getData(); // 936ln?
+
+            // Looking for 936ln-Tag
+            if (formatCode != '0' || !dataString.equals("936ln") || !subfieldsIter.hasNext())
+                continue;
+
+            subfield = subfieldsIter.next();
+            codeString = subfield.getCode().toString(); // |a?
+            formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+            if (formatCode != 'a')
+                continue;
+
+            String subfield_data = subfield.getData();
+            Matcher matcher = FID_SYSTEMATIK_PATTERN.matcher(subfield_data);
+            if (!matcher.matches())
+	        continue;
+
+            // Remove optional leading "k":
+            if (subfield_data.charAt(0) == 'k')
+	        subfield_data = subfield_data.substring(1);
+
+            String[] parts = subfield.getData().split("\\.");
+            if (parts.length < 1)
+                continue;
+
+            if (level == 1)
+                results.add(parts[0]);
+            else if (level == 2) {
+	        if (parts.length >= 2)
+                    results.add(parts[0] + "." + parts[1]);
+            } else if (level == 3) {
+	        if (parts.length >= 3)
+                    results.add(parts[0] + "." + parts[1] + "." + parts[2]);
+            } else if (level == 4) {
+	        if (parts.length >= 4)
+                    results.add(parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3]);
+            } else if (level == 5) {
+	        if (parts.length >= 5)
+                    results.add(parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3] + "." + parts[4]);
+            }
+        }
+    }
+
+    return results;
+}
+
+
+public Set getFIDSystematik1(Record record) {
+    return getFIDSystematik(record, 1);
+}
+
+
+public Set getFIDSystematik2(Record record) {
+    return getFIDSystematik(record, 2);
+}
+
+
+public Set getFIDSystematik3(Record record) {
+    return getFIDSystematik(record, 3);
+}
+
+
+public Set getFIDSystematik4(Record record) {
+    return getFIDSystematik(record, 4);
+}
+
+
+public Set getFIDSystematik5(Record record) {
+    return getFIDSystematik(record, 5);
 }
 
 
