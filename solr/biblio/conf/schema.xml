@@ -19,6 +19,7 @@
     </fieldType>
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
+	<charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII_de.txt"/>
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
@@ -26,6 +27,7 @@
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
       <analyzer type="query">
+	<charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII_de.txt"/>
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"/>
@@ -47,20 +49,19 @@
     <!-- Topic Field mit Synonymen für Personen im Indexanalyzer -->
     <fieldType name="text-syn-per" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
-        <!-- <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" /> -->
+	<charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII_de.txt"/>
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.SynonymFilterFactory" synonyms="synonymliste_per.dat" ignoreCase="true" expand="true"/>
         <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
-        <filter class="solr.ICUFoldingFilterFactory"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
       <analyzer type="query">
+	<charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII_de.txt"/>
         <!-- <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" /> -->
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
-        <filter class="solr.ICUFoldingFilterFactory"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
