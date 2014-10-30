@@ -64,7 +64,6 @@ if (is_array($series)) {
 }
 
 $author = $this->driver->tryMethod('getPrimaryAuthor');
-$author = rtrim($author, ' -0123456789');  # Trim trailing years.
 if (!empty($author)) {
     echo 'AU  - ' . "$author\r\n";
 }
@@ -72,10 +71,7 @@ if (!empty($author)) {
 $secondaryAuthors = $this->driver->tryMethod('getSecondaryAuthors');
 if (is_array($secondaryAuthors)) {
     foreach ($secondaryAuthors as $current) {
-        $current = rtrim($current, ' -0123456789');  # Trim trailing years.
-	if (!empty($current)) {
-            echo 'A2  - ' . "$current\r\n";
-        }
+        echo 'A2  - ' . "$current\r\n";
     }
 }
 
