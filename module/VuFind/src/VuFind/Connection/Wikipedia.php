@@ -110,7 +110,7 @@ class Wikipedia implements TranslatorAwareInterface
      */
     public function setLanguage($lang)
     {
-        $this->lang = $lang;
+        $this->lang = explode('-', $lang, 2)[0]; // To handle, e.g. "en-gb" etc.
     }
 
     /**
@@ -440,7 +440,7 @@ class Wikipedia implements TranslatorAwareInterface
         $info = array(
             'name' => $name,
             'description' => $this->sanitizeWikipediaBody($bodyStr),
-            'wiki_lang' => $this->lang,
+            'wiki_lang' =>  $this->lang,
         );
 
         /* Image */
