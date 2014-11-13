@@ -1095,6 +1095,48 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * Return an associative array of all container IDs (parents) mapped to their titles containing the record.
+     *
+     * @return array
+     */
+    public function getContainerIDsAndTitles()
+    {
+        $retval = array();
+
+        if (isset($this->fields['container_ids_and_titles']) && !empty($this->fields['container_ids_and_titles'])) {
+            foreach ($this->fields['container_ids_and_titles'] as $id_and_title) {
+	        $a = explode(":",  $id_and_title, 2);
+                if (count($a) == 2) {
+                    $retval[$a[0]] = $a[1];
+                }
+            }
+        }
+
+        return $retval;
+    }
+
+    /**
+     * Return an associative array of all containee IDs (children) mapped to their titles containing the record.
+     *
+     * @return array
+     */
+    public function getContaineeIDsAndTitles()
+    {
+        $retval = array();
+
+        if (isset($this->fields['containee_ids_and_titles']) && !empty($this->fields['containee_ids_and_titles'])) {
+            foreach ($this->fields['containee_ids_and_titles'] as $id_and_title) {
+	        $a = explode(":",  $id_and_title, 2);
+                if (count($a) == 2) {
+                    $retval[$a[0]] = $a[1];
+                }
+            }
+        }
+
+        return $retval;
+    }
+
+    /**
      * Get the short (pre-subtitle) title of the record.
      *
      * @return string
