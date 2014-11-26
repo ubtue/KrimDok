@@ -1095,6 +1095,30 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * @return array
+     */
+    public function getInstitutsSystematik()
+    {
+        if (isset($this->fields['instituts_systematik2']) && !empty($this->fields['instituts_systematik2'])) {
+            return $this->fields['instituts_systematik2'];
+        } else {
+            return array();
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getFidSystematik()
+    {
+        if (isset($this->fields['fid_systematik']) && !empty($this->fields['fid_systematik'])) {
+            return $this->fields['fid_systematik'];
+        } else {
+            return array();
+        }
+    }
+
+    /**
      * Return an associative array of all container IDs (parents) mapped to their titles containing the record.
      *
      * @return array

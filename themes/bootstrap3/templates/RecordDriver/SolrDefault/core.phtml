@@ -158,6 +158,21 @@
       </tr>
       <? endif; ?>
 
+      <? $fid_systematiken = $this->driver->getFidSystematik(); if (!empty($fid_systematiken)): ?>
+        <tr>
+          <th>FID Systematik</th>
+          <td><? foreach ($fid_systematiken as $fid_systematik): ?><?= $this->escapeHtml($fid_systematik)?><br/><? endforeach; ?></td>
+        </tr>
+      <? endif; ?>
+
+      <? $instituts_systematiken = $this->driver->getInstitutsSystematik(); if (!empty($instituts_systematiken)): ?>
+        <tr>
+          <th>Institutssystematik</th>
+          <td><? foreach ($instituts_systematiken as $instituts_systematik): ?>
+	  <?= $this->escapeHtml($instituts_systematik[0] . " " . substr($instituts_systematik, 1))?><br/><? endforeach; ?></td>
+        </tr>
+      <? endif; ?>
+
       <?/* Display container section if at least one container exists. */?>
       <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles)): ?>
       <tr>

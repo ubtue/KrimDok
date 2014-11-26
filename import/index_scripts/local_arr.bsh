@@ -189,7 +189,7 @@ public Set getInstitutsSystematik2(Record record) {
 Pattern FID_SYSTEMATIK_PATTERN = Pattern.compile("k?\\d+(\\.\\d+)+");
 
 
-Set getFIDSystematik(Record record, int level) {
+Set getFIDSystematikHelper(Record record, int level) {
     Set results = new HashSet();
     Iterator fieldsIter = record.getVariableFields("LOK").iterator();
     while (fieldsIter.hasNext()) {
@@ -222,7 +222,12 @@ Set getFIDSystematik(Record record, int level) {
             if (subfield_data.charAt(0) == 'k')
 	        subfield_data = subfield_data.substring(1);
 
-            String[] parts = subfield.getData().split("\\.");
+	    if (level == 0) {
+		results.add(subfield_data);
+		continue;
+	    }
+
+            String[] parts = subfield_data.split("\\.");
             if (parts.length < 1)
                 continue;
 
@@ -248,28 +253,33 @@ Set getFIDSystematik(Record record, int level) {
 }
 
 
+public Set getFIDSystematik(Record record) {
+    return getFIDSystematikHelper(record, 0);
+}
+
+
 public Set getFIDSystematik1(Record record) {
-    return getFIDSystematik(record, 1);
+    return getFIDSystematikHelper(record, 1);
 }
 
 
 public Set getFIDSystematik2(Record record) {
-    return getFIDSystematik(record, 2);
+    return getFIDSystematikHelper(record, 2);
 }
 
 
 public Set getFIDSystematik3(Record record) {
-    return getFIDSystematik(record, 3);
+    return getFIDSystematikHelper(record, 3);
 }
 
 
 public Set getFIDSystematik4(Record record) {
-    return getFIDSystematik(record, 4);
+    return getFIDSystematikHelper(record, 4);
 }
 
 
 public Set getFIDSystematik5(Record record) {
-    return getFIDSystematik(record, 5);
+    return getFIDSystematikHelper(record, 5);
 }
 
 

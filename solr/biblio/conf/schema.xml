@@ -51,17 +51,18 @@
       <analyzer type="index">
 	<charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII_de.txt"/>
         <tokenizer class="solr.ICUTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
+        <!--<filter class="solr.LowerCaseFilterFactory"/>-->
         <filter class="solr.SynonymFilterFactory" synonyms="synonymliste_per.dat" ignoreCase="true" expand="true"/>
-        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
+	<filter class="solr.LowerCaseTokenizerFactory" />
+        <!--<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>-->
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
       <analyzer type="query">
 	<charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII_de.txt"/>
-        <!-- <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" /> -->
         <tokenizer class="solr.ICUTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
+        <!--<filter class="solr.LowerCaseFilterFactory"/>-->
+	<filter class="solr.LowerCaseTokenizerFactory" />
+        <!--<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>-->
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
@@ -269,13 +270,14 @@
    <field name="local_signature" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="signature" type="signaturestring" indexed="true" stored="true" multiValued="true"/>
    <field name="local_subject" type="text" indexed="true" stored="true" multiValued="true"/>
-   <field name="instituts_systematik1" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="instituts_systematik2" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik1" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik2" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik3" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik4" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik5" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="instituts_systematik1" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="instituts_systematik2" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik1" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik2" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik3" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik4" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik5" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
 
    <!--  Multipart  -->
    <field name="multipart_set" type="string" indexed="true" stored="true"/>
