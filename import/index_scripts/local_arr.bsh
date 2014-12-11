@@ -60,13 +60,13 @@ public Set getIsils(Record record) {
 
                 	// Looking for 852-Tag
                 	if (formatCode == '0' && dataString.equals("852  ")) {
-                		pseudotag =  subfield.getData(); // dataString 852
+                		pseudotag = subfield.getData(); // dataString 852
                 	}
 //                	System.out.println("pseudotag: " + pseudotag);
 
                 	//Looking for ISIL
                 	if (formatCode == 'a' && pseudotag.equals("852  ")) {
-                		data =  subfield.getData();
+                		data = subfield.getData();
                 		isils.add(data);
 //                		System.out.print("  | " + data + " [" + pseudotag + "] ");
                			data = "";
@@ -91,7 +91,7 @@ public Set getIsils(Record record) {
     // Nothing worked!
     if (isils.isEmpty()) {
         isils.add("Unknown");
-        System.out.println("Unknown added");
+        System.out.println("No ISIL found!");
     }
 
     return isils;
@@ -186,7 +186,7 @@ public Set getInstitutsSystematik2(Record record) {
 }
 
 
-Pattern FID_SYSTEMATIK_PATTERN = Pattern.compile("k?\\d+(\\.\\d+)+");
+Pattern FID_SYSTEMATIK_PATTERN = Pattern.compile("k\\d+(\\.\\d+)+");
 
 
 Set getFIDSystematikHelper(Record record, int level) {
@@ -218,9 +218,8 @@ Set getFIDSystematikHelper(Record record, int level) {
             if (!matcher.matches())
 	        continue;
 
-            // Remove optional leading "k":
-            if (subfield_data.charAt(0) == 'k')
-	        subfield_data = subfield_data.substring(1);
+            // Remove leading "k":
+	    subfield_data = subfield_data.substring(1);
 
 	    if (level == 0) {
 		results.add(subfield_data);
@@ -521,63 +520,48 @@ public Set getLocalSignaturesIsil(Record record) {
  */
 public Set getLocalSubjects(Record record) {
     Set localsubjects = new LinkedHashSet();
-    List fields = record.getVariableFields("LOK");
-    Iterator fieldsIter = fields.iterator();
+    Iterator fieldsIter = record.getVariableFields("LOK").iterator();
     String dataString;
     String codeString;
     String pseudotag = "";
     String data = "";
     char formatCode = ' ';
-    if (fields != null) {
-        DataField lokfield;
-        while(fieldsIter.hasNext()) {
-            lokfield = (DataField) fieldsIter.next();
-            List subfields = lokfield.getSubfields();
-            Iterator subfieldsIter = subfields.iterator();
-            if (subfields != null) {
-                Subfield subfield;
-                while (subfieldsIter.hasNext()) {
-                	subfield = (Subfield) subfieldsIter.next();
+    while(fieldsIter.hasNext()) {
+	DataField lokfield = (DataField) fieldsIter.next();
+	List subfields = lokfield.getSubfields();
+	Iterator subfieldsIter = subfields.iterator();
+	if (subfields != null) {
+	    Subfield subfield;
+	    while (subfieldsIter.hasNext()) {
+		subfield = (Subfield) subfieldsIter.next();
 
-                	codeString = subfield.getCode().toString(); // |0
-                	formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+		codeString = subfield.getCode().toString(); // |0
+		formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
 
-                	dataString = subfield.getData().toUpperCase(); // 689
+		dataString = subfield.getData().toUpperCase(); // 689
 
-//                	System.out.print("subfieldcode: " + subfield.getCode() + "  " );
-//                	System.out.println("subfielddata: " + subfield.getData() );
+		//                	System.out.print("subfieldcode: " + subfield.getCode() + "  " );
+		//                	System.out.println("subfielddata: " + subfield.getData() );
 
-                	// Looking for 689-Tag
-                	if (formatCode == '0' && dataString.equals("689  ")) {
-                		pseudotag =  subfield.getData(); // dataString 689
-                	}
-//                	System.out.println("pseudotag:--" + pseudotag + "--");
+		// Looking for 689-Tag
+		if (formatCode == '0' && dataString.equals("689  ")) {
+		    pseudotag =  subfield.getData(); // dataString 689
+		}
+		//                	System.out.println("pseudotag:--" + pseudotag + "--");
 
-                	//Looking for local subject
-                	if (formatCode == 'a' && pseudotag.equals("689  ")) {
-                		data =  subfield.getData();
-//                		System.out.println("-> 689|a:--" + data + "--");
-//                		if (!data.equals("a") && !data.equals("g") && !data.equals("f") && !data.equals("s") && !data.equals("p") && !data.equals("k") && !data.equals("z") && !data.equals("c")) {
-                		if (data.length() > 1) {
-                			localsubjects.add(data);
-                			// System.out.println("Schlagwort: " + data );
-               				data = "";
-               				pseudotag = "";
-               			}
-                	}
-                }
+		//Looking for local subject
+		if (formatCode == 'a' && pseudotag.equals("689  ")) {
+		    data =  subfield.getData();
+		    if (data.length() > 1) {
+			localsubjects.add(data);
+			System.out.println("Schlagwort: " + data );
+			data = "";
+			pseudotag = "";
+		    }
+		}
+	    }
 
-            }
-
-//        System.out.println("");
-//        System.out.println("--- New LOK Line----");
-//        System.out.println("");
-        }
-//     System.out.println("");
-//     System.out.println("");
-//     System.out.println("=== New Record ===");
-//     System.out.println("");
-
+	}
     }
 
 
