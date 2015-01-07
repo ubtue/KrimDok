@@ -670,7 +670,6 @@ class SolrMarc extends SolrDefault
             '856' => ['y', 'z', '3'],   // Standard URL
             '555' => ['a']         // Cumulative index/finding aids
         ];
-
         foreach ($fieldsToCheck as $field => $subfields) {
             $urls = $this->getMarcRecord()->getFields($field);
             if ($urls) {
