@@ -129,6 +129,8 @@
         </tr>
       <? endif; ?>
 
+      <? require "JOP.phtml"; ?>
+
       <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
       <tr>
         <th><?=$this->transEsc('Published')?>: </th>
