@@ -291,6 +291,6 @@ public Set getFormat(Record record){
     if (result.isEmpty()) {
         result.add("Unknown");
     }
-    
+
     return result;
 }
