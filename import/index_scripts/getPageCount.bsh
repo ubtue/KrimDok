@@ -1,0 +1,21 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.marc4j.marc.Record;
+
+
+// define the base level indexer so that its methods can be called from the script.
+// note that the SolrIndexer code will set this value before the script methods are called.
+org.solrmarc.index.SolrIndexer indexer = null;
+
+
+private final static Pattern PAGE_COUNT_PATTERN = Pattern.compile("\\s*([0-9])+\\s*S\\.\\s*");
+
+
+public String getPageCount(Record record) {
+    String field_value = indexer.getFirstFieldVal(record, "300a");
+    if (field_value == null)
+	return null;
+
+    Matcher matcher = PAGE_COUNT_PATTERN.matcher(field_value);
+    return matcher.matches() ? matcher.group(1) : null;
+}
