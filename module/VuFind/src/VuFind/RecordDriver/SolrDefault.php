@@ -194,6 +194,16 @@ class SolrDefault extends AbstractBase
         return $retval;
     }
 
+    public function getGenres()
+    {
+        return isset($this->fields['genre']) ? $this->fields['genre'] : array();
+    }
+
+    public function getTopics()
+    {
+        return isset($this->fields['topic']) ? $this->fields['topic'] : array();
+    }
+
     /**
      * Get all record links related to the current record. Each link is returned as
      * array.
@@ -1705,6 +1715,18 @@ class SolrDefault extends AbstractBase
     {
         return isset($this->fields['container_start_page'])
             ? $this->fields['container_start_page'] : '';
+    }
+
+    /**
+     * Get the start page of the item that contains this record (i.e. MARC 773q of a
+     * journal).
+     *
+     * @return string
+     */
+    public function getPageCount()
+    {
+        return isset($this->fields['page_count'])
+            ? $this->fields['page_count'] : '';
     }
 
     /**
