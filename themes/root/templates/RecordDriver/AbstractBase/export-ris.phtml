@@ -59,7 +59,7 @@ if (!empty($journalTitle)) {
 $series = $this->driver->tryMethod('getSeries');
 if (is_array($series)) {
     foreach ($series as $current) {
-        echo 'T3  - ' . (is_array($current) ? $current['name'] : $current) . "\r\n";
+        echo ($format == 'BOOK' ? 'T2' : 'T3') . '  - ' . (is_array($current) ? $current['name'] : $current) . "\r\n";
     }
 }
 
@@ -106,6 +106,25 @@ if (is_array($languages)) {
     foreach ($languages as $lang) {
         echo 'LA  - ' . "$lang\r\n";
     }
+}
+
+$genres =  $this->driver->tryMethod('getGenres');
+if (is_array($genres)) {
+    foreach ($genres as $genre) {
+        echo 'M3  - ' . "$genre\r\n";
+    }
+}
+
+$topics =  $this->driver->tryMethod('getTopics');
+if (is_array($topics)) {
+    foreach ($topics as $topic) {
+        echo 'KW  - ' . "$topic\r\n";
+    }
+}
+
+$start_page = $this->driver->tryMethod('getContainerStartPage');
+if (!empty($start_page)) {
+    echo 'SP  - ' . "$start_page\r\n";
 }
 
 $isbns = $this->driver->tryMethod('getISBNs');
