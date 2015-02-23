@@ -6,20 +6,6 @@ import java.util.LinkedHashSet;
 import java.util.regex.*;
 
 
-class ContainerIdAndTitle {
-    private String id_;
-    private String title_;
-
-    public ContainerIdAndTitle(String id, String title) {
-	this.id_ = id;
-	this.title_ = title;
-    }
-
-    public String getId() { return id_; }
-    public String getTitle() { return title_; }
-}
-
-
 /**
  * Returns either a Set<String> of parent (ID + colon + parent title).  Only IDs w/o titles will not be returned,
  * instead a warning will be emitted on stderr.
