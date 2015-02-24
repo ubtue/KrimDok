@@ -1150,6 +1150,28 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * Return an associative array of all container IDs (parents) mapped to their titles containing the record.
+     *
+     * @return array
+     */
+    public function getURLsAndMaterialTypes()
+    {
+        $retval = array();
+
+        if (isset($this->fields['urls_and_material_types']) && !empty($this->fields['urls_and_material_types'])) {
+            foreach ($this->fields['urls_and_material_types'] as $url_and_material_type) {
+	        $last_colon_pos = strrpos($url_and_material_type, ":");
+                if ($last_colon_pos) {
+                    $retval[substr($url_and_material_type, 0, $last_colon_pos)] =
+		        substr($url_and_material_type, $last_colon_pos + 1);
+                }
+            }
+        }
+
+        return $retval;
+    }
+
+    /**
      * Return an associative array of all containee IDs (children) mapped to their titles containing the record.
      *
      * @return array

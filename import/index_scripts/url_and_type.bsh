@@ -1,0 +1,25 @@
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
+
+import java.util.LinkedHashSet;
+
+
+/**
+ * Returns either a Set<String> of parent (URL + colon + material type).  URLs are taken from 856u and material
+ * types from 8563.  For missing 8563 subfields the text "Unknown material type" will be used.
+ *
+ * @return  A, possibly empty, Set<String> containing the URL/material-type pairs.
+ */
+public Set getUrlsAndMaterialTypes(Record record) {
+    Set urls_and_material_types = new LinkedHashSet();
+    for (DataField field : record.getVariableFields("856")) {
+	Subfield subfield_3 = field.getSubfield('3');
+	String material_type = (subfield_3 == null) ? "Unknown material type" : subfield_3.getData();
+
+	for (Subfield subfield_u : field.getSubfields('u'))
+	    urls_and_material_types.add(subfield_u.getData() + ":" + material_type);
+    }
+
+    return urls_and_material_types;
+}
