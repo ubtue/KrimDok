@@ -182,21 +182,15 @@
       </tr>
       <? endif; ?>
 
-      <?
-        $openUrl = $this->driver->openURLActive('record') ? $this->driver->getOpenURL() : false;
-        // Account for replace_other_urls setting
-        $urls = ($openUrl && $this->driver->replaceURLsWithOpenURL()) ? array() : $this->record($this->driver)->getLinkDetails();
-      ?>
-      <? if (!empty($urls) || $openUrl): ?>
+      <? $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
+      <? if (!empty($urls_and_material_types)): ?>
       <tr>
-        <th><?=$this->transEsc('Online Access')?>: </th>
+        <th><?=$this->transEsc('Online Access')?>:</th>
         <td>
-          <? foreach ($urls as $current): ?>
-            <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>"><?=$this->escapeHtml($current['desc'])?></a><br/>
+          <? foreach ($urls_and_material_types as $url => $material_type): ?>
+            <a href="<?=$url?>" target="_blank"><?=$this->escapeHtml($material_type)?></a>
+            <br/>
           <? endforeach; ?>
-          <? if ($openUrl): ?>
-            <?=$this->openUrl($openUrl)?><br/>
-          <? endif; ?>
         </td>
       </tr>
       <? endif; ?>
