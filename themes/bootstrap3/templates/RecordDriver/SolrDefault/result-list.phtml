@@ -105,6 +105,20 @@
           <? endif; ?>
         <? endif; ?>
       </div>
+      <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles)): ?>
+      <? foreach ($ids_and_titles as $id => $title): ?>
+        <div>
+	  <?=$this->transEsc('Part of')?>: <a href="/vufind/Record/<?=$id?>"><?=$this->escapeHtml($title)?></a>
+        </div>
+      <? endforeach; ?>
+    <? endif; ?>
+
+    <? if(!$this->driver->isCollection()): ?>
+      <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
+        <? if (!empty($snippet['caption'])): ?>
+          <strong><?=$this->transEsc($snippet['caption']) ?>:</strong> ';
+        <? endif; ?>
+      </div>
 
       <? /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
             but even if we don't plan to display the link, we still want to get the $openUrl
