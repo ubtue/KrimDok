@@ -151,22 +151,24 @@
       <? endif; ?>
       <?=$this->record($this->driver)->getPreviews()?>
     </div>
-    <div class="col-xs-3 right hidden-print">
-      <? /* Display qrcode if appropriate: */ ?>
-      <? if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
-        <?
-          // Add JS Variables for QrCode
-          $this->jsTranslations()->addStrings(array('qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show'));
-        ?>
-        <span class="hidden-xs">
-          <i class="fa fa-fw fa-qrcode"></i> <a href="<?=$this->escapeHtmlAttr($QRCode);?>" class="qrcodeLink"><?=$this->transEsc('qrcode_show')?></a>
-          <div class="qrcode hidden">
-            <script type="text/template" class="qrCodeImgTag">
-              <img alt="<?=$this->transEsc('QR Code')?>" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
-            </script>
-          </div><br/>
-        </span>
-      <? endif; ?>
+
+    <? $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
+    <? if (!empty($urls_and_material_types)): ?>
+      <? foreach ($urls_and_material_types as $url => $material_type): ?>
+        <a href="<?=$url?>" class="fulltext" target="new"><i class="fa fa-external-link"></i> <?=$this->escapeHtml($material_type)?></a>
+        <br/>
+      <? endforeach; ?>
+    <? endif; ?>
+
+    <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+
+    <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
+      <span class="status ajax-availability hidden">
+        <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
+      </span>
+    <? endif; ?>
+    <?=$this->record($this->driver)->getPreviews()?>
+  </div>
 
       <? if ($this->userlist()->getMode() !== 'disabled'): ?>
         <? /* Add to favorites */ ?>
