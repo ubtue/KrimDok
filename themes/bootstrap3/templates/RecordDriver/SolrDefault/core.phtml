@@ -129,7 +129,7 @@
         </tr>
       <? endif; ?>
 
-      <? require "JOP.phtml"; ?>
+      <? include(realpath(dirname(__FILE__) . "JOP.phtml")); ?>
 
       <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
       <tr>
