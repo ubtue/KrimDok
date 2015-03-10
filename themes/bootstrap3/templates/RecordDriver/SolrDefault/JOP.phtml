@@ -7,7 +7,7 @@
           var genre = ("<?=$formats[0]?>" == "Article" ? "article" : "journal");
           $.ajax({
             type: "GET",
-            url: "/vufind/proxy/load?url=http%3A%2F%2Fservices.dnb.de%2Ffize-service%2Fgvr%2Ffull.xml%3Fsid%3Dbib%3Atueb%26issn%3D<?=$this->escapeHtml($this->driver->getCleanISSN())?>%26genre%3D"+genre,
+            url: "<?=$this->url('home') ?>proxy/load?url=http%3A%2F%2Fservices.dnb.de%2Ffize-service%2Fgvr%2Ffull.xml%3Fsid%3Dbib%3Atueb%26issn%3D<?=$this->escapeHtml($this->driver->getCleanISSN())?>%26genre%3D"+genre,
             dataType: "xml",
             success: function(xml) {
               $(document).ready(function() {
