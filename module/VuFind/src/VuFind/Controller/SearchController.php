@@ -282,12 +282,11 @@ class SearchController extends AbstractSearch
     public function homeAction()
     {
         return $this->createViewModel(
-            [
-                'results' => $this->getHomePageFacets(),
-                'hierarchicalFacets' => $this->getHierarchicalFacets(),
-                'hierarchicalFacetSortOptions'
-                    => $this->getHierarchicalFacetSortSettings()
-            ]
+/*
+  No browsing needed hier...
+            array('results' => $this->getHomePageFacets())
+*/
+            array('results' => null)
         );
     }
 
