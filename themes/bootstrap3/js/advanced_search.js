@@ -73,9 +73,9 @@ function addGroup(firstTerm, firstField, join)
   if(join == 'NOT') {
     newGroup += ' selected';
   }
-  newGroup += '>' +searchJoins['NOT'] + '</option>'
+/*  newGroup += '>' +searchJoins['NOT'] + '</option>'
     + '</select></div></div>';
-
+*/
   $('#groupPlaceHolder').before(newGroup);
   addSearch(nextGroup, firstTerm, firstField);
   // Show join menu

@@ -2,7 +2,7 @@
 
 var nextGroup = 0;
 var groupSearches = [];
-var booleanSearchOperators = ["AND", "OR", "NOT"];
+var booleanSearchOperators = ["AND", "OR"];
 
 function addSearch(group, term, field, op)
 {
