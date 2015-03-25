@@ -1164,6 +1164,7 @@ class SolrDefault extends AbstractBase
 	    "Inhaltstext"               => "contents",
 	    "Verlagsinformation"        => "publisher information",
 	    "Ausführliche Beschreibung" => "detailed description",
+	    "Unbekanntes Material"      => "unknown material type",
         ];
         $map_to_french = [
             "Inhaltsverzeichnis"        => "contenu",
@@ -1173,6 +1174,7 @@ class SolrDefault extends AbstractBase
 	    "Inhaltstext"               => "contenu du texte",
 	    "Verlagsinformation"        => "informations editeur",
 	    "Ausführliche Beschreibung" => "la pleine description",
+	    "Unbekanntes Material"      => "matériau inconnu",
         ];
 
 	// Determine language code:
