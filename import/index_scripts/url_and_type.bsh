@@ -15,7 +15,7 @@ public Set getUrlsAndMaterialTypes(Record record) {
     Set urls_and_material_types = new LinkedHashSet();
     for (DataField field : record.getVariableFields("856")) {
 	Subfield subfield_3 = field.getSubfield('3');
-	String material_type = (subfield_3 == null) ? "Unknown material type" : subfield_3.getData();
+	String material_type = (subfield_3 == null) ? "Unbekanntes Material" : subfield_3.getData();
 
 	for (Subfield subfield_u : field.getSubfields('u'))
 	    urls_and_material_types.add(subfield_u.getData() + ":" + material_type);
