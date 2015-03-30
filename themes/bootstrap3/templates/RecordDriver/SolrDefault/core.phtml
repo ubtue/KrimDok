@@ -178,7 +178,7 @@
       <?/* Display container section if at least one container exists. */?>
       <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles)): ?>
       <tr>
-        <th><?=$this->transEsc('Part of')?>: </th>
+        <th><?=$this->transEsc('In')?>: </th>
         <td>
           <? foreach ($ids_and_titles as $id => $title): ?>
             <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
