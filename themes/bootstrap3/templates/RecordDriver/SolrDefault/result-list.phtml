@@ -63,7 +63,7 @@
           <? endif; ?>
         <? endif; ?>
       <? endif; ?>
-
+    <? endif; ?>
       <?
       /* Display information on duplicate records if available */
       if ($dedupData = $this->driver->getDedupData()): ?>
@@ -182,13 +182,12 @@
       <? if ($this->userlist()->getMode() !== 'disabled'): ?>
         <? /* Add to favorites */ ?>
         <i class="fa fa-fw fa-star"></i> <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="save-record modal-link" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"><?=$this->transEsc('Add to favorites')?></a><br/>
-
         <? /* Saved lists */ ?>
         <div class="savedLists alert alert-info hidden">
           <strong><?=$this->transEsc("Saved in")?>:</strong>
         </div>
-      <? endif; ?>
-
+      <? endif; ?>	
+      <? /* Hierarchy tree link */ ?>
       <? $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
         <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
           <div class="hierarchyTreeLink">

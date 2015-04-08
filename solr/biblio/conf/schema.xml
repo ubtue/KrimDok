@@ -318,16 +318,11 @@
  <!-- CopyFields for All Fields -->
  <copyField source="format"    dest="allfields"/>
  <copyField source="format"    dest="allfields_unstemmed"/>
-<<<<<<< HEAD
  <!-- CopyFields for call numbers -->
  <copyField source="dewey-raw" dest="dewey-search"/>
  <copyField source="callnumber-raw" dest="callnumber-search"/>
-=======
-
  <!--  Local Data -->
  <copyField source="local_signature" dest="signature"/>
-
->>>>>>> Integration weiterer Anpassungen von Stefan Winkler vom BSZ.
  <!-- Default Boolean Operator -->
  <solrQueryParser defaultOperator="AND"/>
 </schema>
