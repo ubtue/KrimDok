@@ -27,7 +27,7 @@
  * @link     http://vufind.org/wiki/vufind2:record_drivers Wiki
  */
 namespace VuFind\RecordDriver;
-use VuFind\Code\ISBN, VuFind\View\Helper\Root\RecordLink;
+use VuFindCode\ISBN, VuFind\View\Helper\Root\RecordLink;
 
 /**
  * Default model for Solr records -- used when a more specific model based on
@@ -40,6 +40,7 @@ use VuFind\Code\ISBN, VuFind\View\Helper\Root\RecordLink;
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:record_drivers Wiki
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class SolrDefault extends AbstractBase
@@ -50,9 +51,9 @@ class SolrDefault extends AbstractBase
      *
      * @var array
      */
-    protected $preferredSnippetFields = array(
+    protected $preferredSnippetFields = [
         'contents', 'topic'
-    );
+    ];
 
     /**
      * These Solr fields should NEVER be used for snippets.  (We exclude author
@@ -62,11 +63,11 @@ class SolrDefault extends AbstractBase
      *
      * @var array
      */
-    protected $forbiddenSnippetFields = array(
+    protected $forbiddenSnippetFields = [
         'author', 'author-letter', 'title', 'title_short', 'title_full',
         'title_full_unstemmed', 'title_auth', 'title_sub', 'spelling', 'id',
         'ctrlnum'
-    );
+    ];
 
     /**
      * These are captions corresponding with Solr fields for use when displaying
@@ -74,7 +75,7 @@ class SolrDefault extends AbstractBase
      *
      * @var array
      */
-    protected $snippetCaptions = array();
+    protected $snippetCaptions = [];
 
     /**
      * Should we highlight fields in search results?
@@ -109,7 +110,21 @@ class SolrDefault extends AbstractBase
      *
      * @var array
      */
-    protected $highlightDetails = array();
+    protected $highlightDetails = [];
+
+    /**
+     * Search results plugin manager
+     *
+     * @var \VuFindSearch\Service
+     */
+    protected $searchService = null;
+
+    /**
+     * Should we use hierarchy fields for simple container-child records linking?
+     *
+     * @var bool
+     */
+    protected $containerLinking = false;
 
     /**
      * Constructor
@@ -137,6 +152,12 @@ class SolrDefault extends AbstractBase
                 $this->snippetCaptions[$key] = $value;
             }
         }
+
+        // Container-contents linking
+        $this->containerLinking
+            = !isset($mainConfig->Hierarchy->simpleContainerLinks)
+            ? false : $mainConfig->Hierarchy->simpleContainerLinks;
+
         parent::__construct($mainConfig, $recordConfig);
     }
 
@@ -160,7 +181,7 @@ class SolrDefault extends AbstractBase
     public function getAccessRestrictions()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -172,26 +193,20 @@ class SolrDefault extends AbstractBase
      */
     public function getAllSubjectHeadings()
     {
-        $topic = isset($this->fields['topic']) ? $this->fields['topic'] : array();
-        $geo = isset($this->fields['geographic']) ?
-            $this->fields['geographic'] : array();
-        $genre = isset($this->fields['genre']) ? $this->fields['genre'] : array();
+        $headings = [];
+        foreach (['topic', 'geographic', 'genre', 'era'] as $field) {
+            if (isset($this->fields[$field])) {
+                $headings = array_merge($headings, $this->fields[$field]);
+            }
+        }
 
         // The Solr index doesn't currently store subject headings in a broken-down
         // format, so we'll just send each value as a single chunk.  Other record
         // drivers (i.e. MARC) can offer this data in a more granular format.
-        $retval = array();
-        foreach ($topic as $t) {
-            $retval[] = array($t);
-        }
-        foreach ($geo as $g) {
-            $retval[] = array($g);
-        }
-        foreach ($genre as $g) {
-            $retval[] = array($g);
-        }
-
-        return $retval;
+        $callback = function ($i) {
+            return [$i];
+        };
+        return array_map($callback, array_unique($headings));
     }
 
     public function getGenres()
@@ -235,7 +250,7 @@ class SolrDefault extends AbstractBase
     public function getAwards()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -246,7 +261,7 @@ class SolrDefault extends AbstractBase
     public function getBibliographyNotes()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -261,18 +276,26 @@ class SolrDefault extends AbstractBase
     }
 
     /**
-     * Get the call number associated with the record (empty string if none).
+     * Get the first call number associated with the record (empty string if none).
      *
      * @return string
      */
     public function getCallNumber()
     {
-        // Use the callnumber-a field from the Solr index; the plain callnumber
-        // field is normalized to have no spaces, so it is unsuitable for display.
-        return isset($this->fields['callnumber-a']) ?
-            $this->fields['callnumber-a'] : '';
+        $all = $this->getCallNumbers();
+        return isset($all[0]) ? $all[0] : '';
     }
 
+    /**
+     * Get all call numbers associated with the record (empty string if none).
+     *
+     * @return array
+     */
+    public function getCallNumbers()
+    {
+        return isset($this->fields['callnumber-raw'])
+            ? $this->fields['callnumber-raw'] : [];
+    }
     /**
      * Return the first valid ISBN found in the record (favoring ISBN-10 over
      * ISBN-13 when possible).
@@ -366,7 +389,7 @@ class SolrDefault extends AbstractBase
     public function getDateSpan()
     {
         return isset($this->fields['dateSpan']) ?
-            $this->fields['dateSpan'] : array();
+            $this->fields['dateSpan'] : [];
     }
 
     /**
@@ -377,15 +400,15 @@ class SolrDefault extends AbstractBase
      */
     public function getDeduplicatedAuthors()
     {
-        $authors = array(
+        $authors = [
             'main' => $this->getPrimaryAuthor(),
             'corporate' => $this->getCorporateAuthor(),
             'secondary' => $this->getSecondaryAuthors()
-        );
+        ];
 
         // The secondary author array may contain a corporate or primary author;
         // let's be sure we filter out duplicate values.
-        $duplicates = array();
+        $duplicates = [];
         if (!empty($authors['main'])) {
             $duplicates[] = $authors['main'];
         }
@@ -418,7 +441,7 @@ class SolrDefault extends AbstractBase
     public function getFindingAids()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -428,7 +451,7 @@ class SolrDefault extends AbstractBase
      */
     public function getFormats()
     {
-        return isset($this->fields['format']) ? $this->fields['format'] : array();
+        return isset($this->fields['format']) ? $this->fields['format'] : [];
     }
 
     /**
@@ -439,7 +462,7 @@ class SolrDefault extends AbstractBase
     public function getGeneralNotes()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -494,10 +517,10 @@ class SolrDefault extends AbstractBase
             // First check for preferred fields:
             foreach ($this->preferredSnippetFields as $current) {
                 if (isset($this->highlightDetails[$current][0])) {
-                    return array(
+                    return [
                         'snippet' => $this->highlightDetails[$current][0],
                         'caption' => $this->getSnippetCaption($current)
-                    );
+                    ];
                 }
             }
 
@@ -507,10 +530,10 @@ class SolrDefault extends AbstractBase
             ) {
                 foreach ($this->highlightDetails as $key => $value) {
                     if (!in_array($key, $this->forbiddenSnippetFields)) {
-                        return array(
+                        return [
                             'snippet' => $value[0],
                             'caption' => $this->getSnippetCaption($key)
-                        );
+                        ];
                     }
                 }
             }
@@ -543,7 +566,7 @@ class SolrDefault extends AbstractBase
     public function getInstitutions()
     {
         return isset($this->fields['institution'])
-            ? $this->fields['institution'] : array();
+            ? $this->fields['institution'] : [];
     }
 
     /**
@@ -556,7 +579,7 @@ class SolrDefault extends AbstractBase
         // If ISBN is in the index, it should automatically be an array... but if
         // it's not set at all, we should normalize the value to an empty array.
         return isset($this->fields['isbn']) && is_array($this->fields['isbn']) ?
-            $this->fields['isbn'] : array();
+            $this->fields['isbn'] : [];
     }
 
     /**
@@ -569,7 +592,7 @@ class SolrDefault extends AbstractBase
         // If ISSN is in the index, it should automatically be an array... but if
         // it's not set at all, we should normalize the value to an empty array.
         return isset($this->fields['issn']) && is_array($this->fields['issn']) ?
-            $this->fields['issn'] : array();
+            $this->fields['issn'] : [];
     }
 
     /**
@@ -580,7 +603,7 @@ class SolrDefault extends AbstractBase
     public function getLanguages()
     {
         return isset($this->fields['language']) ?
-            $this->fields['language'] : array();
+            $this->fields['language'] : [];
     }
 
     /**
@@ -628,7 +651,7 @@ class SolrDefault extends AbstractBase
     public function getNewerTitles()
     {
         return isset($this->fields['title_new']) ?
-            $this->fields['title_new'] : array();
+            $this->fields['title_new'] : [];
     }
 
     /**
@@ -639,7 +662,7 @@ class SolrDefault extends AbstractBase
     public function getOCLC()
     {
         return isset($this->fields['oclc_num']) ?
-            $this->fields['oclc_num'] : array();
+            $this->fields['oclc_num'] : [];
     }
 
     /**
@@ -701,13 +724,13 @@ class SolrDefault extends AbstractBase
         $pubDate = empty($pubDate) ? '' : $pubDate[0];
 
         // Start an array of OpenURL parameters:
-        return array(
+        return [
             'ctx_ver' => 'Z39.88-2004',
             'ctx_enc' => 'info:ofi/enc:UTF-8',
             'rfr_id' => 'info:sid/' . $this->getCoinsID() . ':generator',
             'rft.title' => $this->getTitle(),
             'rft.date' => $pubDate
-        );
+        ];
     }
 
     /**
@@ -863,7 +886,7 @@ class SolrDefault extends AbstractBase
     public function getPhysicalDescriptions()
     {
         return isset($this->fields['physical']) ?
-            $this->fields['physical'] : array();
+            $this->fields['physical'] : [];
     }
 
     /**
@@ -874,7 +897,7 @@ class SolrDefault extends AbstractBase
     public function getPlacesOfPublication()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -885,7 +908,7 @@ class SolrDefault extends AbstractBase
     public function getPlayingTimes()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -896,7 +919,7 @@ class SolrDefault extends AbstractBase
     public function getPreviousTitles()
     {
         return isset($this->fields['title_old']) ?
-            $this->fields['title_old'] : array();
+            $this->fields['title_old'] : [];
     }
 
     /**
@@ -918,7 +941,7 @@ class SolrDefault extends AbstractBase
     public function getProductionCredits()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -929,7 +952,7 @@ class SolrDefault extends AbstractBase
     public function getPublicationDates()
     {
         return isset($this->fields['publishDate']) ?
-            $this->fields['publishDate'] : array();
+            $this->fields['publishDate'] : [];
     }
 
     /**
@@ -956,7 +979,7 @@ class SolrDefault extends AbstractBase
         $dates = $this->getHumanReadablePublicationDates();
 
         $i = 0;
-        $retval = array();
+        $retval = [];
         while (isset($places[$i]) || isset($names[$i]) || isset($dates[$i])) {
             // Build objects to represent each set of data; these will
             // transform seamlessly into strings in the view layer.
@@ -979,7 +1002,7 @@ class SolrDefault extends AbstractBase
     public function getPublicationFrequency()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -990,7 +1013,7 @@ class SolrDefault extends AbstractBase
     public function getPublishers()
     {
         return isset($this->fields['publisher']) ?
-            $this->fields['publisher'] : array();
+            $this->fields['publisher'] : [];
     }
 
     /**
@@ -1002,7 +1025,7 @@ class SolrDefault extends AbstractBase
     public function getRealTimeHistory()
     {
         // Not supported by the Solr index -- implement in child classes.
-        return array();
+        return [];
     }
 
     /**
@@ -1014,7 +1037,7 @@ class SolrDefault extends AbstractBase
     public function getRealTimeHoldings()
     {
         // Not supported by the Solr index -- implement in child classes.
-        return array();
+        return [];
     }
 
     /**
@@ -1025,7 +1048,7 @@ class SolrDefault extends AbstractBase
     public function getRelationshipNotes()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -1036,7 +1059,7 @@ class SolrDefault extends AbstractBase
     public function getSecondaryAuthors()
     {
         return isset($this->fields['author2']) ?
-            $this->fields['author2'] : array();
+            $this->fields['author2'] : [];
     }
 
     /**
@@ -1053,7 +1076,7 @@ class SolrDefault extends AbstractBase
             return $this->fields['series'];
         }
         return isset($this->fields['series2']) ?
-            $this->fields['series2'] : array();
+            $this->fields['series2'] : [];
     }
 
     /**
@@ -1219,7 +1242,7 @@ class SolrDefault extends AbstractBase
     public function getSystemDetails()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -1237,11 +1260,11 @@ class SolrDefault extends AbstractBase
             && !empty($this->fields['description'])
         ) {
             return is_array($this->fields['description'])
-                ? $this->fields['description'] : array($this->fields['description']);
+                ? $this->fields['description'] : [$this->fields['description']];
         }
 
         // If we got this far, no description was found:
-        return array();
+        return [];
     }
 
     /**
@@ -1252,7 +1275,7 @@ class SolrDefault extends AbstractBase
     public function getTargetAudienceNotes()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -1271,12 +1294,12 @@ class SolrDefault extends AbstractBase
         if (isset($this->fields['thumbnail']) && $this->fields['thumbnail']) {
             return $this->fields['thumbnail'];
         }
-        $arr = array(
+        $arr = [
             'author'     => mb_substr($this->getPrimaryAuthor(), 0, 300, 'utf-8'),
             'callnumber' => $this->getCallNumber(),
             'size'       => $size,
             'title'      => mb_substr($this->getTitle(), 0, 300, 'utf-8')
-        );
+        ];
         if ($isbn = $this->getCleanISBN()) {
             $arr['isbn'] = $isbn;
         }
@@ -1292,7 +1315,7 @@ class SolrDefault extends AbstractBase
         // If an ILS driver has injected extra details, check for IDs in there
         // to fill gaps:
         if ($ilsDetails = $this->getExtraDetail('ils_details')) {
-            foreach (array('isbn', 'issn', 'oclc', 'upc') as $key) {
+            foreach (['isbn', 'issn', 'oclc', 'upc'] as $key) {
                 if (!isset($arr[$key]) && isset($ilsDetails[$key])) {
                     $arr[$key] = $ilsDetails[$key];
                 }
@@ -1343,7 +1366,7 @@ class SolrDefault extends AbstractBase
     public function getTOC()
     {
         return isset($this->fields['contents'])
-            ? $this->fields['contents'] : array();
+            ? $this->fields['contents'] : [];
     }
 
     /**
@@ -1354,7 +1377,7 @@ class SolrDefault extends AbstractBase
     public function getHierarchicalPlaceNames()
     {
         // Not currently stored in the Solr index
-        return array();
+        return [];
     }
 
     /**
@@ -1365,7 +1388,7 @@ class SolrDefault extends AbstractBase
     public function getUPC()
     {
         return isset($this->fields['upc_str_mv']) ?
-            $this->fields['upc_str_mv'] : array();
+            $this->fields['upc_str_mv'] : [];
     }
 
     /**
@@ -1388,11 +1411,11 @@ class SolrDefault extends AbstractBase
         // otherwise, return empty array:
         if (isset($this->fields['url']) && is_array($this->fields['url'])) {
             $filter = function ($url) {
-                return array('url' => $url);
+                return ['url' => $url];
             };
             return array_map($filter, $this->fields['url']);
         }
-        return array();
+        return [];
     }
 
     /**
@@ -1435,19 +1458,18 @@ class SolrDefault extends AbstractBase
     public function getHierarchyTopID()
     {
         return isset($this->fields['hierarchy_top_id'])
-            ? $this->fields['hierarchy_top_id'] : array();
+            ? $this->fields['hierarchy_top_id'] : [];
     }
 
     /**
-     * Get the absolute parent title(s) associated with this item
-     * (empty if none).
+     * Get the absolute parent title(s) associated with this item (empty if none).
      *
      * @return array
      */
     public function getHierarchyTopTitle()
     {
         return isset($this->fields['hierarchy_top_title'])
-            ? $this->fields['hierarchy_top_title'] : array();
+            ? $this->fields['hierarchy_top_title'] : [];
     }
 
     /**
@@ -1468,7 +1490,7 @@ class SolrDefault extends AbstractBase
 
         // Initialize some variables needed within the switch below:
         $isCollection = $this->isCollection();
-        $titles = $ids = array();
+        $titles = $ids = [];
 
         // Check config setting for what constitutes a collection, act accordingly:
         switch ($hierarchyDriver->getCollectionLinkType()) {
@@ -1500,7 +1522,7 @@ class SolrDefault extends AbstractBase
 
         // Map the titles and IDs to a useful format:
         $c = count($ids);
-        $retVal = array();
+        $retVal = [];
         for ($i = 0; $i < $c; $i++) {
             $retVal[$ids[$i]] = $titles[$i];
         }
@@ -1544,7 +1566,7 @@ class SolrDefault extends AbstractBase
      */
     public function getHierarchyPositionsInParents()
     {
-        $retVal = array();
+        $retVal = [];
         if (isset($this->fields['hierarchy_parent_id'])
             && isset($this->fields['hierarchy_sequence'])
         ) {
@@ -1563,7 +1585,7 @@ class SolrDefault extends AbstractBase
      */
     public function getTitlesInHierarchy()
     {
-        $retVal = array();
+        $retVal = [];
         if (isset($this->fields['title_in_hierarchy'])
             && is_array($this->fields['title_in_hierarchy'])
         ) {
@@ -1583,8 +1605,8 @@ class SolrDefault extends AbstractBase
      *
      * @param string $hierarchyID The hierarchy to get the tree for
      *
-     * @return mixed An associative array of hierachy trees on success (id => title),
-     * false if no hierarchies found
+     * @return mixed An associative array of hierarchy trees on success
+     * (id => title), false if no hierarchies found
      */
     public function getHierarchyTrees($hierarchyID = false)
     {
@@ -1722,7 +1744,7 @@ class SolrDefault extends AbstractBase
      */
     protected function getSupportedCitationFormats()
     {
-        return array('APA', 'Chicago', 'MLA');
+        return ['APA', 'Chicago', 'MLA'];
     }
 
     /**
@@ -1839,7 +1861,7 @@ class SolrDefault extends AbstractBase
      */
     public function getSchemaOrgFormatsArray()
     {
-        $types = array();
+        $types = [];
         foreach ($this->getFormats() as $format) {
             switch ($format) {
             case 'Book':
@@ -1887,6 +1909,54 @@ class SolrDefault extends AbstractBase
     {
         return isset($this->fields['dedup_data'])
             ? $this->fields['dedup_data']
-            : array();
+            : [];
+    }
+
+    /**
+     * Attach a Search Results Plugin Manager connection and related logic to
+     * the driver
+     *
+     * @param \VuFindSearch\Service $service Search Service Manager
+     *
+     * @return void
+     */
+    public function attachSearchService(\VuFindSearch\Service $service)
+    {
+        $this->searchService = $service;
+    }
+
+    /**
+     * Get the number of child records belonging to this record
+     *
+     * @return int Number of records
+     */
+    public function getChildRecordCount()
+    {
+        // Shortcut: if this record is not the top record, let's not find out the
+        // count. This assumes that contained records cannot contain more records.
+        if (!$this->containerLinking
+            || empty($this->fields['is_hierarchy_id'])
+            || null === $this->searchService
+        ) {
+            return 0;
+        }
+
+        $safeId = addcslashes($this->fields['is_hierarchy_id'], '"');
+        $query = new \VuFindSearch\Query\Query(
+            'hierarchy_parent_id:"' . $safeId . '"'
+        );
+        return $this->searchService->search('Solr', $query, 0, 0)->getTotal();
+    }
+
+    /**
+     * Get the container record id.
+     *
+     * @return string Container record id (empty string if none)
+     */
+    public function getContainerRecordID()
+    {
+        return $this->containerLinking
+            && !empty($this->fields['hierarchy_parent_id'])
+            ? $this->fields['hierarchy_parent_id'][0] : '';
     }
 }

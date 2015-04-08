@@ -59,7 +59,7 @@ if (!empty($journalTitle)) {
 $series = $this->driver->tryMethod('getSeries');
 if (is_array($series)) {
     foreach ($series as $current) {
-        echo ($format == 'BOOK' ? 'T2' : 'T3') . '  - ' . (is_array($current) ? $current['name'] : $current) . "\r\n";
+        echo 'T3  - ' . (is_array($current) ? $current['name'] : $current) . "\r\n";
     }
 }
 
