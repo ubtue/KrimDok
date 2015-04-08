@@ -258,6 +258,37 @@
    <dynamicField name="*_txtP_mv" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_random" type="random" />
    <dynamicField name="*_boolean" type="boolean" indexed="true" stored="true"/>
+
+   <!--  RVK -->
+   <field name="rvk" type="textFacet" indexed="true" stored="true" multiValued="true"/>
+   <field name="rvk-notation" type="textFacet" indexed="true" stored="true" multiValued="true"/>
+
+   <!-- Normdaten -->
+   <field name="pndnum" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="gkdnum" type="string" indexed="true" stored="true" multiValued="true"/>
+
+   <!-- Local Data -->
+   <field name="local_signature" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="signature" type="signaturestring" indexed="true" stored="true" multiValued="true"/>
+   <field name="local_subject" type="text" indexed="true" stored="true" multiValued="true"/>
+   <field name="instituts_systematik1" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="instituts_systematik2" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik1" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik2" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik3" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik4" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="fid_systematik5" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+
+   <!--  Multipart  -->
+   <field name="multipart_set" type="string" indexed="true" stored="true"/>
+   <field name="multipart_link" type="string" indexed="true" stored="true" multiValued="true" termVectors="true"/>
+   <field name="multipart_part" type="string" indexed="true" stored="true"  multiValued="true"/>
+
+   <!-- SWB: Abrufzeichen und Formate -->
+   <field name="abr" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="media" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="content" type="string" indexed="true" stored="true" multiValued="true"/>
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>
@@ -287,16 +318,9 @@
  <!-- CopyFields for All Fields -->
  <copyField source="format"    dest="allfields"/>
  <copyField source="format"    dest="allfields_unstemmed"/>
-<<<<<<< HEAD
-
- <!--  Local Data -->
- <copyField source="local_signature" dest="signature"/>
-
-=======
  <!-- CopyFields for call numbers -->
  <copyField source="dewey-raw" dest="dewey-search"/>
  <copyField source="callnumber-raw" dest="callnumber-search"/>
->>>>>>> 4cd9f6aa4fdebbf339d3ee38aeb53c6daaddf932
  <!-- Default Boolean Operator -->
  <solrQueryParser defaultOperator="AND"/>
 </schema>

@@ -90,7 +90,7 @@
           <span class="quotestart">&#8220;</span>...<?=$this->highlight($snippet['snippet']) ?>...<span class="quoteend">&#8221;</span><br/>
         <? endif; ?>
       <? endif; ?>
-
+    <? endif; ?>
       <?
       /* Display information on duplicate records if available */
       $dedupData = $this->driver->getDedupData();
@@ -178,7 +178,11 @@
       <? if ($this->userlist()->getMode() !== 'disabled'): ?>
         <? /* Add to favorites */ ?>
         <i class="fa fa-heart"></i> <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="save-record modal-link" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"><?=$this->transEsc('Add to favorites')?></a><br/>
-
+        <? /* Saved lists */ ?>
+        <div class="savedLists alert alert-info hidden">
+          <strong><?=$this->transEsc("Saved in")?>:</strong>
+        </div>
+      <? endif; ?>	
       <? /* Hierarchy tree link */ ?>
       <? $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
         <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>

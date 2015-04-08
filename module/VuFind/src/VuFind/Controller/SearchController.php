@@ -289,11 +289,14 @@ class SearchController extends AbstractSearch
   @author: Oliver Obenland
   No browsing needed hier...
                 'results' => $this->getHomePageFacets(),
-*/
-		'results' => null
                 'hierarchicalFacets' => $this->getHierarchicalFacets(),
                 'hierarchicalFacetSortOptions'
                     => $this->getHierarchicalFacetSortSettings()
+*/
+		'results' => null,
+                'hierarchicalFacets' => null,
+                'hierarchicalFacetSortOptions'
+                    => null
             ]
         );
     }
