@@ -18,3 +18,6 @@ alphabetical_browse
 tlog.*
 
 httpd-vufind-vhosts.conf
+
+# Ignore documentation
+public/doc
