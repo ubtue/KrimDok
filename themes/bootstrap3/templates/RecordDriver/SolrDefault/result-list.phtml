@@ -9,12 +9,6 @@
     <? endif ?>
     <div class="<?=$cover ? 'col-sm-7 col-xs-6' : 'col-sm-9 col-xs-9'?> middle">
       <div>
-        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title">
-          <?=$this->record($this->driver)->getTitleHtml()?>
-        </a>
-      </div>
-
-      <div>
         <? if($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map(array($this, 'escapeHtml'), $this->driver->getSummary())); ?>
         <? else: ?>
