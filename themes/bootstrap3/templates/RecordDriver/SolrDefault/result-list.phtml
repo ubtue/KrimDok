@@ -19,22 +19,6 @@
     </div>
     <div class="col-sm-7 col-xs-6 middle">
       <div>
-        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title">
-        <?
-          $summHighlightedTitle = $this->driver->getHighlightedTitle();
-          $summTitle = $this->driver->getTitle();
-          if (!empty($summHighlightedTitle)) {
-            echo $this->highlight($this->addEllipsis($summHighlightedTitle, $summTitle));
-          } else if (!empty($summTitle)) {
-            echo $this->escapeHtml($this->truncate($summTitle, 180));
-          } else {
-            echo $this->transEsc('Title not available');
-          }
-        ?>
-        </a>
-      </div>
-
-      <div>
         <? if($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map(array($this, 'escapeHtml'), $this->driver->getSummary())); ?>
         <? else: ?>
