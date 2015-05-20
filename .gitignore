@@ -1,3 +1,4 @@
+File Edit Options Buffers Tools Help                                                                    
 # GNU Emacs temporary files
 
 ChangeLog
@@ -6,3 +7,17 @@ ChangeLog
 TAGS
 *~
 vendor/.git
+
+# SOLR index files:
+_*
+segments_*
+segments.gen
+write.lock
+alphabetical_browse
+
+tlog.*
+
+httpd-vufind-vhosts.conf
+
+# Ignore documentation
+public/doc

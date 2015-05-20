@@ -138,7 +138,7 @@ findDirectory()
 # JAVA_OPTIONS="-server -Xmx1024m -XX:+UseParallelGC -XX:NewRatio=5"
 if [ -z "$JAVA_OPTIONS" ]
 then
-  JAVA_OPTIONS="-server -Xms1024m -Xmx1024m -XX:+UseParallelGC -XX:NewRatio=5"
+  JAVA_OPTIONS="-server -Xms3800m -Xmx3800m -XX:+UseParallelGC -XX:NewRatio=5"
 fi
 
 ##################################################
@@ -414,7 +414,7 @@ fi
 #####################################################
 if [ "$SOLR_HOME" != "" ]
 then
-  JAVA_OPTIONS="$JAVA_OPTIONS -Dsolr.solr.home=$SOLR_HOME"
+  JAVA_OPTIONS="$JAVA_OPTIONS -Dsolr.solr.home=$SOLR_HOME -Djava.util.logging.config.file=etc/logging.properties"
 fi
 
 #####################################################

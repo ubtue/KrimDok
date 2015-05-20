@@ -55,7 +55,7 @@
 
   <? $langs = $this->driver->getLanguages(); if (!empty($langs)): ?>
     <dt><?=$this->transEsc('Language')?>: </dt>
-    <dd><? foreach ($langs as $lang): ?><?= $this->escapeHtml($lang)?> <? endforeach; ?></dd>
+    <dd><? foreach ($langs as $lang): ?><?= $this->transEsc($lang)?> <? endforeach; ?></dd>
   <? endif; ?>
 
   <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>

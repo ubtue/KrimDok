@@ -1,0 +1,575 @@
+import org.marc4j.marc.Record;
+import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.*;
+
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * get the ISILs from LOK-tagged fields
+ *
+ * Typical LOK-Section below a Marc21 - Title-Set of a record:
+ * LOK             |0 000 xxxxxnu a22 zn 4500
+ * LOK             |0 001 000001376
+ * LOK             |0 003 DE-576
+ * LOK             |0 004 000000140
+ * LOK             |0 005 20020725000000
+ * LOK             |0 008 020725||||||||||||||||ger|||||||
+ * LOK             |0 014   |a 000001368  |b DE-576
+ * LOK             |0 541   |e 76.6176
+ * LOK             |0 852   |a DE-Sp3
+ * LOK             |0 852 1  |c B IV 529  |9 00
+ *
+ * LOK = Field
+ * |0 852 = Subfield
+ * |a DE-Sp3 = Subfield with ISIL
+ *
+ *
+ * @param  Record  record
+ * @return Set of   isils
+ */
+public Set getIsils(Record record) {
+    Set isils = new LinkedHashSet();
+    List fields = record.getVariableFields("LOK");
+    Iterator fieldsIter = fields.iterator();
+    String dataString;
+    String codeString;
+    String pseudotag = "";
+    String data = "";
+    char formatCode = ' ';
+    if (fields != null) {
+        DataField lokfield;
+        while(fieldsIter.hasNext()) {
+            lokfield = (DataField) fieldsIter.next();
+            List subfields = lokfield.getSubfields();
+            Iterator subfieldsIter = subfields.iterator();
+            if (subfields != null) {
+                Subfield subfield;
+                while (subfieldsIter.hasNext()) {
+                	subfield = (Subfield) subfieldsIter.next();
+
+                	codeString = subfield.getCode().toString(); // |0
+                	formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+
+                	dataString = subfield.getData().toUpperCase(); // 852
+
+//                	System.out.print("subfieldcode: " + subfield.getCode() + "  " );
+//                	System.out.println("subfielddata: " + subfield.getData() );
+
+                	// Looking for 852-Tag
+                	if (formatCode == '0' && dataString.equals("852  ")) {
+                		pseudotag = subfield.getData(); // dataString 852
+                	}
+//                	System.out.println("pseudotag: " + pseudotag);
+
+                	//Looking for ISIL
+                	if (formatCode == 'a' && pseudotag.equals("852  ")) {
+                		data = subfield.getData();
+                		isils.add(data);
+//                		System.out.print("  | " + data + " [" + pseudotag + "] ");
+               			data = "";
+               			pseudotag = "";
+                	}
+                }
+
+            }
+
+//        System.out.println("");
+//        System.out.println("--- New LOK Line----");
+//        System.out.println("");
+        }
+//     System.out.println("");
+//     System.out.println("");
+//     System.out.println("=== New Record ===");
+//     System.out.println("");
+
+    }
+
+
+    // Nothing worked!
+    if (isils.isEmpty()) {
+        isils.add("Unknown");
+        System.out.println("No ISIL found!");
+    }
+
+    return isils;
+}
+
+
+Set roman_numerals = null;
+
+
+/** Tests whether "s" is a roman numeral in the range I..XX. */
+boolean IsRomanNumeral(String s) {
+     if (roman_numerals == null) {
+         roman_numerals = new HashSet();
+         roman_numerals.add("I");
+         roman_numerals.add("II");
+         roman_numerals.add("III");
+         roman_numerals.add("IV");
+         roman_numerals.add("V");
+         roman_numerals.add("VI");
+         roman_numerals.add("VII");
+         roman_numerals.add("VIII");
+         roman_numerals.add("IX");
+         roman_numerals.add("X");
+         roman_numerals.add("XI");
+         roman_numerals.add("XII");
+         roman_numerals.add("XIII");
+         roman_numerals.add("XIV");
+         roman_numerals.add("XV");
+         roman_numerals.add("XVI");
+         roman_numerals.add("XVII");
+         roman_numerals.add("XVIII");
+         roman_numerals.add("XIX");
+         roman_numerals.add("XX");
+     }
+
+     return roman_numerals.contains(s);
+}
+
+
+final String INSTITUT_SYSTEMATIK_LETTERS = "ABCDEFGHJKLMNOPQX";
+
+
+Set getInstitutsSystematik(Record record, int level) {
+    Set results = new HashSet();
+    Iterator fieldsIter = record.getVariableFields("LOK").iterator();
+    while (fieldsIter.hasNext()) {
+        DataField lokfield = fieldsIter.next();
+        Iterator subfieldsIter = lokfield.getSubfields().iterator();
+        while (subfieldsIter.hasNext()) {
+            Subfield subfield = subfieldsIter.next();
+
+            String codeString = subfield.getCode().toString(); // |0?
+            char formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+
+            String dataString = subfield.getData(); // 852?
+
+            // Looking for 852-Tag
+            if (formatCode != '0' || !dataString.equals("852 1") || !subfieldsIter.hasNext())
+                continue;
+
+            subfield = subfieldsIter.next();
+            codeString = subfield.getCode().toString(); // |c?
+            formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+            if (formatCode != 'c')
+                continue;
+
+            String[] parts = subfield.getData().split(" ");
+            if (parts.length < 2)
+                continue;
+
+            if (INSTITUT_SYSTEMATIK_LETTERS.indexOf(parts[0]) == -1 || !IsRomanNumeral(parts[1]))
+                continue;
+
+            if (level == 1)
+                results.add(parts[0]);
+            else // Assume level == 2.
+                results.add(parts[0] + parts[1]);
+        }
+    }
+
+    return results;
+}
+
+
+public Set getInstitutsSystematik1(Record record) {
+    return getInstitutsSystematik(record, 1);
+}
+
+
+public Set getInstitutsSystematik2(Record record) {
+    return getInstitutsSystematik(record, 2);
+}
+
+
+Pattern FID_SYSTEMATIK_PATTERN = Pattern.compile("k\\d+(\\.\\d+)+");
+
+
+Set getFIDSystematikHelper(Record record, int level) {
+    Set results = new HashSet();
+    Iterator fieldsIter = record.getVariableFields("LOK").iterator();
+    while (fieldsIter.hasNext()) {
+        DataField lokfield = fieldsIter.next();
+        Iterator subfieldsIter = lokfield.getSubfields().iterator();
+        while (subfieldsIter.hasNext()) {
+            Subfield subfield = subfieldsIter.next();
+
+            String codeString = subfield.getCode().toString(); // |0?
+            char formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+
+            String dataString = subfield.getData(); // 936ln?
+
+            // Looking for 936ln-Tag
+            if (formatCode != '0' || !dataString.equals("936ln") || !subfieldsIter.hasNext())
+                continue;
+
+            subfield = subfieldsIter.next();
+            codeString = subfield.getCode().toString(); // |a?
+            formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+            if (formatCode != 'a')
+                continue;
+
+            String subfield_data = subfield.getData();
+            Matcher matcher = FID_SYSTEMATIK_PATTERN.matcher(subfield_data);
+            if (!matcher.matches())
+	        continue;
+
+            // Remove leading "k":
+	    subfield_data = subfield_data.substring(1);
+
+	    if (level == 0) {
+		results.add(subfield_data);
+		continue;
+	    }
+
+            String[] parts = subfield_data.split("\\.");
+            if (parts.length < 1)
+                continue;
+
+            if (level == 1)
+                results.add(parts[0]);
+            else if (level == 2) {
+	        if (parts.length >= 2)
+                    results.add(parts[0] + "." + parts[1]);
+            } else if (level == 3) {
+	        if (parts.length >= 3)
+                    results.add(parts[0] + "." + parts[1] + "." + parts[2]);
+            } else if (level == 4) {
+	        if (parts.length >= 4)
+                    results.add(parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3]);
+            } else if (level == 5) {
+	        if (parts.length >= 5)
+                    results.add(parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3] + "." + parts[4]);
+            }
+        }
+    }
+
+    return results;
+}
+
+
+public Set getFIDSystematik(Record record) {
+    return getFIDSystematikHelper(record, 0);
+}
+
+
+public Set getFIDSystematik1(Record record) {
+    return getFIDSystematikHelper(record, 1);
+}
+
+
+public Set getFIDSystematik2(Record record) {
+    return getFIDSystematikHelper(record, 2);
+}
+
+
+public Set getFIDSystematik3(Record record) {
+    return getFIDSystematikHelper(record, 3);
+}
+
+
+public Set getFIDSystematik4(Record record) {
+    return getFIDSystematikHelper(record, 4);
+}
+
+
+public Set getFIDSystematik5(Record record) {
+    return getFIDSystematikHelper(record, 5);
+}
+
+
+HashMap isil_to_department_map = null;
+
+
+void InitIsilToDepartmentMap() {
+    isil_to_department_map = new HashMap();
+
+    isil_to_department_map.put("Unknown", "Unknown");
+    isil_to_department_map.put("DE-21", "Universit\u00E4tsbibliothek T\u00FCbingen");
+    isil_to_department_map.put("DE-21-1", "Universit\u00E4t T\u00FCbingen, Klinik f\u00FCr Psychatrie und Psychologie");
+    isil_to_department_map.put("DE-21-3", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Toxikologie und Pharmakologie");
+    isil_to_department_map.put("DE-21-4", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Augenklinik");
+    isil_to_department_map.put("DE-21-10", "Universit\u00E4tsbibliothek T\u00FCbingen, Bereichsbibliothek Geowissenschaften");
+    isil_to_department_map.put("DE-21-11", "Universit\u00E4tsbibliothek T\u00FCbingen, Bereichsbibliothek Schloss Nord");
+    isil_to_department_map.put("DE-21-14", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Ur- und Fr\u00FChgeschichte und Arch\u00E4ologie des Mittelalters, Abteilung j\u00FCngere Urgeschichte und Fr\u00FChgeschichte + Abteilung f\u00FCr Arch\u00E4ologie des Mittelalters");
+    isil_to_department_map.put("DE-21-17", "Universit\u00E4t T\u00FCbingen, Geographisches Institut");
+    isil_to_department_map.put("DE-21-18", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Hautklinik");
+    isil_to_department_map.put("DE-21-19", "Universit\u00E4t T\u00FCbingen, Wirtschaftswissenschaftliches Seminar");
+    isil_to_department_map.put("DE-21-20", "Universit\u00E4t T\u00FCbingen, Frauenklinik");
+    isil_to_department_map.put("DE-21-21", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Hals-Nasen-Ohrenklinik, Bibliothek");
+    isil_to_department_map.put("DE-21-22", "Universit\u00E4t T\u00FCbingen, Kunsthistorisches Institut");
+    isil_to_department_map.put("DE-21-23", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Pathologie");
+    isil_to_department_map.put("DE-21-24", "Universit\u00E4t T\u00FCbingen, Juristisches Seminar");
+    isil_to_department_map.put("DE-21-25", "Universit\u00E4t T\u00FCbingen, Musikwissenschaftliches Institut");
+    isil_to_department_map.put("DE-21-26", "Universit\u00E4t T\u00FCbingen, Anatomisches Institut");
+    isil_to_department_map.put("DE-21-27", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Anthropologie und Humangenetik");
+    isil_to_department_map.put("DE-21-28", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Astronomie und Astrophysik, Abteilung Astronomie");
+    isil_to_department_map.put("DE-21-31", "Universit\u00E4t T\u00FCbingen, Evangelisch-theologische Fakult\u00E4t");
+    isil_to_department_map.put("DE-21-32a", "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Alte Geschichte");
+    isil_to_department_map.put("DE-21-32b", "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Mittelalterliche Geschichte");
+    isil_to_department_map.put("DE-21-32c", "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Neuere Geschichte");
+    isil_to_department_map.put("DE-21-34", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Indologie und Vergleichende Religionswissenschaft");
+    isil_to_department_map.put("DE-21-35", "Universit\u00E4t T\u00FCbingen, Katholisch-theologische Fakult\u00E4t");
+    isil_to_department_map.put("DE-21-39", "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Mathematik");
+    isil_to_department_map.put("DE-21-37", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Sportwissenschaft");
+    isil_to_department_map.put("DE-21-42", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Orient- uns Islamwissenschaft");
+    isil_to_department_map.put("DE-21-43", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Erziehungswissenschaft");
+    isil_to_department_map.put("DE-21-45", "Universit\u00E4t T\u00FCbingen, Philologisches Seminar");
+    isil_to_department_map.put("DE-21-46", "Universit\u00E4t T\u00FCbingen, Philosophisches Seminar");
+    isil_to_department_map.put("DE-21-50", "Universit\u00E4t T\u00FCbingen, Physiologisches Institut");
+    isil_to_department_map.put("DE-21-51", "Universit\u00E4t T\u00FCbingen, Psychologisches Institut");
+    isil_to_department_map.put("DE-21-52", "Universit\u00E4t T\u00FCbingen, Ludwig-Uhland-Institut f\u00FCr Empirische Kulturwissenschaft");
+    isil_to_department_map.put("DE-21-53", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Ethnologie");
+    isil_to_department_map.put("DE-21-54", "Universit\u00E4t T\u00FCbingen, Universit\u00E4tsklinik f\u00FCr Zahn-, Mund- und Kieferheilkunde");
+    isil_to_department_map.put("DE-21-58", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Politikwissenschaft");
+    isil_to_department_map.put("DE-21-62", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Osteurop\u00E4ische Geschichte und Landeskunde");
+    isil_to_department_map.put("DE-21-63", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Tropenmedizin");
+    isil_to_department_map.put("DE-21-64", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Geschichtliche Landeskunde und Historische Hilfswissenschaften");
+    isil_to_department_map.put("DE-21-65", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Apotheke");
+    isil_to_department_map.put("DE-21-74", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Informations-Technologie");
+    isil_to_department_map.put("DE-21-78", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Biometrie");
+    isil_to_department_map.put("DE-21-81", "Universit\u00E4t T\u00FCbingen, Inst. f. Astronomie und Astrophysik/Abt. Geschichte der Naturwiss.");
+    isil_to_department_map.put("DE-21-85", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Soziologie");
+    isil_to_department_map.put("DE-21-86", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Datenverarbeitung");
+    isil_to_department_map.put("DE-21-89", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Arbeits- und Sozialmedizin");
+    isil_to_department_map.put("DE-21-92", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Gerichtliche Medizin");
+    isil_to_department_map.put("DE-21-93", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Ethik und Geschichte der Medizin");
+    isil_to_department_map.put("DE-21-95", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Hirnforschung");
+    isil_to_department_map.put("DE-21-98", "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Physik");
+    isil_to_department_map.put("DE-21-99", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Ur- und Fr\u00FChgeschichte und Arch\u00E4ologie des Mittelalters, Abteilung f\u00FCr \u00E4ltere Urgeschichteund Quart\u00E4r\u00F6kologie");
+    isil_to_department_map.put("DE-21-106", "Universit\u00E4t T\u00FCbingen, Seminar f\u00FCr Zeitgeschichte");
+    isil_to_department_map.put("DE-21-108", "Universit\u00E4t T\u00FCbingen, Fakult\u00E4tsbibliothek Neuphilologie");
+    isil_to_department_map.put("DE-21-109", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Sinologie und Koreanistik");
+    isil_to_department_map.put("DE-21-110", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Kriminologie");
+    isil_to_department_map.put("DE-21-112", "Universit\u00E4t T\u00FCbingen, Fakult\u00E4t f\u00FCr Biologie, Bibliothek");
+    isil_to_department_map.put("DE-21-116", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Molekularbiologie der Pflanzen, Forschungsgruppe Pflanzenbiochemie");
+    isil_to_department_map.put("DE-21-117", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Informationsverarbeitung");
+    isil_to_department_map.put("DE-21-118", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Archiv");
+    isil_to_department_map.put("DE-21-119", "Universit\u00E4t T\u00FCbingen, Wilhelm-Schickard-Institut f\u00FCr Informatik");
+    isil_to_department_map.put("DE-21-120", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Japanologie");
+    isil_to_department_map.put("DE-21-121", "Universit\u00E4t T\u00FCbingen, Internationales Zentrum f\u00FCr Ethik in den Wissenschaften");
+    isil_to_department_map.put("DE-21-123", "Universit\u00E4t T\u00FCbingen, Medizinbibliothek");
+    isil_to_department_map.put("DE-21-124", "Universit\u00E4t T\u00FCbingen, Institut f. Medizinische Virologie und Epidemiologie d. Viruskrankheiten");
+    isil_to_department_map.put("DE-21-126", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Mikrobiologie und Hygiene");
+    isil_to_department_map.put("DE-21-203", "Universit\u00E4t T\u00FCbingen, Sammlung Werner Schweikert - Archiv der Weltliteratur");
+    isil_to_department_map.put("DE-21-205", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Islamische Theologie");
+}
+
+
+/**
+ * get the collections from LOK-tagged fields
+ *
+ * Typical LOK-Section below a Marc21 - Title-Set of a record:
+ * LOK             |0 000 xxxxxnu a22 zn 4500
+ * LOK             |0 001 000001376
+ * LOK             |0 003 DE-576
+ * LOK             |0 004 000000140
+ * LOK             |0 005 20020725000000
+ * LOK             |0 008 020725||||||||||||||||ger|||||||
+ * LOK             |0 014   |a 000001368  |b DE-576
+ * LOK             |0 541   |e 76.6176
+ * LOK             |0 852   |a DE-Sp3
+ * LOK             |0 852 1  |c B IV 529  |9 00
+ *
+ * LOK = Field
+ * |0 852 = Subfield
+ * |a DE-Sp3 = Subfield with ISIL
+ *
+ *
+ * @param  Record  record
+ * @return Set of  collections
+ */
+public Set getCollections(Record record) {
+    if (isil_to_department_map == null)
+        InitIsilToDepartmentMap();
+
+    Set isils = getIsils(record);
+    Set collections = new HashSet();
+    for (isil : isils) {
+        String collection = isil_to_department_map.get(isil);
+	if (collection != null)
+            collections.add(collection);
+	else {
+            System.out.println("************************ Unknown: " + isil);
+	    System.exit(1);
+        }
+    }
+
+    if (collections.isEmpty())
+        collections.add("Unknown");
+
+    return collections;
+}
+
+
+public String getInstitution(Record record) {
+       Set collections = getCollections(record);
+       return (String)collections.iterator().next();
+}
+
+
+/**
+ * get the local signature from LOK-tagged fields
+ * prefix with isil
+ *
+ * nicht bei signatur="Einzel*"
+ *
+ * LOK = Field
+ * |0 852 = Subfield
+ * |a DE-Sp3 = Subfield with ISIL
+ * |c B IV 529 = Subfield with local signature
+ *
+ *
+ * @param  Record  record
+ * @return Set of  local signatures with isil prefix "(DE-Sp3)B IV 529"
+ */
+public Set getLocalSignaturesIsil(Record record) {
+    Set localsignatures = new LinkedHashSet();
+    List fields = record.getVariableFields("LOK");
+    Iterator fieldsIter = fields.iterator();
+    String dataString;
+    String codeString;
+    String pseudotag = "";
+    String data = "";
+    String isil = "";
+
+    char formatCode = ' ';
+    if (fields != null) {
+        DataField lokfield;
+        while(fieldsIter.hasNext()) {
+            lokfield = (DataField) fieldsIter.next();
+            List subfields = lokfield.getSubfields();
+            Iterator subfieldsIter = subfields.iterator();
+            if (subfields != null) {
+                Subfield subfield;
+                while (subfieldsIter.hasNext()) {
+                	subfield = (Subfield) subfieldsIter.next();
+
+                	codeString = subfield.getCode().toString();
+                	formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' '; // |0 |a | c
+
+                	dataString = subfield.getData().toUpperCase(); // xxxind1ind2
+
+                	//System.out.print("subfieldcode: " + subfield.getCode() + "  " );
+                	//System.out.println("subfielddata: " + subfield.getData() );
+
+                	// Looking for 852-Tag and subfield 0
+                	if (formatCode == '0' && dataString.equals("852  ")) {
+                		pseudotag =  subfield.getData(); // dataString 852
+                	}
+                	//System.out.println("pseudotag: " + pseudotag);
+
+                    //Looking for ISIL
+                	if (formatCode == 'a' && pseudotag.equals("852  ")) {
+                		isil =  subfield.getData();
+                    }
+
+                	//Looking for local signature
+                	if (formatCode == 'c' && pseudotag.equals("852  ")) {
+                		data =  subfield.getData();
+                		if (!data.contains("Einzel")) {
+                			localsignatures.add(data);
+                			localsignatures.add(isil + ": " + data);
+	        				//System.out.println("localsig: " + isil + ": " + data);
+                		}
+						data = "";
+        				isil = "";
+        				pseudotag = "";
+        			}
+                }
+
+            }
+
+        //System.out.println("");
+        //System.out.println("--- New LOK Line----");
+        //System.out.println("");
+        }
+     //System.out.println("");
+     //System.out.println("");
+     //System.out.println("=== New Record ===");
+     //System.out.println("");
+
+    }
+
+
+    // Nothing worked!
+    if (localsignatures.isEmpty()) {
+        localsignatures.add("Unknown");
+        //System.out.println("Unknown added");
+    }
+
+    return localsignatures;
+}
+
+
+/**
+ * get the local subjects from LOK-tagged fields
+ *
+ *
+ * LOK = Field
+ * |0 689 = Subfield
+ * |a Imperialismus = Subfield with local subject
+ *
+ *
+ * @param  Record  record
+ * @return Set of local subjects
+ */
+public Set getLocalSubjects(Record record) {
+    Set localsubjects = new LinkedHashSet();
+    Iterator fieldsIter = record.getVariableFields("LOK").iterator();
+    String dataString;
+    String codeString;
+    String pseudotag = "";
+    String data = "";
+    char formatCode = ' ';
+    while(fieldsIter.hasNext()) {
+	DataField lokfield = (DataField) fieldsIter.next();
+	List subfields = lokfield.getSubfields();
+	Iterator subfieldsIter = subfields.iterator();
+	if (subfields != null) {
+	    Subfield subfield;
+	    while (subfieldsIter.hasNext()) {
+		subfield = (Subfield) subfieldsIter.next();
+
+		codeString = subfield.getCode().toString(); // |0
+		formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+
+		dataString = subfield.getData().toUpperCase(); // 689
+
+		//                	System.out.print("subfieldcode: " + subfield.getCode() + "  " );
+		//                	System.out.println("subfielddata: " + subfield.getData() );
+
+		// Looking for 689-Tag
+		if (formatCode == '0' && dataString.equals("689  ")) {
+		    pseudotag =  subfield.getData(); // dataString 689
+		}
+		//                	System.out.println("pseudotag:--" + pseudotag + "--");
+
+		//Looking for local subject
+		if (formatCode == 'a' && pseudotag.equals("689  ")) {
+		    data =  subfield.getData();
+		    if (data.length() > 1) {
+			localsubjects.add(data);
+			System.out.println("Schlagwort: " + data );
+			data = "";
+			pseudotag = "";
+		    }
+		}
+	    }
+
+	}
+    }
+
+
+    // Nothing worked!
+//    if (localsubjects.isEmpty()) {
+//        localsubjects.add("Unknown");
+//        System.out.println("Unknown added");
+//    }
+
+    return localsubjects;
+}

@@ -285,10 +285,18 @@ class SearchController extends AbstractSearch
     {
         return $this->createViewModel(
             [
+/*
+  @author: Oliver Obenland
+  No browsing needed hier...
                 'results' => $this->getHomePageFacets(),
                 'hierarchicalFacets' => $this->getHierarchicalFacets(),
                 'hierarchicalFacetSortOptions'
                     => $this->getHierarchicalFacetSortSettings()
+*/
+		'results' => null,
+                'hierarchicalFacets' => null,
+                'hierarchicalFacetSortOptions'
+                    => null
             ]
         );
     }

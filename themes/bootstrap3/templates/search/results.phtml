@@ -105,7 +105,7 @@
         <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_'))?>
         <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
       </form>
-
+<? if(false):?>
       <div class="searchtools hidden-print">
         <strong><?=$this->transEsc('Search Tools')?>:</strong>
         <i class="fa fa-bell"></i> <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><?=$this->transEsc('Get RSS Feed')?></a>
@@ -122,6 +122,7 @@
           <? endif; ?>
         <? endif; ?>
       </div>
+<? endif; ?>
     <? endif; ?>
   </div>
   <? /* End Main Listing */ ?>

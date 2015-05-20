@@ -209,6 +209,16 @@ class SolrDefault extends AbstractBase
         return array_map($callback, array_unique($headings));
     }
 
+    public function getGenres()
+    {
+        return isset($this->fields['genre']) ? $this->fields['genre'] : array();
+    }
+
+    public function getTopics()
+    {
+        return isset($this->fields['topic']) ? $this->fields['topic'] : array();
+    }
+
     /**
      * Get all record links related to the current record. Each link is returned as
      * array.
@@ -1070,6 +1080,128 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * @return array
+     */
+    public function getInstitutsSystematik()
+    {
+        if (isset($this->fields['instituts_systematik2']) && !empty($this->fields['instituts_systematik2'])) {
+            return $this->fields['instituts_systematik2'];
+        } else {
+            return array();
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getFidSystematik()
+    {
+        if (isset($this->fields['fid_systematik']) && !empty($this->fields['fid_systematik'])) {
+            return $this->fields['fid_systematik'];
+        } else {
+            return array();
+        }
+    }
+
+    /**
+     * Return an associative array of all container IDs (parents) mapped to their titles containing the record.
+     *
+     * @return array
+     */
+    public function getContainerIDsAndTitles()
+    {
+        $retval = array();
+
+        if (isset($this->fields['container_ids_and_titles']) && !empty($this->fields['container_ids_and_titles'])) {
+            foreach ($this->fields['container_ids_and_titles'] as $id_and_title) {
+	        $a = explode(":",  $id_and_title, 2);
+                if (count($a) == 2) {
+                    $retval[$a[0]] = $a[1];
+                }
+            }
+        }
+
+        return $retval;
+    }
+
+    /**
+     * Return an associative array of URL's mapped to their material types.
+     *
+     * @return array
+     */
+    public function getURLsAndMaterialTypes()
+    {
+        $map_to_english = [
+            "Inhaltsverzeichnis"        => "TOC",
+	    "Klappentext"               => "blurb",
+	    "Rezension"                 => "review",
+	    "Cover"                     => "cover",
+	    "Inhaltstext"               => "contents",
+	    "Verlagsinformation"        => "publisher information",
+	    "Ausführliche Beschreibung" => "detailed description",
+	    "Unbekanntes Material"      => "unknown material type",
+        ];
+        $map_to_french = [
+            "Inhaltsverzeichnis"        => "contenu",
+	    "Klappentext"               => "blurb",
+	    "Rezension"                 => "examen",
+	    "Cover"                     => "couverture",
+	    "Inhaltstext"               => "contenu du texte",
+	    "Verlagsinformation"        => "informations editeur",
+	    "Ausführliche Beschreibung" => "la pleine description",
+	    "Unbekanntes Material"      => "matériau inconnu",
+        ];
+
+	// Determine language code:
+	$lang = !is_null($this->translator)
+                ? substr($this->translator->getLocale(), 0, 2)
+                : 'de';
+
+        $retval = array();
+
+        if (isset($this->fields['urls_and_material_types']) && !empty($this->fields['urls_and_material_types'])) {
+            foreach ($this->fields['urls_and_material_types'] as $url_and_material_type) {
+	        $last_colon_pos = strrpos($url_and_material_type, ":");
+                if ($last_colon_pos) {
+                    $material_type = substr($url_and_material_type, $last_colon_pos + 1);
+	            if ($lang === "en") {
+                        if (isset($map_to_english[$material_type]))
+			    $material_type = $map_to_english[$material_type];
+                    } else if ($lang == "fr") {
+                        if (isset($map_to_french[$material_type]))
+			    $material_type = $map_to_french[$material_type];
+                    }
+
+                    $retval[substr($url_and_material_type, 0, $last_colon_pos)] = $material_type;
+                }
+            }
+        }
+
+        return $retval;
+    }
+
+    /**
+     * Return an associative array of all containee IDs (children) mapped to their titles containing the record.
+     *
+     * @return array
+     */
+    public function getContaineeIDsAndTitles()
+    {
+        $retval = array();
+
+        if (isset($this->fields['containee_ids_and_titles']) && !empty($this->fields['containee_ids_and_titles'])) {
+            foreach ($this->fields['containee_ids_and_titles'] as $id_and_title) {
+	        $a = explode(":",  $id_and_title, 2);
+                if (count($a) == 2) {
+                    $retval[$a[0]] = $a[1];
+                }
+            }
+        }
+
+        return $retval;
+    }
+
+    /**
      * Get the short (pre-subtitle) title of the record.
      *
      * @return string
@@ -1661,6 +1793,18 @@ class SolrDefault extends AbstractBase
     {
         return isset($this->fields['container_start_page'])
             ? $this->fields['container_start_page'] : '';
+    }
+
+    /**
+     * Get the start page of the item that contains this record (i.e. MARC 773q of a
+     * journal).
+     *
+     * @return string
+     */
+    public function getPageCount()
+    {
+        return isset($this->fields['page_count'])
+            ? $this->fields['page_count'] : '';
     }
 
     /**

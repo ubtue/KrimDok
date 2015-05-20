@@ -1,32 +1,4 @@
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
-  <div class="col-sm-3">
-    <div class="text-center">
-      <? /* Display thumbnail if appropriate: */ ?>
-      <? $mediumThumb = $this->record($this->driver)->getThumbnail('medium'); $largeThumb = $this->record($this->driver)->getThumbnail('large'); ?>
-      <? if ($mediumThumb): ?>
-        <? if ($largeThumb): ?><a href="<?=$this->escapeHtmlAttr($largeThumb)?>"><? endif; ?>
-          <img alt="<?=$this->transEsc('Cover Image')?>" class="recordcover" src="<?=$this->escapeHtmlAttr($mediumThumb);?>"/>
-        <? if ($largeThumb): ?></a><? endif; ?>
-      <? else: ?>
-        <img src="<?=$this->url('cover-unavailable')?>" class="recordcover" alt="<?=$this->transEsc('No Cover Image')?>"/>
-      <? endif; ?>
-
-      <? /* Display qrcode if appropriate: */ ?>
-      <? $QRCode = $this->record($this->driver)->getQRCode("core"); ?>
-      <? if($QRCode): ?>
-        <span class="hidden-xs">
-          <br/><img alt="<?=$this->transEsc('QR Code')?>" class="qrcode" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
-        </span>
-      <? endif; ?>
-    </div>
-
-    <? // if you have a preview tab but want to move or remove the preview link
-       // from this area of the record view, this can be split into
-       // getPreviewData() (should stay here) and
-       // getPreviewLink() (can go in your desired tab) ?>
-    <?=$this->record($this->driver)->getPreviews()?>
-  </div>
-
   <div class="col-sm-9">
     <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitle() . ' ' . $this->driver->getSubtitle() . ' ' . $this->driver->getTitleSection())?></h3>
 
@@ -116,9 +88,11 @@
       <? $langs = $this->driver->getLanguages(); if (!empty($langs)): ?>
         <tr>
           <th><?=$this->transEsc('Language')?>: </th>
-          <td><? foreach ($langs as $lang): ?><?= $this->escapeHtml($lang)?><br/><? endforeach; ?></td>
+          <td><? foreach ($langs as $lang): ?><?= $this->transEsc($lang)?><br/><? endforeach; ?></td>
         </tr>
       <? endif; ?>
+
+      <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
 
       <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
       <tr>
@@ -149,26 +123,42 @@
       </tr>
       <? endif; ?>
 
-      <?/* Display series section if at least one series exists. */?>
-      <? $series = $this->driver->getSeries(); if (!empty($series)): ?>
+      <? $fid_systematiken = $this->driver->getFidSystematik(); if (!empty($fid_systematiken)): ?>
+        <tr>
+          <th>FID Systematik</th>
+          <td><? foreach ($fid_systematiken as $fid_systematik): ?><?= $this->escapeHtml($fid_systematik)?><br/><? endforeach; ?></td>
+        </tr>
+      <? endif; ?>
+
+      <? $instituts_systematiken = $this->driver->getInstitutsSystematik(); if (!empty($instituts_systematiken)): ?>
+        <tr>
+          <th>Institutssystematik</th>
+          <td><? foreach ($instituts_systematiken as $instituts_systematik): ?>
+	  <?= $this->escapeHtml($instituts_systematik[0] . " " . substr($instituts_systematik, 1))?><br/><? endforeach; ?></td>
+        </tr>
+      <? endif; ?>
+
+      <?/* Display container section if at least one container exists. */?>
+      <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles)): ?>
       <tr>
-        <th><?=$this->transEsc('Series')?>: </th>
+        <th><?=$this->transEsc('In')?>: </th>
         <td>
-          <? foreach ($series as $field): ?>
-            <?/* Depending on the record driver, $field may either be an array with
-               "name" and "number" keys or a flat string containing only the series
-               name.  We should account for both cases to maximize compatibility. */?>
-            <? if (is_array($field)): ?>
-              <? if (!empty($field['name'])): ?>
-                <a href="<?=$this->record($this->driver)->getLink('series', $field['name'])?>"><?=$this->escapeHtml($field['name'])?></a>
-                <? if (!empty($field['number'])): ?>
-                  <?=$this->escapeHtml($field['number'])?>
-                <? endif; ?>
-                <br/>
-              <? endif; ?>
-            <? else: ?>
-              <a href="<?=$this->record($this->driver)->getLink('series', $field)?>"><?=$this->escapeHtml($field)?></a><br/>
-            <? endif; ?>
+          <? foreach ($ids_and_titles as $id => $title): ?>
+            <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
+            <br/>
+          <? endforeach; ?>
+        </td>
+      </tr>
+      <? endif; ?>
+
+      <?/* Display containee section if at least one containee exists. */?>
+      <? $ids_and_titles = $this->driver->getContaineeIDsAndTitles(); if (!empty($ids_and_titles)): ?>
+      <tr>
+        <th><?=$this->transEsc('Contains')?>: </th>
+        <td>
+          <? foreach ($ids_and_titles as $id => $title): ?>
+            <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
+            <br/>
           <? endforeach; ?>
         </td>
       </tr>
@@ -193,30 +183,15 @@
       </tr>
       <? endif; ?>
 
-      <? $childRecordCount = $this->driver->tryMethod('getChildRecordCount'); if ($childRecordCount): ?>
+      <? $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
+      <? if (!empty($urls_and_material_types)): ?>
       <tr>
-        <th><?=$this->transEsc('child_records')?>: </th>
+        <th><?=$this->transEsc('Online Access')?>:</th>
         <td>
-          <a href="<?=$this->recordLink()->getChildRecordSearchUrl($this->driver)?>"><?=$this->transEsc('child_record_count', array('%%count%%' => $childRecordCount))?></a>
-        </td>
-      </tr>
-      <? endif; ?>
-
-      <?
-        $openUrl = $this->driver->openURLActive('record') ? $this->driver->getOpenURL() : false;
-        // Account for replace_other_urls setting
-        $urls = ($openUrl && $this->driver->replaceURLsWithOpenURL()) ? array() : $this->record($this->driver)->getLinkDetails();
-      ?>
-      <? if (!empty($urls) || $openUrl): ?>
-      <tr>
-        <th><?=$this->transEsc('Online Access')?>: </th>
-        <td>
-          <? foreach ($urls as $current): ?>
-            <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>"><?=$this->escapeHtml($current['desc'])?></a><br/>
+          <? foreach ($urls_and_material_types as $url => $material_type): ?>
+            <a href="<?=$url?>" target="_blank"><?=$this->escapeHtml($material_type)?></a>
+            <br/>
           <? endforeach; ?>
-          <? if ($openUrl): ?>
-            <?=$this->openUrl($openUrl)?><br/>
-          <? endif; ?>
         </td>
       </tr>
       <? endif; ?>
