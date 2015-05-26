@@ -455,6 +455,16 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * Get an array of all the ISILs in the record.
+     *
+     * @return array
+     */
+    public function getIsils()
+    {
+        return isset($this->fields['isil']) ? $this->fields['isil'] : [];
+    }
+
+    /**
      * Get general notes on the record.
      *
      * @return array
