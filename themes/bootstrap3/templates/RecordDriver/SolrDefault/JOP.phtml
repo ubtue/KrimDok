@@ -1,6 +1,6 @@
       <? $formats = $this->driver->getFormats(); if (!empty($formats) && ($formats[0] == "Article" || $formats[0] == "Journal" || $formats[0] == "Article")): ?>
         <tr>
-          <th><?=$this->transEsc('Journals Online & Print')?>: </th>
+          <th>Journals Online &amp; Print:</th>
           <td><div style="color:grey" id="jop_place_holder"><?=$this->transEsc("Loading")?>...</div></td>
         </tr>
         <script type="text/javascript" language="javascript">
@@ -14,12 +14,13 @@
                 var first_reference_tag = $(xml).find('Reference').first();
                 if (!first_reference_tag || 0 == first_reference_tag.length) {
 		  $("#jop_place_holder").each(function() {
-                    $(this).replaceWith('<?=$this->transEsc("Not locally available.")?>');
+                    $(this).replaceWith('<?=$this->transEsc("Not locally available")?>.');
                   })
                 } else if (first_reference_tag) {
                   var sURL = first_reference_tag.find('URL').text();
                   $("#jop_place_holder").each(function() {
-	            $(this).replaceWith('<a href="' + sURL + '"><?=$this->transEsc("Locally available.")?></a>');
+                      var text = '<?=$this->transEsc("Locally available")?>';
+                      $(this).replaceWith('<a href="' + sURL + '">' + text + '.</a>');
                   })
                 } else {
                   $("#jop_place_holder").each(function() {
