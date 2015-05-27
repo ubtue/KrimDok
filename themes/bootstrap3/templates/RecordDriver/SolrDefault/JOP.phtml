@@ -12,20 +12,21 @@
             success: function(xml) {
               $(document).ready(function() {
                 var sURL = null;
-                $(xml).find('Result').each(function() {
+                $(xml).find('Result').each(function(index, value) {
                     var state = $(this).attr("state");
                     if (state >= 0 && state <= 3) {
-                        sURL = $(this).find('AccessURL').first().text();
+                        sURL = $(value).find('AccessURL').first().text();
+			return false;
                     }
                 });
-                if (sURL !== null) {
+                if (sURL != null) {
                     $("#jop_place_holder").each(function() {
-                        var text = '<?=$this->transEsc("Locally available")?>';
+                        var text = '<?=$this->transEsc("Available locally or online")?>';
                         $(this).replaceWith('<a href="' + sURL + '">' + text + '.</a>');
                     });
                 } else {
                     $("#jop_place_holder").each(function() {
-                        $(this).replaceWith('<?=$this->transEsc("Not locally available")?>.');
+                        $(this).replaceWith('<?=$this->transEsc("Not available")?>.');
                     })
                 }
               }); 
