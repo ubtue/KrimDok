@@ -22,3 +22,22 @@ local/config/vufind/server.ini
 
 # Ignore documentation
 public/doc
+/start-vufind.sh
+
+# Eclipse IDE
+.classpath
+.project
+*.pydevproject
+.metadata
+.gradle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.buildpath
+.target
