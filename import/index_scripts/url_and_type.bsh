@@ -7,7 +7,7 @@ import java.util.LinkedHashSet;
 
 /**
  * Returns either a Set<String> of parent (URL + colon + material type).  URLs are taken from 856u and material
- * types from 8563.  For missing 8563 subfields the text "Unknown material type" will be used.
+ * types from 8563, 856z or 856x.  For missing type subfields the text "Unbekanntes Material" will be used.
  *
  * @return  A, possibly empty, Set<String> containing the URL/material-type pairs.
  */
@@ -15,7 +15,18 @@ public Set getUrlsAndMaterialTypes(Record record) {
     Set urls_and_material_types = new LinkedHashSet();
     for (DataField field : record.getVariableFields("856")) {
 	Subfield subfield_3 = field.getSubfield('3');
-	String material_type = (subfield_3 == null) ? "Unbekanntes Material" : subfield_3.getData();
+	String material_type;
+	if (subfield_3 != null)
+	    material_type = subfield_3.getData();
+	else {
+	    Subfield subfield_z = field.getSubfield('z');
+	    if (subfield_z != null)
+	        material_type = subfield_z.getData();
+	    else {
+	         Subfield subfield_x = field.getSubfield('x');
+	         material_type = (subfield_x == null) ? "Unbekanntes Material" : subfield_x.getData();
+	    }
+        }
 
 	for (Subfield subfield_u : field.getSubfields('u'))
 	    urls_and_material_types.add(subfield_u.getData() + ":" + material_type);
