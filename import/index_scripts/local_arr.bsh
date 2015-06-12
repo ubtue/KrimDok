@@ -53,7 +53,7 @@ public Set getIsils(Record record) {
                 	codeString = subfield.getCode().toString(); // |0
                 	formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
 
-                	dataString = subfield.getData().toUpperCase(); // 852
+                	dataString = subfield.getData(); // 852
 
 //                	System.out.print("subfieldcode: " + subfield.getCode() + "  " );
 //                	System.out.println("subfielddata: " + subfield.getData() );
@@ -95,6 +95,41 @@ public Set getIsils(Record record) {
     }
 
     return isils;
+}
+
+
+boolean getTubingenAvailability(Record record) {
+    Set isils = getIsils(record);
+    if (isils.contains("DE-21")) // university library
+        return true;
+    if (!isils.contains("DE-21-110")) // criminology institute
+        return false;
+
+    // If we get here we know that the record is from the criminology institute and we need
+    // to check the $m subfield of the 852 local field.
+
+    List fields = record.getVariableFields("LOK");
+    Iterator fieldsIter = fields.iterator();
+    while (fieldsIter.hasNext()) {
+        DataField lok_field = (DataField)fieldsIter.next();
+        List subfields = lok_field.getSubfields();
+	if (subfields == null)
+            continue;
+        Iterator subfieldsIter = subfields.iterator();
+	boolean found_852_pseudo_tag = false;
+        while (subfieldsIter.hasNext()) {
+	    subfield = (Subfield)subfieldsIter.next();
+            String codeString = subfield.getCode().toString();
+            if (codeString.length() < 1)
+                continue;
+            if (codeString.charAt(0) == '0' && subfield.getData() == "852  ")
+                found_852_pseudo_tag = true;
+            else if (found_852_pseudo_tag && codeString.charAt(0) == 'm' && subfield.getData() == "v")
+	        return false;
+        }
+    }
+
+    return true; // No $m w/ value "v" in any 852 local field.
 }
 
 
