@@ -86,4 +86,8 @@ class SimilarItemsCarousel extends AbstractBase
             $record->getSourceIdentifier(), $record->getUniqueId(), $params
         );
     }
+    
+    public function isActive() {
+    	return false;	
+    }
 }
