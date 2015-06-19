@@ -279,6 +279,7 @@
    <field name="fid_systematik3" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
    <field name="fid_systematik4" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
    <field name="fid_systematik5" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
+   <field name="available_in_tubingen" type="boolean" indexed="true" stored="true" multiValued="false"/>
 
    <!--  Multipart  -->
    <field name="multipart_set" type="string" indexed="true" stored="true"/>
