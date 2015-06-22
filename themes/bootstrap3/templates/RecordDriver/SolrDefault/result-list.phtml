@@ -1,13 +1,23 @@
 <div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-11">
+<<<<<<< HEAD
   <div class="row">
+=======
+  <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
+  <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
+  <div class="left">
+>>>>>>> Webdesign-Anpassungen: Breite ausgenutzt und Platz zwischen Resultaten vergrößert
     <div>
       <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
       <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
     </div>
+<<<<<<< HEAD
     <? if ($cover = $this->record($this->driver)->getCover('result-list', 'medium', $this->recordLink()->getUrl($this->driver))): ?>
       <div class="col-sm-2 col-xs-3 left"><?=$cover ?></div>
     <? endif ?>
     <div class="<?=$cover ? 'col-sm-7 col-xs-6' : 'col-sm-9 col-xs-9'?> middle">
+=======
+    <div class="middle">
+>>>>>>> Webdesign-Anpassungen: Breite ausgenutzt und Platz zwischen Resultaten vergrößert
       <div>
         <? if($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map(array($this, 'escapeHtml'), $this->driver->getSummary())); ?>
@@ -164,6 +174,7 @@
     $openUrl = $this->driver->getOpenURL();
     $openUrlActive = $this->driver->openURLActive('results');
 ?>
+<<<<<<< HEAD
 
     <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
       <span class="status ajax-availability hidden">
@@ -195,6 +206,14 @@
       <? endif; ?>
 
       <?=$this->driver->supportsCoinsOpenUrl()?'<span class="Z3988" title="'.$this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()).'"></span>':''?>
+=======
+      <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
+        <span class="status ajax-availability hidden">
+          <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
+        </span>
+      <? endif; ?>
+      <?=$this->record($this->driver)->getPreviews()?>
+>>>>>>> Webdesign-Anpassungen: Breite ausgenutzt und Platz zwischen Resultaten vergrößert
     </div>
   </div>
 </div>
