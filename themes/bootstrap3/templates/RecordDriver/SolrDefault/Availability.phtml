@@ -1,26 +1,10 @@
-<? 
-   $isils = $this->driver->getIsils(); 
-
-   $available_in_tubingen = false;
-   foreach ($isils as $isil) {
-       if ($isil == "DE-21" || $isil == "DE-21-110") {
-           /*
-              TODO: Wenn $isil == "DE-21-110" wird eine weitere
-                    Bedingung benötigt, um die Verfügbarkeit
-                    zu ermitteln. Siehe Kriminologen.
-           */
-           $available_in_tubingen = true;
-	   break;
-       }
-   } 
-?>
 <tr>
     <th>
 	<?= $this->transEsc('Availability') . ":"; ?>
     </th>
     <td>
 	<?php
-	   if ($available_in_tubingen) {
+       if ($this->driver->isAvailableInTubingen()) {
 	      echo $this->transEsc('Available in Tubingen') . ".";
 	   } else {
 	      echo $this->transEsc('Not available in Tubingen') . ".";   

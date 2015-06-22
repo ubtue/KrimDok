@@ -464,6 +464,11 @@ class SolrDefault extends AbstractBase
         return isset($this->fields['isil']) ? $this->fields['isil'] : [];
     }
 
+    public function isAvailableInTubingen()
+    {
+        return $this->fields['available_in_tubingen'];
+    }
+
     /**
      * Get general notes on the record.
      *
