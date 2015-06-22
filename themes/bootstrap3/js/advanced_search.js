@@ -94,21 +94,11 @@ function addGroup(firstTerm, firstField, join)
   if(join.length > 0) {
     $newGroup.find('option[value="'+join+'"]').attr('selected', 1);
   }
-  newGroup += '>' +searchJoins['AND'] + '</option>'
-    + '<option value="OR"';
-  if(join == 'OR') {
-    newGroup += ' selected';
-  }
-  newGroup += '>' +searchJoins['OR'] + '</option>'
-    + '<option value="NOT"';
-  if(join == 'NOT') {
-    newGroup += ' selected';
-  }
-/*  newGroup += '>' +searchJoins['NOT'] + '</option>'
-    + '</select></div></div>';
-*/
-  $('#groupPlaceHolder').before(newGroup);
-  addSearch(nextGroup, firstTerm, firstField);
+  // Insert
+  $('#groupPlaceHolder').before($newGroup);
+  // Populate
+  groupLength[nextGroup] = 0;
+  addSearch(nextGroup, {term:firstTerm, field:firstField});
   // Show join menu
   if(nextGroup > 0) {
     $('#groupJoin').removeClass('hidden');
@@ -146,3 +136,11 @@ function addSearchJS(group)
   addSearch(groupNum);
   return false;
 }
+
+$(document).ready(function() {
+  $('.clear-btn').click(function() {
+    $('input[type="text"]').val('');
+    $("option:selected").removeAttr("selected");
+    $("#illustrated_-1").click();
+  });
+});
