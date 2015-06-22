@@ -87,6 +87,14 @@
           <?=$this->transEsc('nohit_prefix')?> - <strong><?=$this->escapeHtml($lookfor)?></strong> - <?=$this->transEsc('nohit_suffix')?>
         <? endif; ?>
       </p>
+      <div class="noresult">
+		  Hier sind weitere Möglichkeiten für Sie vielleicht doch etwas Relevantes zu finden:
+		  <ul class="noresult">
+	      	<li><a href="https://www.worldcat.org/search?qt=worldcat_org_all&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->escapeHtml("WorldCat, die weltgrößte bibliografische Datenbank");?></a></li>
+	      	<li><a href="https://katalog.ub.uni-tuebingen.de/opac/RDSIndex/Results?lookfor=<?=$this->escapeHtml($lookfor)?>"><?=$this->escapeHtml("Katalog plus, Bestände Tübinger Bibliotheken");?></a></li>
+	      	<li><a href="https://tue.ibs-bw.de/aDISWeb/app"><?=$this->escapeHtml("Fernleihe");?> der Universitätsbibliothek Tübingen</a></li>
+	      </ul>
+      </div>
       <? if (isset($this->parseError)): ?>
         <p class="alert alert-danger"><?=$this->transEsc('nohit_parse_error')?></p>
       <? endif; ?>
