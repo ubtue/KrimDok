@@ -88,10 +88,10 @@
         <? endif; ?>
       </p>
       <div class="noresult">
-		  Hier sind weitere Möglichkeiten für Sie vielleicht doch etwas Relevantes zu finden:
+		  <?=$this->transEsc('no_result_header');?>:
 		  <ul class="noresult">
-	      	<li><a href="https://www.worldcat.org/search?qt=worldcat_org_all&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->escapeHtml("WorldCat, die weltgrößte bibliografische Datenbank");?></a></li>
-	      	<li><a href="http://www.subito-doc.de/index.php&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->escapeHtml("Subito, ein Verein und Dokumentenlieferdienst wissenschaftlicher Bibliotheken");?></a></li>
+	      	<li><a href="https://www.worldcat.org/search?qt=worldcat_org_all&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->transEsc('no_result_worldcat_link');?></a></li>
+	      	<li><a href="http://www.subito-doc.de/index.php&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->transEsc('no_result_subito_link');?></a></li>
 	      </ul>
       </div>
       <? if (isset($this->parseError)): ?>
