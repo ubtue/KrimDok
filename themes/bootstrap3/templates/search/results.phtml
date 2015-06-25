@@ -88,11 +88,11 @@
         <? endif; ?>
       </p>
       <div class="noresult">
-		  <?=$this->transEsc('no_result_header');?>:
-		  <ul class="noresult">
-	      	<li><a href="https://www.worldcat.org/search?qt=worldcat_org_all&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->transEsc('no_result_worldcat_link');?></a></li>
-	      	<li><a href="http://www.subito-doc.de/index.php&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->transEsc('no_result_subito_link');?></a></li>
-	      </ul>
+		<?=$this->transEsc('no_result_header');?>:
+		<ul class="noresult">
+			<li><a href="https://www.worldcat.org/search?qt=worldcat_org_all&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->transEsc('no_result_worldcat_link');?></a></li>
+			<li><a href="http://www.subito-doc.de/index.php&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->transEsc('no_result_subito_link');?></a></li>
+		</ul>
       </div>
       <? if (isset($this->parseError)): ?>
         <p class="alert alert-danger"><?=$this->transEsc('nohit_parse_error')?></p>
