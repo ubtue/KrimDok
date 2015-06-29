@@ -13,6 +13,9 @@ write.lock
 alphabetical_browse
 tlog.*
 
+# Compiled CSS
+compiled.css
+
 # Server specific configuration files
 httpd-vufind.conf
 httpd-vufind-vhosts.conf
