@@ -542,7 +542,7 @@ public Set getLocalSignaturesIsil(Record record) {
 
 
 /**
- * get the local subjects from LOK-tagged fields
+ * get the local subjects from LOK-tagged fields and get subjects from 936k subfields
  *
  *
  * LOK = Field
@@ -553,19 +553,19 @@ public Set getLocalSignaturesIsil(Record record) {
  * @param  Record  record
  * @return Set of local subjects
  */
-public Set getLocalSubjects(Record record) {
-    Set localsubjects = new LinkedHashSet();
+public Set getAllTopics(Record record) {
+    Set topics = new LinkedHashSet();
     Iterator fieldsIter = record.getVariableFields("LOK").iterator();
     String dataString;
     String codeString;
     String pseudotag = "";
     String data = "";
     char formatCode = ' ';
-    while(fieldsIter.hasNext()) {
-	DataField lokfield = (DataField) fieldsIter.next();
-	List subfields = lokfield.getSubfields();
-	Iterator subfieldsIter = subfields.iterator();
+    while (fieldsIter.hasNext()) {
+	DataField lokfield = (DataField) fieldsIter.next(); List
+	subfields = lokfield.getSubfields();
 	if (subfields != null) {
+            Iterator subfieldsIter = subfields.iterator();
 	    Subfield subfield;
 	    while (subfieldsIter.hasNext()) {
 		subfield = (Subfield) subfieldsIter.next();
@@ -588,8 +588,7 @@ public Set getLocalSubjects(Record record) {
 		if (formatCode == 'a' && pseudotag.equals("689  ")) {
 		    data =  subfield.getData();
 		    if (data.length() > 1) {
-			localsubjects.add(data);
-			System.out.println("Schlagwort: " + data );
+			topics.add(data);
 			data = "";
 			pseudotag = "";
 		    }
@@ -599,12 +598,14 @@ public Set getLocalSubjects(Record record) {
 	}
     }
 
+    // Extract topics from all 936k subfields:
+    Iterator fieldsIter = record.getVariableFields("936").iterator();
+    while (fieldsIter.hasNext()) {
+	DataField _936_field = (DataField) fieldsIter.next();
+	Iterator kIter = _936_field.getSubfields('k').iterator();
+	while (kIter.hasNext())
+	      topics.add(kIter.next().getData());
+    }
 
-    // Nothing worked!
-//    if (localsubjects.isEmpty()) {
-//        localsubjects.add("Unknown");
-//        System.out.println("Unknown added");
-//    }
-
-    return localsubjects;
+    return topics;
 }

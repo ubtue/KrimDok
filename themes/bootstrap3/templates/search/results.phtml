@@ -65,7 +65,7 @@
             <?=$this->transEsc('query time')?>: <?=$this->localizedNumber($qtime, 2).$this->transEsc('seconds_abbrev')?>
           <? endif; ?>
         <? else: ?>
-          <p class="lead"><?=$this->transEsc('nohit_heading')?></p>
+          <h1><?=$this->transEsc('nohit_heading')?></h1>
         <? endif; ?>
       </div>
 
@@ -87,6 +87,13 @@
           <?=$this->transEsc('nohit_prefix')?> - <strong><?=$this->escapeHtml($lookfor)?></strong> - <?=$this->transEsc('nohit_suffix')?>
         <? endif; ?>
       </p>
+      <div class="noresult">
+        <?=$this->transEsc('no_result_header');?>:
+        <ul class="noresult">
+          <li><a href="https://www.worldcat.org/search?qt=worldcat_org_all&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->transEsc('no_result_worldcat_link');?></a></li>
+          <li><a href="http://www.subito-doc.de/index.php&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->transEsc('no_result_subito_link');?></a></li>
+        </ul>
+      </div>
       <? if (isset($this->parseError)): ?>
         <p class="alert alert-danger"><?=$this->transEsc('nohit_parse_error')?></p>
       <? endif; ?>
