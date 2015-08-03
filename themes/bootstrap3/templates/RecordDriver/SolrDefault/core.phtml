@@ -97,7 +97,7 @@
       <? $issn = $this->driver->getCleanISSN(); if (!empty($issn)): ?>
         <tr>
           <th><?=$this->transEsc('Subito Delivery Service')?>: </th>
-          <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=&SS=<?=$issn?>">Link</a><br/></td>
+          <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=&SS=<?=$issn?>"><?=$this->transEsc("Order now")?>.</a></td>
         </tr>
       <? endif; ?>
 
