@@ -94,6 +94,13 @@
 
       <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
 
+      <? $issn = $this->driver->getCleanISSN(); if (!empty($issn)): ?>
+        <tr>
+          <th><?=$this->transEsc('Subito Delivery Service')?>: </th>
+          <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=&SS=<?=$issn?>"><?=$this->transEsc("Order now")?>.</a></td>
+        </tr>
+      <? endif; ?>
+
       <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
       <tr>
         <th><?=$this->transEsc('Published')?>: </th>
