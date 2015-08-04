@@ -96,21 +96,12 @@
 
       <? $issn = $this->driver->getCleanISSN(); $isbn = $this->driver->getCleanISBN();
          if (!empty($issn) || !empty($isbn)):
-             $page_range = '';
-             $start_page = $this->driver->getContainerStartPage();
-             $page_count = $this->driver->getPageCount();
-             if (!empty($start_page) && !empty($page_count)) {
-                 $end_page = $start_page + $page_count - 1;
-                 $page_range = $start_page . '%2D' . $end_page;
-             }
+             $page_range = $this->driver->getPageRange();
+             $container_volume = $this->driver->getContainerVolume();
       ?>
         <tr>
-          <th><?=$this->transEsc('Subito-Lieferdienst')?>: </th>
-      <? if (!empty($issn)): ?>
-          <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=<?=$this->escapeHtml($this->driver->getContainerVolume())?>&PG=<?=$this->escapeHtml($page_range)?>&SS=<?=$this->escapeHtml($issn)?>">Link</a><br/></td>
-      <? else: ?>
-          <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=<?=$this->escapeHtml($this->driver->getContainerVolume())?>&PG=<?=$this->escapeHtml($page_range)?>&SB=<?=$this->escapeHtml($isbn)?>">Link</a><br/></td>
-      <? endif; ?>
+          <th><?=$this->transEsc('Subito Delivery Service');?>: </th>
+          <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=<?=$this->escapeHtml($container_volume);?>&PG=<?=$this->escapeHtml($page_range);?>&SS=<?=$this->escapeHtml($issn);?>&SB=<?=$this->escapeHtml($isbn);?>"><?=$this->transEsc("Order now");?>.</a></td>
         </tr>
       <? endif; ?>
 
