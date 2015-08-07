@@ -98,12 +98,16 @@ public Set getIsils(Record record) {
 }
 
 
-boolean getTubingenAvailability(Record record) {
+String getTubingenAvailability(Record record) {
     Set isils = getIsils(record);
-    if (isils.contains("DE-21")) // university library
-        return true;
-    if (!isils.contains("DE-21-110")) // criminology institute
-        return false;
+    if (isils.contains("DE-21")) {// university library
+        System.out.println("returning true");
+        return "true";
+    }
+    if (!isils.contains("DE-21-110")) {// criminology institute
+        System.out.println("returning false");
+        return "false";
+    }
 
     // If we get here we know that the record is from the criminology institute and we need
     // to check the $m subfield of the 852 local field.
@@ -124,12 +128,15 @@ boolean getTubingenAvailability(Record record) {
                 continue;
             if (codeString.charAt(0) == '0' && subfield.getData() == "852  ")
                 found_852_pseudo_tag = true;
-            else if (found_852_pseudo_tag && codeString.charAt(0) == 'm' && subfield.getData() == "v")
-	        return false;
+            else if (found_852_pseudo_tag && codeString.charAt(0) == 'm' && subfield.getData() == "v") {
+	         System.out.println("returning false");
+	        return "false";
+            }
         }
     }
 
-    return true; // No $m w/ value "v" in any 852 local field.
+        System.out.println("returning true");
+    return "true"; // No $m w/ value "v" in any 852 local field.
 }
 
 
