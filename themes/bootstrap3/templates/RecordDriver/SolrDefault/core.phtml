@@ -92,6 +92,20 @@
         </tr>
       <? endif; ?>
 
+      <? $issue = $this->driver->getIssue(); if (!empty($issue)): ?>
+      <tr>
+        <th><?=$this->transEsc('Issue')?>: </th>
+        <td><?=$this->escapeHtml($issue)?></td>
+      </tr>
+      <? endif; ?>
+
+      <? $pages = $this->driver->getPages(); if (!empty($pages)): ?>
+      <tr>
+        <th><?=$this->transEsc('Pages')?>: </th>
+        <td><?=$this->escapeHtml($pages)?></td>
+      </tr>
+      <? endif; ?>
+
       <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
 
       <? $issn = $this->driver->getCleanISSN(); $isbn = $this->driver->getCleanISBN();
