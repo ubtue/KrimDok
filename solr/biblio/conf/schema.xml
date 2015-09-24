@@ -291,6 +291,10 @@
    <field name="abr" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="media" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="content" type="string" indexed="true" stored="true" multiValued="true"/>
+
+   <!-- Miscellaneous -->
+   <field name="issue" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="pages" type="string" indexed="true" stored="true" multiValued="false"/>
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>
