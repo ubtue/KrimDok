@@ -657,7 +657,8 @@ label.list-group-item {
   }
 }
 .search-controls {
-  margin: 10px auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .search-controls .alert {
   margin-bottom: 0;
