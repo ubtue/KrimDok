@@ -656,10 +656,6 @@ label.list-group-item {
     display: none;
   }
 }
-.search-controls {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 .search-controls .alert {
   margin-bottom: 0;
 }
