@@ -143,15 +143,6 @@
       </tr>
       <? endif; ?>
 
-      <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
-
-      <? $issn = $this->driver->getCleanISSN(); if (!empty($issn)): ?>
-        <tr>
-          <th><?=$this->transEsc('Subito Delivery Service')?>: </th>
-          <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=&SS=<?=$issn?>"><?=$this->transEsc("Order now")?>.</a></td>
-        </tr>
-      <? endif; ?>
-
       <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
       <tr>
         <th><?=$this->transEsc('Published')?>: </th>
@@ -222,25 +213,6 @@
       </tr>
       <? endif; ?>
 
-      <? $subjects = $this->driver->getAllSubjectHeadings(); if (!empty($subjects)): ?>
-        <tr>
-          <th><?=$this->transEsc('Subjects')?>: </th>
-          <td>
-            <? foreach ($subjects as $field): ?>
-              <div class="subjectLine" property="keywords">
-                <? $subject = ''; ?>
-                <? if(count($field) == 1) $field = explode('--', $field[0]); ?>
-                <? $i = 0; foreach ($field as $subfield): ?>
-                  <?=($i++ == 0) ? '' : ' &gt; '?>
-                  <? $subject = trim($subject . ' ' . $subfield); ?>
-                  <a class="backlink" title="<?=$this->escapeHtmlAttr($subject)?>" href="<?=$this->record($this->driver)->getLink('subject', $subject)?>" rel="nofollow"><?=trim($this->escapeHtml($subfield))?></a>
-                <? endforeach; ?>
-              </div>
-            <? endforeach; ?>
-          </td>
-        </tr>
-      <? endif; ?>
-
       <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
       <? include(realpath(dirname(__FILE__) . "/Availability.phtml")); ?>
 
@@ -283,6 +255,26 @@
                 <?=$this->transEsc('No Tags')?>, <?=$this->transEsc('Be the first to tag this record')?>!
               <? endif; ?>
             </div>
+          </td>
+        </tr>
+      <? endif; ?>
+
+
+      <? $subjects = $this->driver->getAllSubjectHeadings(); if (!empty($subjects)): ?>
+        <tr>
+          <th><?=$this->transEsc('Subjects')?>: </th>
+          <td>
+            <? foreach ($subjects as $field): ?>
+              <div class="subjectLine" property="keywords">
+                <? $subject = ''; ?>
+                <? if(count($field) == 1) $field = explode('--', $field[0]); ?>
+                <? $i = 0; foreach ($field as $subfield): ?>
+                  <?=($i++ == 0) ? '' : ' &gt; '?>
+                  <? $subject = trim($subject . ' ' . $subfield); ?>
+                  <a class="backlink" title="<?=$this->escapeHtmlAttr($subject)?>" href="<?=$this->record($this->driver)->getLink('subject', $subject)?>" rel="nofollow"><?=trim($this->escapeHtml($subfield))?></a>
+                <? endforeach; ?>
+              </div>
+            <? endforeach; ?>
           </td>
         </tr>
       <? endif; ?>

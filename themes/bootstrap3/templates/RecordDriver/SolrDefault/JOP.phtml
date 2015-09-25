@@ -2,7 +2,6 @@
         <tr>
           <th>Journals Online &amp; Print:</th>
           <td><div style="color:grey" id="jop_place_holder"><?=$this->transEsc("Loading")?>...</div></td>
-        </tr>
         <script type="text/javascript" language="javascript">
           var genre = ("<?=$formats[0]?>" == "Article" ? "article" : "journal");
           $.ajax({
@@ -41,4 +40,5 @@
             }
           }); // end ajax
         </script>
+        </tr>
       <? endif; ?>
