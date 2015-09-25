@@ -41,7 +41,7 @@ public Set getUrlsAndMaterialTypes(Record record) {
 	    final Subfield subfield_a = field.getSubfield('a');
             if (subfield_a != null) {
                 final String url = "https://doi.org/" + subfield_a.getData();
-		urls_and_material_types.add(url + ":DOI Link");
+		urls_and_material_types.add(url + ":DOI");
             }
         }
     }
