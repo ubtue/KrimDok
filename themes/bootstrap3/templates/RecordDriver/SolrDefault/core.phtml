@@ -186,33 +186,6 @@
 	  <?= $this->escapeHtml($instituts_systematik[0] . " " . substr($instituts_systematik, 1))?><br/><? endforeach; ?></td>
         </tr>
       <? endif; ?>
-
-      <?/* Display container section if at least one container exists. */?>
-      <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles)): ?>
-      <tr>
-        <th><?=$this->transEsc('In')?>: </th>
-        <td>
-          <? foreach ($ids_and_titles as $id => $title): ?>
-            <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
-            <br/>
-          <? endforeach; ?>
-        </td>
-      </tr>
-      <? endif; ?>
-
-      <?/* Display containee section if at least one containee exists. */?>
-      <? $ids_and_titles = $this->driver->getContaineeIDsAndTitles(); if (!empty($ids_and_titles)): ?>
-      <tr>
-        <th><?=$this->transEsc('Contains')?>: </th>
-        <td>
-          <? foreach ($ids_and_titles as $id => $title): ?>
-            <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
-            <br/>
-          <? endforeach; ?>
-        </td>
-      </tr>
-      <? endif; ?>
-
       <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
       <? include(realpath(dirname(__FILE__) . "/Availability.phtml")); ?>
 
@@ -259,6 +232,31 @@
         </tr>
       <? endif; ?>
 
+      <?/* Display container section if at least one container exists. */?>
+      <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles)): ?>
+        <tr>
+          <th><?=$this->transEsc('In')?>: </th>
+          <td>
+            <? foreach ($ids_and_titles as $id => $title): ?>
+              <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
+              <br/>
+            <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <?/* Display containee section if at least one containee exists. */?>
+      <? $ids_and_titles = $this->driver->getContaineeIDsAndTitles(); if (!empty($ids_and_titles)): ?>
+        <tr>
+          <th><?=$this->transEsc('Contains')?>: </th>
+          <td>
+            <? foreach ($ids_and_titles as $id => $title): ?>
+              <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
+              <br/>
+            <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
 
       <? $subjects = $this->driver->getAllSubjectHeadings(); if (!empty($subjects)): ?>
         <tr>
