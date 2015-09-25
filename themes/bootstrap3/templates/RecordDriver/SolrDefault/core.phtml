@@ -149,6 +149,7 @@
 	  <?= $this->escapeHtml($instituts_systematik[0] . " " . substr($instituts_systematik, 1))?><br/><? endforeach; ?></td>
         </tr>
       <? endif; ?>
+      <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
 
       <? $issn = $this->driver->getCleanISSN(); $isbn = $this->driver->getCleanISBN();
       if (!empty($issn) || !empty($isbn)):
