@@ -282,10 +282,6 @@ class SearchController extends AbstractSearch
     public function homeAction()
     {
         return $this->createViewModel(
-/*
-  No browsing needed hier...
-            array('results' => $this->getHomePageFacets())
-*/
             array('results' => null)
         );
     }

@@ -1,23 +1,32 @@
 <div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-11">
-<<<<<<< HEAD
   <div class="row">
-=======
-  <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
-  <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
-  <div class="left">
->>>>>>> Webdesign-Anpassungen: Breite ausgenutzt und Platz zwischen Resultaten vergrößert
     <div>
       <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
       <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
     </div>
-<<<<<<< HEAD
     <? if ($cover = $this->record($this->driver)->getCover('result-list', 'medium', $this->recordLink()->getUrl($this->driver))): ?>
       <div class="col-sm-2 col-xs-3 left"><?=$cover ?></div>
     <? endif ?>
     <div class="<?=$cover ? 'col-sm-7 col-xs-6' : 'col-sm-9 col-xs-9'?> middle">
-=======
+  <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
+  <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
+  <div class="left">
+    <div>
+      <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title">
+      <?
+        $summHighlightedTitle = $this->driver->getHighlightedTitle();
+        $summTitle = $this->driver->getTitle();
+        if (!empty($summHighlightedTitle)) {
+          echo $this->highlight($this->addEllipsis($summHighlightedTitle, $summTitle));
+        } else if (!empty($summTitle)) {
+          echo $this->escapeHtml($this->truncate($summTitle, 180));
+        } else {
+          echo $this->transEsc('Title not available');
+        }
+      ?>
+      </a>
+    </div>
     <div class="middle">
->>>>>>> Webdesign-Anpassungen: Breite ausgenutzt und Platz zwischen Resultaten vergrößert
       <div>
         <? if($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map(array($this, 'escapeHtml'), $this->driver->getSummary())); ?>
@@ -57,14 +66,21 @@
         <? endif; ?>
       </div>
 
-      <? if(!$this->driver->isCollection()): ?>
-        <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
-          <? if (!empty($snippet['caption'])): ?>
-            <strong><?=$this->transEsc($snippet['caption']) ?>:</strong> ';
-          <? endif; ?>
-          <? if (!empty($snippet['snippet'])): ?>
-            <span class="quotestart">&#8220;</span>...<?=$this->highlight($snippet['snippet']) ?>...<span class="quoteend">&#8221;</span><br/>
-          <? endif; ?>
+    <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles)): ?>
+      <? foreach ($ids_and_titles as $id => $title): ?>
+        <div>
+	  <?=$this->transEsc('In')?>: <a href="/Record/<?=$id?>"><?=$this->escapeHtml($title)?></a>
+        </div>
+      <? endforeach; ?>
+    <? endif; ?>
+
+    <? if(!$this->driver->isCollection()): ?>
+      <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
+        <? if (!empty($snippet['caption'])): ?>
+          <strong><?=$this->transEsc($snippet['caption']) ?>:</strong> ';
+        <? endif; ?>
+        <? if (!empty($snippet['snippet'])): ?>
+          <span class="quotestart">&#8220;</span>...<?=$this->highlight($snippet['snippet']) ?>...<span class="quoteend">&#8221;</span><br/>
         <? endif; ?>
       <? endif; ?>
     <? endif; ?>
@@ -124,6 +140,7 @@
         <? endif; ?>
       </div>
 
+<<<<<<< HEAD
       <? /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
             but even if we don't plan to display the link, we still want to get the $openUrl
             value for use in generating a COinS (Z3988) tag -- see bottom of file.
@@ -146,8 +163,25 @@
         <? endif; ?>
       <? endif; ?>
 
+=======
+    <? $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
+    <? if (!empty($urls_and_material_types)): ?>
+      <? foreach ($urls_and_material_types as $url => $material_type): ?>
+        <a href="<?=$url?>" class="fulltext" target="new"><i class="fa fa-external-link"></i> <?=$this->escapeHtml($material_type)?></a>
+        <br/>
+      <? endforeach; ?>
+    <? endif; ?>
+>>>>>>> ad3f81d3976c4ff457bb8245d8aba343c4e298e1
       <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
 
+<?
+    /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
+       but even if we don't plan to display the link, we still want to get the $openUrl
+       value for use in generating a COinS (Z3988) tag -- see bottom of file.
+    */
+    $openUrl = $this->driver->getOpenURL();
+    $openUrlActive = $this->driver->openURLActive('results');
+?>
       <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
         <span class="status ajax-availability hidden">
           <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
@@ -155,6 +189,7 @@
       <? endif; ?>
       <?=$this->record($this->driver)->getPreviews()?>
     </div>
+<<<<<<< HEAD
 
     <? $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
     <? if (!empty($urls_and_material_types)): ?>
@@ -215,5 +250,7 @@
       <?=$this->record($this->driver)->getPreviews()?>
 >>>>>>> Webdesign-Anpassungen: Breite ausgenutzt und Platz zwischen Resultaten vergrößert
     </div>
+=======
+>>>>>>> ad3f81d3976c4ff457bb8245d8aba343c4e298e1
   </div>
 </div>

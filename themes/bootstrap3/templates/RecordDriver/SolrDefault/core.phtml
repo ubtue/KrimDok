@@ -7,31 +7,6 @@
   }
 ?>
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
-  <? $QRCode = $this->record($this->driver)->getQRCode("core"); 
-     $cover = $this->record($this->driver)->getCover('core', 'medium', $this->record($this->driver)->getThumbnail('large'));
-     $preview = $this->record($this->driver)->getPreviews(); ?>
-  <? if ($QRCode || $cover || $preview): ?>
-  <div class="col-sm-3">
-    <div class="text-center">
-      <? /* Display thumbnail if appropriate: */ ?>
-      <? if($cover): ?>
-        <?=$cover?>
-      <? endif; ?>
-
-      <? /* Display qrcode if appropriate: */ ?>
-      <? if($QRCode): ?>
-        <span class="hidden-xs">
-          <br/><img alt="<?=$this->transEsc('QR Code')?>" class="qrcode" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
-        </span>
-      <? endif; ?>
-    </div>
-
-    <? // if you have a preview tab but want to move or remove the preview link
-       // from this area of the record view, this can be split into
-       // getPreviewData() (should stay here) and
-       // getPreviewLink() (can go in your desired tab) ?>
-    <? if ($preview): ?><?=$preview?><? endif; ?>
-  </div>
   <div class="col-sm-9">
   <? else: ?>
   <div class="col-sm-12">
@@ -296,20 +271,6 @@
           </td>
         </tr>
       <? endif; ?>
-
-      <? if ($this->usertags()->getMode() !== 'disabled'): ?>
-        <? $tagList = $this->driver->getTags(null, null, 'count', $user_id); ?>
-        <tr>
-          <th><?=$this->transEsc('Tags')?>: </th>
-          <td>
-            <a id="tagRecord" class="btn btn-link modal-link pull-right flip" href="<?=$this->recordLink()->getActionUrl($this->driver, 'AddTag')?>" title="<?=$this->transEsc('Add Tag')?>">
-              <i class="fa fa-plus"></i> <?=$this->transEsc('Add Tag')?></a>
-            </a>
-            <?=$this->context($this)->renderInContext('record/taglist', array('tagList'=>$tagList, 'loggedin'=>$loggedin)) ?>
-          </td>
-        </tr>
-      <? endif; ?>
-      <? include(realpath(dirname(__FILE__) . "/Availability.phtml")); ?>
     </table>
     <?/* End Main Details */?>
   </div>

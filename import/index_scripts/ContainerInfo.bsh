@@ -16,7 +16,7 @@ private final static Pattern PAGE_RANGE_PATTERN3 = Pattern.compile("\\s*(\\d+)\\
 public String getPageRange(Record record) {
     String field_value = indexer.getFirstFieldVal(record, "936h");
     if (field_value == null)
-    return null;
+	return null;
 
     Matcher matcher1 = PAGE_RANGE_PATTERN1.matcher(field_value);
     if (matcher1.matches())
@@ -40,7 +40,7 @@ private final static Pattern YEAR_PATTERN = Pattern.compile("(\\d\\d\\d\\d)");
 public String getContainerYear(Record record) {
     String field_value = indexer.getFirstFieldVal(record, "936j");
     if (field_value == null)
-    return null;
+	return null;
 
     Matcher matcher = YEAR_PATTERN.matcher(field_value);
     return matcher.matches() ? matcher.group(1) : null;
@@ -53,7 +53,7 @@ private final static Pattern VOLUME_PATTERN = Pattern.compile("^\\s*(\\d+)$");
 public String getContainerVolume(Record record) {
     String field_value = indexer.getFirstFieldVal(record, "936d");
     if (field_value == null)
-    return null;
+	return null;
 
     Matcher matcher = VOLUME_PATTERN.matcher(field_value);
     return matcher.matches() ? matcher.group(1) : null;

@@ -1813,6 +1813,14 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * @return string
+     */
+    public function getPageRange()
+    {
+        return isset($this->fields['page_range']) ? $this->fields['page_range'] : '';
+    }
+
+    /**
      * Get the end page of the item that contains this record.
      *
      * @return string
