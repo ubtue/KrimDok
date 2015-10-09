@@ -430,13 +430,7 @@ class Wikipedia implements TranslatorAwareInterface
         $info = [
             'name' => $name,
             'description' => $this->sanitizeWikipediaBody($bodyStr),
-<<<<<<< HEAD
-            'wiki_lang' => $this->lang,
         ];
-=======
-            'wiki_lang' =>  $this->lang,
-        );
->>>>>>> As there is no https://en-gb.wikipedia.org we need to drop anything starting with a dash when handling language codes.
 
         /* Image */
 
