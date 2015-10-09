@@ -13,12 +13,10 @@ import java.util.regex.*;
  *                                        tag must be followed by two subfield codes e.g. "800aw:810aw:830aw".
  *                                        The first subfield code for each tag must indicate the "title" subfield
  *                                        and the second subfield code the ID subfield.
- * @arg   optional_id_prefix              If non-empty, this String will prepended to each ID before it is being
- *                                        returned.
  * @arg   optional_field_extraction_regex 
  * @return                                A, possibly empty, Set<String> containing the ID/title pairs.
  */
-public Set getContainerIdsWithTitles(Record record, String fields_and_subfields, String optional_id_prefix,
+public Set getContainerIdsWithTitles(Record record, String fields_and_subfields,
 				     String optional_field_extraction_regex) {
     String[] fields_and_subfields_array = fields_and_subfields.split(":");
     if (fields_and_subfields_array.length == 0) {
@@ -65,10 +63,7 @@ public Set getContainerIdsWithTitles(Record record, String fields_and_subfields,
 		}
 
 		String parent_id;
-		if (optional_id_prefix == null)
-		    parent_id = parent_ref;
-		else
-		    parent_id = optional_id_prefix + parent_ref;
+		parent_id = parent_ref;
 
 		container_ids_and_titles.add(parent_id + ":" + title_iter.next().getData());
 	    }

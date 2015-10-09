@@ -36,14 +36,11 @@ public Set getUrlsAndMaterialTypes(Record record) {
 
     // Handle DOI's:
     for (DataField field : record.getVariableFields("024")) {
-	final Subfield subfield_2 = field.getSubfield('2');	   
-    	print("DOI: Found 024: " + (subfield_2 == null ? null : subfield_2.getData()));
-	print("DOI: " + field.getSubfields());
+	final Subfield subfield_2 = field.getSubfield('2');
 	if (subfield_2 != null && subfield_2.getData().equals("doi")) {
 	    final Subfield subfield_a = field.getSubfield('a');
             if (subfield_a != null) {
                 final String url = "https://doi.org/" + subfield_a.getData();
-	        print("DOI: Found doi: " + url);
 		urls_and_material_types.add(url + ":DOI");
             }
         }
