@@ -55,43 +55,27 @@ public Set getIsils(Record record) {
 
                 	dataString = subfield.getData(); // 852
 
-//                	System.out.print("subfieldcode: " + subfield.getCode() + "  " );
-//                	System.out.println("subfielddata: " + subfield.getData() );
-
                 	// Looking for 852-Tag
                 	if (formatCode == '0' && dataString.equals("852  ")) {
                 		pseudotag = subfield.getData(); // dataString 852
                 	}
-//                	System.out.println("pseudotag: " + pseudotag);
 
                 	//Looking for ISIL
                 	if (formatCode == 'a' && pseudotag.equals("852  ")) {
                 		data = subfield.getData();
                 		isils.add(data);
-//                		System.out.print("  | " + data + " [" + pseudotag + "] ");
                			data = "";
                			pseudotag = "";
                 	}
                 }
-
             }
-
-//        System.out.println("");
-//        System.out.println("--- New LOK Line----");
-//        System.out.println("");
         }
-//     System.out.println("");
-//     System.out.println("");
-//     System.out.println("=== New Record ===");
-//     System.out.println("");
-
     }
 
 
     // Nothing worked!
     if (isils.isEmpty()) {
         isils.add("Unknown");
-        System.out.println("No ISIL found!");
     }
 
     return isils;
