@@ -11,18 +11,30 @@
             dataType: "xml",
             success: function(xml) {
               $(document).ready(function() {
-                var sURL = null;
+                var replacement = "";
                 $(xml).find('Result').each(function(index, value) {
                     var state = $(this).attr("state");
                     if (state >= 0 && state <= 3) {
-                        sURL = $(value).find('AccessURL').first().text();
-			return false;
+                        var accessURL = $(value).find('AccessURL').first().text();
+                        if (accessURL) {
+                            if (replacement)
+                                replacement += '<br />';        
+                            replacement += '<a href="' + accessURL + '">'
+                                           + '<?=$this->transEsc("Available online")?>' + '.</a>';
+                        } else {  // Hopefully available in print!
+                            if (replacement)
+                                replacement += '<br />';        
+                            var location    = $(value).find('Location').first().text();
+                            var call_number = $(value).find('Signature').first().text();
+                            replacement += location;
+                            if (call_number)
+                                 replacement += " (" + call_number + ")";
+                        }
                     }
                 });
-                if (sURL != null) {
+                if (replacement != null) {
                     $("#jop_place_holder").each(function() {
-                        var text = '<?=$this->transEsc("Available locally or online")?>';
-                        $(this).replaceWith('<a href="' + sURL + '">' + text + '.</a>');
+                        $(this).replaceWith(replacement);
                     });
                 } else {
                     $("#jop_place_holder").each(function() {
