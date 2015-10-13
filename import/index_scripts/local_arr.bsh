@@ -540,7 +540,7 @@ void ExtractTopics(final String tag, final char subfield_code, final Set topics)
 
 
 /**
- * get the local subjects from LOK-tagged fields and get subjects from 936k abd 689a subfields
+ * get the local subjects from LOK-tagged fields and get subjects from 936k and 689a subfields
  *
  *
  * LOK = Field
