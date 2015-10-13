@@ -528,8 +528,19 @@ public Set getLocalSignaturesIsil(Record record) {
 }
 
 
+void ExtractTopics(final String tag, final char subfield_code, final Set topics) {
+    final Iterator fieldsIter = record.getVariableFields(tag).iterator();
+    while (fieldsIter.hasNext()) {
+	final DataField data_field = (DataField) fieldsIter.next();
+	final Iterator subfieldIter = data_field.getSubfields(subfield_code).iterator();
+	while (subfieldIter.hasNext())
+	      topics.add(subfieldIter.next().getData());
+    }
+}
+
+
 /**
- * get the local subjects from LOK-tagged fields and get subjects from 936k subfields
+ * get the local subjects from LOK-tagged fields and get subjects from 936k abd 689a subfields
  *
  *
  * LOK = Field
@@ -585,14 +596,9 @@ public Set getAllTopics(Record record) {
 	}
     }
 
-    // Extract topics from all 936k subfields:
-    Iterator fieldsIter = record.getVariableFields("936").iterator();
-    while (fieldsIter.hasNext()) {
-	DataField _936_field = (DataField) fieldsIter.next();
-	Iterator kIter = _936_field.getSubfields('k').iterator();
-	while (kIter.hasNext())
-	      topics.add(kIter.next().getData());
-    }
+    // Extract topics from all 936k and 689a subfields:
+    ExtractTopics("936", 'k', topics);
+    ExtractTopics("689", 'a', topics);
 
     return topics;
 }
