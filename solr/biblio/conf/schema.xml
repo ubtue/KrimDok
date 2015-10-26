@@ -269,18 +269,18 @@
    <field name="gkdnum" type="string" indexed="true" stored="true" multiValued="true"/>
 
    <!-- Local Data -->
-   <field name="local_signature" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="local_signature" type="text" indexed="true" stored="true" multiValued="true"/>
    <field name="signature" type="signaturestring" indexed="true" stored="true" multiValued="true"/>
    <field name="local_subject" type="text" indexed="true" stored="true" multiValued="true"/>
    <field name="instituts_systematik1" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
    <field name="instituts_systematik2" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik1" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik2" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik3" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik4" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik5" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
-   <field name="available_in_tubingen" type="boolean" indexed="true" stored="true" multiValued="false"/>
+   <field name="fid_systematik" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
+   <field name="fid_systematik1" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
+   <field name="fid_systematik2" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
+   <field name="fid_systematik3" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
+   <field name="fid_systematik4" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
+   <field name="fid_systematik5" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
+   <field name="available_in_tubingen" type="boolean" indexed="false" stored="true" multiValued="false"/>
 
    <!--  Multipart  -->
    <field name="multipart_set" type="string" indexed="true" stored="true"/>
@@ -293,8 +293,8 @@
    <field name="content" type="string" indexed="true" stored="true" multiValued="true"/>
 
    <!-- Miscellaneous -->
-   <field name="issue" type="string" indexed="true" stored="true" multiValued="false"/>
-   <field name="pages" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="issue" type="string" indexed="false" stored="true" multiValued="false"/>
+   <field name="pages" type="string" indexed="false" stored="true" multiValued="false"/>
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>

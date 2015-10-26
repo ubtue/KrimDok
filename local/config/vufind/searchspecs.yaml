@@ -156,6 +156,8 @@ Signature:
   QueryFields:
     local_signature:
       - [onephrase, 350]
+      - [and, 200]
+      - [or, 100]
 
 # These searches use Dismax when possible:
 Author:

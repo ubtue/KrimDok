@@ -617,6 +617,18 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * Get the signatures of the record.
+     *
+     * @return array
+     */
+    public function getSignatures()
+    {
+        return isset($this->fields['local_signature']) && is_array($this->fields['local_signature']) ?
+            $this->fields['local_signature'] : [];
+    }
+
+
+    /**
      * Get an array of all ISBNs associated with the record (may be empty).
      *
      * @return array

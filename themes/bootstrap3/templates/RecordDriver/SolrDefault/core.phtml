@@ -227,6 +227,18 @@
         </tr>
       <? endif; ?>
 
+      <? $signatures = $this->driver->getSignatures(); if (!empty($signatures)): ?>
+        <? $contentDisplayed = true; ?>
+        <tr>
+          <th><?=$this->transEsc('Signature')?>: </th>
+          <td>
+            <? foreach ($signatures as $field): ?>
+              <?=$this->escapeHtml($field)?><br/>
+            <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
       <? $instituts_systematiken = $this->driver->getInstitutsSystematik(); if (!empty($instituts_systematiken)): ?>
         <tr>
           <th>Institutssystematik</th>
