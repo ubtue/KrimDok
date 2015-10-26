@@ -4,8 +4,9 @@
     </th>
     <td>
 	<?php
+
        if ($tubingen_call_numbers = $this->driver->getTubingenCallNumbers()) {
-	      echo $this->transEsc('Available in Tubingen') . ": " . $tubingen_call_numbers;
+	      echo $this->transEsc('Available in Tubingen') . ".";
 	   } else {
 	      echo $this->transEsc('Not available in Tubingen') . ".";   
 	   }

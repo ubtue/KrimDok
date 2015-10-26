@@ -144,6 +144,8 @@
       <?
       $issue = $this->driver->getIssue();
       $pages = $this->driver->getPages();
+      // TODO: $year = $this->driver->getYear();
+      // TODO: $volume = $this->driver->getVolume();
       if (!empty($issue) || !empty($pages)): ?>
         <tr>
           <th><?=$this->transEsc('Occurrence')?>: </th>
@@ -180,48 +182,6 @@
           <td>
             <? foreach ($issns as $field): ?>
               <?=$this->escapeHtml($field)?><br/>
-            <? endforeach; ?>
-          </td>
-        </tr>
-      <? endif; ?>
-      <? $summ = $this->driver->getSummary(); if (!empty($summ)): ?>
-        <tr>
-          <th><?=$this->transEsc('Summary')?>: </th>
-          <td>
-            <? foreach ($summ as $field): ?>
-              <?=$this->escapeHtml($field)?><br/>
-            <? endforeach; ?>
-          </td>
-        </tr>
-      <? endif; ?>
-
-      <?/* Display containee section if at least one containee exists. */?>
-      <? $ids_and_titles = $this->driver->getContaineeIDsAndTitles(); if (!empty($ids_and_titles)): ?>
-        <tr>
-          <th><?=$this->transEsc('Contains')?>: </th>
-          <td>
-            <? foreach ($ids_and_titles as $id => $title): ?>
-              <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
-              <br>
-            <? endforeach; ?>
-          </td>
-        </tr>
-      <? endif; ?>
-
-      <? $subjects = $this->driver->getAllSubjectHeadings(); if (!empty($subjects)): ?>
-        <tr>
-          <th><?=$this->transEsc('Subjects')?>: </th>
-          <td>
-            <? foreach ($subjects as $field): ?>
-              <div class="subjectLine" property="keywords">
-                <? $subject = ''; ?>
-                <? if(count($field) == 1) $field = explode('--', $field[0]); ?>
-                <? $i = 0; foreach ($field as $subfield): ?>
-                  <?=($i++ == 0) ? '' : ' &gt; '?>
-                  <? $subject = trim($subject . ' ' . $subfield); ?>
-                  <a class="backlink" title="<?=$this->escapeHtmlAttr($subject)?>" href="<?=$this->record($this->driver)->getLink('subject', $subject)?>" rel="nofollow"><?=trim($this->escapeHtml($subfield))?></a>
-                <? endforeach; ?>
-              </div>
             <? endforeach; ?>
           </td>
         </tr>
@@ -271,6 +231,49 @@
         <tr>
           <th><?=$this->transEsc('Subito Delivery Service');?>: </th>
           <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=<?=$this->escapeHtml($container_volume);?>&PG=<?=$this->escapeHtml($page_range);?>&SS=<?=$this->escapeHtml($issn);?>&SB=<?=$this->escapeHtml($isbn);?>"><?=$this->transEsc("Order now");?>.</a></td>
+        </tr>
+      <? endif; ?>
+
+      <? $summ = $this->driver->getSummary(); if (!empty($summ)): ?>
+        <tr>
+          <th><?=$this->transEsc('Summary')?>: </th>
+          <td>
+            <? foreach ($summ as $field): ?>
+              <?=$this->escapeHtml($field)?><br/>
+            <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <?/* Display containee section if at least one containee exists. */?>
+      <? $ids_and_titles = $this->driver->getContaineeIDsAndTitles(); if (!empty($ids_and_titles)): ?>
+        <tr>
+          <th><?=$this->transEsc('Contains')?>: </th>
+          <td>
+            <? foreach ($ids_and_titles as $id => $title): ?>
+              <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
+              <br>
+            <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? $subjects = $this->driver->getAllSubjectHeadings(); if (!empty($subjects)): ?>
+        <tr>
+          <th><?=$this->transEsc('Subjects')?>: </th>
+          <td>
+            <? foreach ($subjects as $field): ?>
+              <div class="subjectLine" property="keywords">
+                <? $subject = ''; ?>
+                <? if(count($field) == 1) $field = explode('--', $field[0]); ?>
+                <? $i = 0; foreach ($field as $subfield): ?>
+                  <?=($i++ == 0) ? '' : ' &gt; '?>
+                  <? $subject = trim($subject . ' ' . $subfield); ?>
+                  <a class="backlink" title="<?=$this->escapeHtmlAttr($subject)?>" href="<?=$this->record($this->driver)->getLink('subject', $subject)?>" rel="nofollow"><?=trim($this->escapeHtml($subfield))?></a>
+                <? endforeach; ?>
+              </div>
+            <? endforeach; ?>
+          </td>
         </tr>
       <? endif; ?>
 
