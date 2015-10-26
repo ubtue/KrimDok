@@ -488,7 +488,7 @@ public Set getLocalSignaturesIsil(Record record) {
 }
 
 
-void ExtractTopics(final String tag, final char subfield_code, final Set topics) {
+void ExtractTopics(Record record, String tag, char subfield_code, Set topics) {
     final Iterator fieldsIter = record.getVariableFields(tag).iterator();
     while (fieldsIter.hasNext()) {
 	final DataField data_field = (DataField) fieldsIter.next();
@@ -557,8 +557,8 @@ public Set getAllTopics(Record record) {
     }
 
     // Extract topics from all 936k and 689a subfields:
-    ExtractTopics("936", 'k', topics);
-    ExtractTopics("689", 'a', topics);
+    ExtractTopics(record, "936", 'k', topics);
+    ExtractTopics(record, "689", 'a', topics);
 
     return topics;
 }
