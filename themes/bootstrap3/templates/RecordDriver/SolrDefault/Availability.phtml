@@ -5,9 +5,12 @@
     <td>
 	<?php
        if ($tubingen_call_numbers = $this->driver->getTubingenCallNumbers()) {
-	      echo $this->transEsc('Available in Tubingen') . ": " . $tubingen_call_numbers;
+		   echo $this->transEsc('Available in Tubingen') . ".<br>";
+		   foreach ($this->driver->getLocalSignature() as $signature) {
+			   echo $signature . "<br>";
+		   }
 	   } else {
-	      echo $this->transEsc('Not available in Tubingen') . ".";   
+		   echo $this->transEsc('Not available in Tubingen') . ".";
 	   }
 	?>
     </td>

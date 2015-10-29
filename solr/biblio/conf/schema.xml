@@ -269,7 +269,7 @@
    <field name="gkdnum" type="string" indexed="true" stored="true" multiValued="true"/>
 
    <!-- Local Data -->
-   <field name="local_signature" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="local_signature" type="text" indexed="true" stored="true" multiValued="true"/>
    <field name="signature" type="signaturestring" indexed="true" stored="true" multiValued="true"/>
    <field name="local_subject" type="text" indexed="true" stored="true" multiValued="true"/>
    <field name="instituts_systematik1" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
