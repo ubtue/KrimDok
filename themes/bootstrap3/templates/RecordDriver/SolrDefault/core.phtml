@@ -175,6 +175,54 @@
           </td>
         </tr>
       <? endif; ?>
+
+      <? $signatures = $this->driver->getSignatures(); if (!empty($signatures)): ?>
+        <? $contentDisplayed = true; ?>
+        <tr>
+          <th><?=$this->transEsc('Signature')?>: </th>
+          <td>
+            <? foreach ($signatures as $field): ?>
+              <?=$this->escapeHtml($field)?><br/>
+            <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? $instituts_systematiken = $this->driver->getInstitutsSystematik(); if (!empty($instituts_systematiken)): ?>
+        <tr>
+          <th>Institutssystematik</th>
+          <td><? foreach ($instituts_systematiken as $instituts_systematik): ?>
+              <?= $this->escapeHtml($instituts_systematik[0] . " " . substr($instituts_systematik, 1))?><br/><? endforeach; ?></td>
+        </tr>
+      <? endif; ?>
+
+      <? $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
+      <? if (!empty($urls_and_material_types)): ?>
+        <tr>
+          <th><?=$this->transEsc('Online Access')?>:</th>
+          <td>
+            <? foreach ($urls_and_material_types as $url => $material_type): ?>
+              <a href="<?=$url?>" target="_blank"><?=$this->escapeHtml($material_type)?></a>
+              <br/>
+            <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
+      <? include(realpath(dirname(__FILE__) . "/Availability.phtml")); ?>
+
+      <? $issn = $this->driver->getCleanISSN(); $isbn = $this->driver->getCleanISBN();
+      if (!empty($issn) || !empty($isbn)):
+        $page_range = $this->driver->getPageRange();
+        $container_volume = $this->driver->getContainerVolume();
+        ?>
+        <tr>
+          <th><?=$this->transEsc('Subito Delivery Service');?>: </th>
+          <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=<?=$this->escapeHtml($container_volume);?>&PG=<?=$this->escapeHtml($page_range);?>&SS=<?=$this->escapeHtml($issn);?>&SB=<?=$this->escapeHtml($isbn);?>"><?=$this->transEsc("Order now");?>.</a></td>
+        </tr>
+      <? endif; ?>
+
       <? $summ = $this->driver->getSummary(); if (!empty($summ)): ?>
         <tr>
           <th><?=$this->transEsc('Summary')?>: </th>
@@ -215,41 +263,6 @@
               </div>
             <? endforeach; ?>
           </td>
-        </tr>
-      <? endif; ?>
-
-      <? $instituts_systematiken = $this->driver->getInstitutsSystematik(); if (!empty($instituts_systematiken)): ?>
-        <tr>
-          <th>Institutssystematik</th>
-          <td><? foreach ($instituts_systematiken as $instituts_systematik): ?>
-              <?= $this->escapeHtml($instituts_systematik[0] . " " . substr($instituts_systematik, 1))?><br/><? endforeach; ?></td>
-        </tr>
-      <? endif; ?>
-
-      <? $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
-      <? if (!empty($urls_and_material_types)): ?>
-        <tr>
-          <th><?=$this->transEsc('Online Access')?>:</th>
-          <td>
-            <? foreach ($urls_and_material_types as $url => $material_type): ?>
-              <a href="<?=$url?>" target="_blank"><?=$this->escapeHtml($material_type)?></a>
-              <br/>
-            <? endforeach; ?>
-          </td>
-        </tr>
-      <? endif; ?>
-
-      <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
-      <? include(realpath(dirname(__FILE__) . "/Availability.phtml")); ?>
-
-      <? $issn = $this->driver->getCleanISSN(); $isbn = $this->driver->getCleanISBN();
-      if (!empty($issn) || !empty($isbn)):
-        $page_range = $this->driver->getPageRange();
-        $container_volume = $this->driver->getContainerVolume();
-        ?>
-        <tr>
-          <th><?=$this->transEsc('Subito Delivery Service');?>: </th>
-          <td><a href="http://www.subito-doc.de/order/po.php?BI=KRIMDOK&VOL=<?=$this->escapeHtml($container_volume);?>&PG=<?=$this->escapeHtml($page_range);?>&SS=<?=$this->escapeHtml($issn);?>&SB=<?=$this->escapeHtml($isbn);?>"><?=$this->transEsc("Order now");?>.</a></td>
         </tr>
       <? endif; ?>
 
