@@ -526,6 +526,11 @@ class SolrDefault extends AbstractBase
         return $this->fields['available_in_tubingen'];
     }
 
+    public function getLocalSignature()
+    {
+        return $this->fields['local_signature'];
+    }
+
     /**
      * Get general notes on the record.
      *

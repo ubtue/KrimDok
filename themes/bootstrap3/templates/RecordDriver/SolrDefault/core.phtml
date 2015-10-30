@@ -129,7 +129,9 @@
       <? endif; ?>
 
       <?/* Display container section if at least one container exists. */?>
-      <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles)): ?>
+      <? $issue = $this->driver->getIssue(); ?>
+      <? $pages = $this->driver->getPages(); ?>
+      <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles) || !empty($issue) || !empty($pages)): ?>
         <tr>
           <th><?=$this->transEsc('In')?>: </th>
           <td>
@@ -137,19 +139,6 @@
               <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
               <br/>
             <? endforeach; ?>
-          </td>
-        </tr>
-      <? endif; ?>
-
-      <?
-      $issue = $this->driver->getIssue();
-      $pages = $this->driver->getPages();
-      // TODO: $year = $this->driver->getYear();
-      // TODO: $volume = $this->driver->getVolume();
-      if (!empty($issue) || !empty($pages)): ?>
-        <tr>
-          <th><?=$this->transEsc('Occurrence')?>: </th>
-          <td>
             <?if (!empty($issue)):?><?=$this->transEsc('Issue')?>: <?=$this->escapeHtml($issue)?><?endif;?><?if (!empty($issue) && !empty($pages)):?>, <?endif;?>
             <?if (!empty($pages)):?><?=$this->transEsc('Pages')?>: <?=$this->escapeHtml($pages)?><?endif;?>
           </td>
