@@ -32,3 +32,5 @@ public/doc
 
 KeywordChainParser.jar
 BibleRangeParser.jar
+
+solr/logs/
