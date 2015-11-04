@@ -297,6 +297,7 @@
    <field name="pages" type="string" indexed="false" stored="true" multiValued="false"/>
    <field name="volume" type="string" indexed="false" stored="true" multiValued="false"/>
    <field name="year" type="string" indexed="false" stored="true" multiValued="false"/>
+   <field name="bsz_indexed_date" type="date" indexed="true" stored="true"/>
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>

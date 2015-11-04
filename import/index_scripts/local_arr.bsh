@@ -6,6 +6,7 @@ import org.marc4j.marc.*;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Calendar;
 
 /**
  * get the ISILs from LOK-tagged fields
@@ -485,4 +486,48 @@ public Set getLocalSignaturesIsil(Record record) {
     }
 
     return localsignatures;
+}
+
+public String getBSZIndexedDate(Record record) {
+    Iterator fieldsIter = record.getVariableFields("LOK").iterator();
+    while (fieldsIter.hasNext()) {
+        DataField lokfield = fieldsIter.next();
+        Iterator subfieldsIter = lokfield.getSubfields().iterator();
+        while (subfieldsIter.hasNext()) {
+            Subfield subfield = subfieldsIter.next();
+
+            String codeString = subfield.getCode().toString();
+            char formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+
+            String dataString = subfield.getData();
+            if (formatCode != '0' || !dataString.startsWith("938") || !subfieldsIter.hasNext())
+                continue;
+
+            subfield = subfieldsIter.next();
+            codeString = subfield.getCode().toString();
+            formatCode = codeString.length() > 0 ? codeString.charAt(0) : ' ';
+            if (formatCode != 'a')
+                continue;
+
+            dataString = subfield.getData();
+            if (dataString.length() != 4)
+                continue;
+
+            String sub_year_text = dataString.substring(0, 2);
+            int sub_year = Integer.parseInt("20" + sub_year_text);
+            int current_year = Calendar.getInstance().get(Calendar.YEAR);
+            String year;
+            if (sub_year > current_year) {
+                // It is from the last century
+                year = "19" + sub_year_text;
+            } else {
+                year = "20" + sub_year_text;
+            }
+
+            String month = dataString.substring(2, 4);
+
+            return year + "-" + month + "-01T11:00:00:000Z";
+        }
+    }
+    return null;
 }
