@@ -1,10 +1,10 @@
 <?php
 /**
- * XSLT importer support methods.
+ * Proxy Controller Module
  *
  * PHP version 5
  *
- * Copyright (c) Demian Katz 2010.
+ * Copyright (C) Universitätsbiblothek Tübingen 2015.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -19,15 +19,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * @category VuFind2
- * @package  Utilities
- * @author   Andrew S. Nagy <vufind-tech@lists.sourceforge.net>
- * @author   Demian Katz <demian.katz@villanova.edu>
+ * @category TueLib
+ * @author   Johannes Ruscheinski <johannes.ruscheinski@uni-tuebingen.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/importing_records Wiki
  */
+namespace TueLib\Controller;
 
-// Load the Zend framework -- this will automatically trigger the appropriate
-// controller action based on directory and file names
-define('CLI_DIR', __DIR__);     // save directory name of current script
-require_once __DIR__ . '/../public/index.php';
+use VuFind\Exception\Forbidden as ForbiddenException;
+
+/**
+ * This controller handles global web proxy functionality.
+ *
+ * @package  Controller
+ * @author   Johannes Ruscheinski <johannes.ruscheinski@uni-tuebingen.de>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ */
+class StaticPagesController extends \VuFind\Controller\AbstractBase {
+    public function catalogsAction() {
+        return $this->createViewModel();
+    }
+}
+?>

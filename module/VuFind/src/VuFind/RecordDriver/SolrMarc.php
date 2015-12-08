@@ -129,7 +129,29 @@ class SolrMarc extends SolrDefault
                 }
             }
         }
-
+        $results = $this->getMarcRecord()->getFields('689');
+        if ($results) {
+            $current = [];
+            $currentID = 0;
+            foreach ($results as $result) {
+                $id = $result->getIndicator(1);
+                if ($id != $currentID && !empty($current)) {
+                    $retval[] = $current;
+                }
+                $subfields = $result->getSubfields();
+                if ($subfields) {
+                    foreach ($subfields as $subfield) {
+                        if (!is_numeric($subfield->getCode()) && strlen($subfield->getData()) > 2) {
+                            $current[] = $subfield->getData();
+                        }
+                    }
+                }
+                $currentID = $id;
+            }
+            if (!empty($current)) {
+                $retval[] = $current;
+            }
+        }
         // Remove duplicates and then send back everything we collected:
         return array_map(
             'unserialize', array_unique(array_map('serialize', $retval))

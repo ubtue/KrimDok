@@ -27,6 +27,7 @@
  * @link     http://vufind.org/wiki/vufind2:record_drivers Wiki
  */
 namespace VuFind\RecordDriver;
+
 use VuFindCode\ISBN, VuFind\View\Helper\Root\RecordLink;
 
 /**
@@ -129,15 +130,16 @@ class SolrDefault extends AbstractBase
     /**
      * Constructor
      *
-     * @param \Zend\Config\Config $mainConfig     VuFind main configuration (omit for
+     * @param \Zend\Config\Config $mainConfig VuFind main configuration (omit for
      * built-in defaults)
-     * @param \Zend\Config\Config $recordConfig   Record-specific configuration file
+     * @param \Zend\Config\Config $recordConfig Record-specific configuration file
      * (omit to use $mainConfig as $recordConfig)
      * @param \Zend\Config\Config $searchSettings Search-specific configuration file
      */
     public function __construct($mainConfig = null, $recordConfig = null,
-        $searchSettings = null
-    ) {
+                                $searchSettings = null
+    )
+    {
         // Turn on highlighting/snippets as needed:
         $this->highlight = !isset($searchSettings->General->highlighting)
             ? false : $searchSettings->General->highlighting;
@@ -306,6 +308,7 @@ class SolrDefault extends AbstractBase
         return isset($this->fields['callnumber-raw'])
             ? $this->fields['callnumber-raw'] : [];
     }
+
     /**
      * Return the first valid ISBN found in the record (favoring ISBN-10 over
      * ISBN-13 when possible).
@@ -466,6 +469,28 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * Get the volume of the current record.
+     *
+     * @return string
+     */
+    public function getVolume()
+    {
+        return isset($this->fields['volume']) ?
+            $this->fields['volume'] : '';
+    }
+
+    /**
+     * Get the year of the current record.
+     *
+     * @return string
+     */
+    public function getYear()
+    {
+        return isset($this->fields['year']) ?
+            $this->fields['year'] : '';
+    }
+
+    /**
      * Get notes on finding aids related to the record.
      *
      * @return array
@@ -496,9 +521,14 @@ class SolrDefault extends AbstractBase
         return isset($this->fields['isil']) ? $this->fields['isil'] : [];
     }
 
-    public function getTubingenCallNumbers()
+    public function isAvailableInTuebingen()
     {
         return $this->fields['available_in_tubingen'];
+    }
+
+    public function getLocalSignature()
+    {
+        return $this->fields['local_signature'];
     }
 
     /**
@@ -615,6 +645,18 @@ class SolrDefault extends AbstractBase
         return isset($this->fields['institution'])
             ? $this->fields['institution'] : [];
     }
+
+    /**
+     * Get the signatures of the record.
+     *
+     * @return array
+     */
+    public function getSignatures()
+    {
+        return isset($this->fields['local_signature']) && is_array($this->fields['local_signature']) ?
+            $this->fields['local_signature'] : [];
+    }
+
 
     /**
      * Get an array of all ISBNs associated with the record (may be empty).
@@ -1176,7 +1218,7 @@ class SolrDefault extends AbstractBase
 
         if (isset($this->fields['container_ids_and_titles']) && !empty($this->fields['container_ids_and_titles'])) {
             foreach ($this->fields['container_ids_and_titles'] as $id_and_title) {
-	        $a = explode(":",  $id_and_title, 2);
+                $a = explode(":", $id_and_title, 2);
                 if (count($a) == 2) {
                     $retval[$a[0]] = $a[1];
                 }
@@ -1194,44 +1236,44 @@ class SolrDefault extends AbstractBase
     public function getURLsAndMaterialTypes()
     {
         $map_to_english = [
-            "Inhaltsverzeichnis"        => "TOC",
-	    "Klappentext"               => "blurb",
-	    "Rezension"                 => "review",
-	    "Cover"                     => "cover",
-	    "Inhaltstext"               => "contents",
-	    "Verlagsinformation"        => "publisher information",
-	    "Ausführliche Beschreibung" => "detailed description",
-	    "Unbekanntes Material"      => "unknown material type",
+            "Inhaltsverzeichnis" => "TOC",
+            "Klappentext" => "blurb",
+            "Rezension" => "review",
+            "Cover" => "cover",
+            "Inhaltstext" => "contents",
+            "Verlagsinformation" => "publisher information",
+            "Ausführliche Beschreibung" => "detailed description",
+            "Unbekanntes Material" => "unknown material type",
         ];
         $map_to_french = [
-            "Inhaltsverzeichnis"        => "contenu",
-	    "Klappentext"               => "blurb",
-	    "Rezension"                 => "examen",
-	    "Cover"                     => "couverture",
-	    "Inhaltstext"               => "contenu du texte",
-	    "Verlagsinformation"        => "informations editeur",
-	    "Ausführliche Beschreibung" => "la pleine description",
-	    "Unbekanntes Material"      => "matériau inconnu",
+            "Inhaltsverzeichnis" => "contenu",
+            "Klappentext" => "blurb",
+            "Rezension" => "examen",
+            "Cover" => "couverture",
+            "Inhaltstext" => "contenu du texte",
+            "Verlagsinformation" => "informations editeur",
+            "Ausführliche Beschreibung" => "la pleine description",
+            "Unbekanntes Material" => "matériau inconnu",
         ];
 
-	// Determine language code:
-	$lang = !is_null($this->translator)
-                ? substr($this->translator->getLocale(), 0, 2)
-                : 'de';
+        // Determine language code:
+        $lang = !is_null($this->translator)
+            ? substr($this->translator->getLocale(), 0, 2)
+            : 'de';
 
         $retval = array();
 
         if (isset($this->fields['urls_and_material_types']) && !empty($this->fields['urls_and_material_types'])) {
             foreach ($this->fields['urls_and_material_types'] as $url_and_material_type) {
-	        $last_colon_pos = strrpos($url_and_material_type, ":");
+                $last_colon_pos = strrpos($url_and_material_type, ":");
                 if ($last_colon_pos) {
                     $material_type = substr($url_and_material_type, $last_colon_pos + 1);
-	            if ($lang === "en") {
+                    if ($lang === "en") {
                         if (isset($map_to_english[$material_type]))
-			    $material_type = $map_to_english[$material_type];
+                            $material_type = $map_to_english[$material_type];
                     } else if ($lang == "fr") {
                         if (isset($map_to_french[$material_type]))
-			    $material_type = $map_to_french[$material_type];
+                            $material_type = $map_to_french[$material_type];
                     }
 
                     $retval[substr($url_and_material_type, 0, $last_colon_pos)] = $material_type;
@@ -1253,7 +1295,7 @@ class SolrDefault extends AbstractBase
 
         if (isset($this->fields['containee_ids_and_titles']) && !empty($this->fields['containee_ids_and_titles'])) {
             foreach ($this->fields['containee_ids_and_titles'] as $id_and_title) {
-	        $a = explode(":",  $id_and_title, 2);
+                $a = explode(":", $id_and_title, 2);
                 if (count($a) == 2) {
                     $retval[$a[0]] = $a[1];
                 }
@@ -1357,10 +1399,10 @@ class SolrDefault extends AbstractBase
             return $this->fields['thumbnail'];
         }
         $arr = [
-            'author'     => mb_substr($this->getPrimaryAuthor(), 0, 300, 'utf-8'),
+            'author' => mb_substr($this->getPrimaryAuthor(), 0, 300, 'utf-8'),
             'callnumber' => $this->getCallNumber(),
-            'size'       => $size,
-            'title'      => mb_substr($this->getTitle(), 0, 300, 'utf-8')
+            'size' => $size,
+            'title' => mb_substr($this->getTitle(), 0, 300, 'utf-8')
         ];
         if ($isbn = $this->getCleanISBN()) {
             $arr['isbn'] = $isbn;
@@ -1507,7 +1549,8 @@ class SolrDefault extends AbstractBase
      */
     public function setHierarchyDriverManager(
         \VuFind\Hierarchy\Driver\PluginManager $pm
-    ) {
+    )
+    {
         $this->hierarchyDriverManager = $pm;
         return $this;
     }
@@ -1556,30 +1599,30 @@ class SolrDefault extends AbstractBase
 
         // Check config setting for what constitutes a collection, act accordingly:
         switch ($hierarchyDriver->getCollectionLinkType()) {
-        case 'All':
-            if (isset($this->fields['hierarchy_parent_title'])
-                && isset($this->fields['hierarchy_parent_id'])
-            ) {
-                $titles = $this->fields['hierarchy_parent_title'];
-                $ids = $this->fields['hierarchy_parent_id'];
-            }
-            break;
-        case 'Top':
-            if (isset($this->fields['hierarchy_top_title'])
-                && isset($this->fields['hierarchy_top_id'])
-            ) {
-                foreach ($this->fields['hierarchy_top_id'] as $i => $topId) {
-                    // Don't mark an item as its own parent -- filter out parent
-                    // collections whose IDs match that of the current collection.
-                    if (!$isCollection
-                        || $topId !== $this->fields['is_hierarchy_id']
-                    ) {
-                        $ids[] = $topId;
-                        $titles[] = $this->fields['hierarchy_top_title'][$i];
+            case 'All':
+                if (isset($this->fields['hierarchy_parent_title'])
+                    && isset($this->fields['hierarchy_parent_id'])
+                ) {
+                    $titles = $this->fields['hierarchy_parent_title'];
+                    $ids = $this->fields['hierarchy_parent_id'];
+                }
+                break;
+            case 'Top':
+                if (isset($this->fields['hierarchy_top_title'])
+                    && isset($this->fields['hierarchy_top_id'])
+                ) {
+                    foreach ($this->fields['hierarchy_top_id'] as $i => $topId) {
+                        // Don't mark an item as its own parent -- filter out parent
+                        // collections whose IDs match that of the current collection.
+                        if (!$isCollection
+                            || $topId !== $this->fields['is_hierarchy_id']
+                        ) {
+                            $ids[] = $topId;
+                            $titles[] = $this->fields['hierarchy_top_title'][$i];
+                        }
                     }
                 }
-            }
-            break;
+                break;
         }
 
         // Map the titles and IDs to a useful format:
@@ -1608,18 +1651,18 @@ class SolrDefault extends AbstractBase
 
         // Check config setting for what constitutes a collection
         switch ($hierarchyDriver->getCollectionLinkType()) {
-        case 'All':
-            return (isset($this->fields['is_hierarchy_id']));
-        case 'Top':
-            return isset($this->fields['is_hierarchy_title'])
+            case 'All':
+                return (isset($this->fields['is_hierarchy_id']));
+            case 'Top':
+                return isset($this->fields['is_hierarchy_title'])
                 && isset($this->fields['is_hierarchy_id'])
                 && in_array(
                     $this->fields['is_hierarchy_id'],
                     $this->fields['hierarchy_top_id']
                 );
-        default:
-            // Default to not be a collection level record
-            return false;
+            default:
+                // Default to not be a collection level record
+                return false;
         }
     }
 
@@ -1679,9 +1722,9 @@ class SolrDefault extends AbstractBase
      * Return an XML representation of the record using the specified format.
      * Return false if the format is unsupported.
      *
-     * @param string     $format     Name of format to use (corresponds with OAI-PMH
+     * @param string $format Name of format to use (corresponds with OAI-PMH
      * metadataPrefix parameter).
-     * @param string     $baseUrl    Base URL of host containing VuFind (optional;
+     * @param string $baseUrl Base URL of host containing VuFind (optional;
      * may be used to inject record URLs into XML when appropriate).
      * @param RecordLink $recordLink Record link helper (optional; may be used to
      * inject record URLs into XML when appropriate).
@@ -1877,25 +1920,25 @@ class SolrDefault extends AbstractBase
         $types = [];
         foreach ($this->getFormats() as $format) {
             switch ($format) {
-            case 'Book':
-            case 'eBook':
-                $types['Book'] = 1;
-                break;
-            case 'Video':
-            case 'VHS':
-                $types['Movie'] = 1;
-                break;
-            case 'Photo':
-                $types['Photograph'] = 1;
-                break;
-            case 'Map':
-                $types['Map'] = 1;
-                break;
-            case 'Audio':
-                $types['MusicAlbum'] = 1;
-                break;
-            default:
-                $types['CreativeWork'] = 1;
+                case 'Book':
+                case 'eBook':
+                    $types['Book'] = 1;
+                    break;
+                case 'Video':
+                case 'VHS':
+                    $types['Movie'] = 1;
+                    break;
+                case 'Photo':
+                    $types['Photograph'] = 1;
+                    break;
+                case 'Map':
+                    $types['Map'] = 1;
+                    break;
+                case 'Audio':
+                    $types['MusicAlbum'] = 1;
+                    break;
+                default:
+                    $types['CreativeWork'] = 1;
             }
         }
         return array_keys($types);
@@ -1969,7 +2012,7 @@ class SolrDefault extends AbstractBase
     public function getContainerRecordID()
     {
         return $this->containerLinking
-            && !empty($this->fields['hierarchy_parent_id'])
+        && !empty($this->fields['hierarchy_parent_id'])
             ? $this->fields['hierarchy_parent_id'][0] : '';
     }
 }

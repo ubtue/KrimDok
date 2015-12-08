@@ -14,23 +14,31 @@
             success: function(xml) {
               $(document).ready(function() {
                 var replacement = "";
+                var filter = [];
                 $(xml).find('Result').each(function(index, value) {
                     var state = $(this).attr("state");
                     if (state >= 0 && state <= 3) {
                         var accessURL = $(value).find('AccessURL').first().text();
                         if (accessURL) {
-                            if (replacement)
-                                replacement += '<br />';        
-                            replacement += '<a href="' + accessURL + '">'
-                                           + '<?=$this->transEsc("Available online")?>' + '.</a>';
+                            if (filter[accessURL] != 1) {
+                                if (replacement)
+                                    replacement += '<br />';        
+                                replacement += '<a href="' + accessURL + '">'
+                                             + '<?=$this->transEsc("Available online")?>' + '.</a>';
+                                filter[accessURL] = 1;
+                            }
                         } else {  // Hopefully available in print!
-                            if (replacement)
-                                replacement += '<br />';        
                             var location    = $(value).find('Location').first().text();
                             var call_number = $(value).find('Signature').first().text();
-                            replacement += location;
+                            var label = location;
                             if (call_number)
-                                 replacement += " (" + call_number + ")";
+                                 label += " (" + call_number + ")";
+                            if (filter[label] != 1) {
+                                if (replacement)
+                                    replacement += '<br />';
+                                replacement += label;
+                                filter[label] = 1;
+                            }
                         }
                     }
                 });
