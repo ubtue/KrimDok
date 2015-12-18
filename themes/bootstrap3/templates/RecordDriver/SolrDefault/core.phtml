@@ -182,14 +182,6 @@
         </tr>
       <? endif; ?>
 
-      <? $instituts_systematiken = $this->driver->getInstitutsSystematik(); if (!empty($instituts_systematiken)): ?>
-        <tr>
-          <th>Institutssystematik</th>
-          <td><? foreach ($instituts_systematiken as $instituts_systematik): ?>
-              <?= $this->escapeHtml($instituts_systematik[0] . " " . substr($instituts_systematik, 1))?><br/><? endforeach; ?></td>
-        </tr>
-      <? endif; ?>
-
       <? $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
       <? if (!empty($urls_and_material_types)): ?>
         <tr>
