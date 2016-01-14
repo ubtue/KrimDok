@@ -131,16 +131,22 @@
       <?/* Display container section if at least one container exists. */?>
       <? $issue = $this->driver->getIssue(); ?>
       <? $pages = $this->driver->getPages(); ?>
-      <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles) || !empty($issue) || !empty($pages)): ?>
+      <? $volume = $this->driver->getVolume(); ?>
+      <? $year = $this->driver->getYear(); ?>
+      <? $infos =  array(); ?>
+      <?if (!empty($volume)) { $infos[] = $this->transEsc('Volume') . ': ' . $this->escapeHtml($volume); }?>
+      <?if (!empty($issue)) { $infos[] = $this->transEsc('Issue') . ': ' . $this->escapeHtml($issue); }?>
+      <?if (!empty($pages)) { $infos[] = $this->transEsc('Pages') . ': ' . $this->escapeHtml($pages); }?>
+      <?if (!empty($year)) { $infos[] = $this->transEsc('Year') . ': ' . $this->escapeHtml($year); }?>
+      <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles) || !empty($infos)): ?>
         <tr>
           <th><?=$this->transEsc('In')?>: </th>
           <td>
             <? foreach ($ids_and_titles as $id => $title): ?>
               <a href="<?=$id?>"><?=$this->escapeHtml($title)?></a>
               <br/>
+              <?=implode(', ', $infos);?>
             <? endforeach; ?>
-            <?if (!empty($issue)):?><?=$this->transEsc('Issue')?>: <?=$this->escapeHtml($issue)?><?endif;?><?if (!empty($issue) && !empty($pages)):?>, <?endif;?>
-            <?if (!empty($pages)):?><?=$this->transEsc('Pages')?>: <?=$this->escapeHtml($pages)?><?endif;?>
           </td>
         </tr>
       <? endif; ?>
@@ -167,20 +173,12 @@
       <? $issns = $this->driver->getISSNs(); if (!empty($issns)): ?>
         <? $contentDisplayed = true; ?>
         <tr>
-          <th><?=$this->transEsc('ISSN')?>: </th>
+          <th><?=$this->transEsc('ISSN')?>:</th>
           <td>
             <? foreach ($issns as $field): ?>
               <?=$this->escapeHtml($field)?><br/>
             <? endforeach; ?>
           </td>
-        </tr>
-      <? endif; ?>
-
-      <? $instituts_systematiken = $this->driver->getInstitutsSystematik(); if (!empty($instituts_systematiken)): ?>
-        <tr>
-          <th>Institutssystematik</th>
-          <td><? foreach ($instituts_systematiken as $instituts_systematik): ?>
-              <?= $this->escapeHtml($instituts_systematik[0] . " " . substr($instituts_systematik, 1))?><br/><? endforeach; ?></td>
         </tr>
       <? endif; ?>
 

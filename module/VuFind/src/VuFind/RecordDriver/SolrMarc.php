@@ -152,6 +152,23 @@ class SolrMarc extends SolrDefault
                 $retval[] = $current;
             }
         }
+        $results = $this->getMarcRecord()->getFields('LOK');
+        if ($results) {
+            foreach ($results as $result) {
+                $current = [];
+                $subfields = $result->getSubfields();
+                if ($subfields && $subfields->bottom()->getData() === '689  ') {
+                    foreach ($subfields as $subfield) {
+                        if ($subfield->getCode() === 'a' && strlen($subfield->getData()) > 1) {
+                            $current[] = $subfield->getData();
+                        }
+                    }
+                }
+                if (!empty($current)) {
+                    $retval[] = $current;
+                }
+            }
+        }
         // Remove duplicates and then send back everything we collected:
         return array_map(
             'unserialize', array_unique(array_map('serialize', $retval))
