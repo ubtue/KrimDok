@@ -55,4 +55,22 @@ class HelpController extends AbstractBase
             ['topic' => $this->params()->fromQuery('topic')]
         );
     }
+
+    public function faqAction(){
+        return $this->createViewModel(
+            ['topics' =>
+                [
+                    'NachweiseKrimDok',
+                    'FremdsprachigeSchlagworte2015',
+                    'SignaturenInLiteraturnachweisen',
+                    'BezeichnungInLiteraturnachweisen',
+                    'WasIstSubito',
+                    'WerkTuebingerBestaenden',
+                    'KriminologischesWerkKeineBibliothek',
+                    'KeineNotationen',
+                    'WenigeNachweiseMonografien'
+                ]
+            ]
+        );
+    }
 }
