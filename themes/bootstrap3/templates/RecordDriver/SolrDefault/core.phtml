@@ -134,10 +134,10 @@
       <? $volume = $this->driver->getVolume(); ?>
       <? $year = $this->driver->getYear(); ?>
       <? $infos =  array(); ?>
+      <?if (!empty($year)) { $infos[] = $this->transEsc('Year') . ': ' . $this->escapeHtml($year); }?>
       <?if (!empty($volume)) { $infos[] = $this->transEsc('Volume') . ': ' . $this->escapeHtml($volume); }?>
       <?if (!empty($issue)) { $infos[] = $this->transEsc('Issue') . ': ' . $this->escapeHtml($issue); }?>
       <?if (!empty($pages)) { $infos[] = $this->transEsc('Pages') . ': ' . $this->escapeHtml($pages); }?>
-      <?if (!empty($year)) { $infos[] = $this->transEsc('Year') . ': ' . $this->escapeHtml($year); }?>
       <? $ids_and_titles = $this->driver->getContainerIDsAndTitles(); if (!empty($ids_and_titles) || !empty($infos)): ?>
         <tr>
           <th><?=$this->transEsc('In')?>: </th>
