@@ -33,5 +33,6 @@ public/doc
 KeywordChainParser.jar
 BibleRangeParser.jar
 TuelibSolrmarcMixin.jar
+FacetPrefixSortComponent.jar
 
 solr/logs/
