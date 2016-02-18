@@ -1218,9 +1218,9 @@ class SolrDefault extends AbstractBase
 
         if (isset($this->fields['container_ids_and_titles']) && !empty($this->fields['container_ids_and_titles'])) {
             foreach ($this->fields['container_ids_and_titles'] as $id_and_title) {
-                $a = explode(":", $id_and_title, 2);
-                if (count($a) == 2) {
-                    $retval[$a[0]] = $a[1];
+                $a = explode("#31;", $id_and_title, 3); // \u00F1 gets represented by #31;.
+                if (count($a) == 3) {
+                    $retval[$a[0]] = array($a[1], $a[2]);
                 }
             }
         }
