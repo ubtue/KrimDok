@@ -36,12 +36,13 @@ use VuFind\Exception\Forbidden as ForbiddenException;
  */
 class ProxyController extends \VuFind\Controller\AbstractBase
 {
-    const DNB_REGEX = 'http://services.dnb.de/fize-service/gvr/full.xml.*';
+    const DNB_REGEX = 'http://services.dnb.de/fize-service/gvr/.*';
     const WHITE_LIST_REGEX = ProxyController::DNB_REGEX;
 
     public function loadAction()
     {
-        $url = $this->params()->fromQuery('url');
+        $requestUri = $this->getRequest()->getUri()->getQuery();
+        $url = urldecode(strstr($requestUri, 'http'));
         if (ereg(ProxyController::WHITE_LIST_REGEX, $url) !== FALSE) {
             $client = $this->getServiceLocator()->get('VuFind\Http')->createClient();
             return $client->setUri($url)->send();
