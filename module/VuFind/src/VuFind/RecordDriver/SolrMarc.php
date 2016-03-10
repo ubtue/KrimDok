@@ -137,6 +137,7 @@ class SolrMarc extends SolrDefault
                 $id = $result->getIndicator(1);
                 if ($id != $currentID && !empty($current)) {
                     $retval[] = $current;
+                    $current = [];
                 }
                 $subfields = $result->getSubfields();
                 if ($subfields) {
