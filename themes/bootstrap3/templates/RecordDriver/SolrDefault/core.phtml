@@ -145,7 +145,7 @@
           <th><?=$this->transEsc('In')?>: </th>
           <td>
             <? foreach ($ids_and_titles as $id => $titleAndVolume): ?>
-              <a href="<?=$id?>"><?=$this->escapeHtml($titleAndVolume[0])?></a>
+              <a href="<?=$id?>"><?=$this->escapeHtml(implode(" ", $titleAndVolume))?></a>
               <br/>
             <? endforeach; ?>
             <?=implode(', ', $infos);?>
