@@ -17,13 +17,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind2
+ * @category VuFind
  * @package  OAI_Server
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ * @link     https://vufind.org/wiki/development Wiki
  */
 namespace VuFind\OAI;
 use SimpleXMLElement,
@@ -34,11 +34,11 @@ use SimpleXMLElement,
  *
  * This class provides OAI server functionality.
  *
- * @category VuFind2
+ * @category VuFind
  * @package  OAI_Server
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ * @link     https://vufind.org/wiki/development Wiki
  */
 class Server
 {
@@ -596,7 +596,8 @@ class Server
 
         // Get non-deleted records from the Solr index:
         $result = $this->listRecordsGetNonDeleted(
-            $from, $until, $solrOffset, $solrLimit, $params['set']
+            $from, $until, $solrOffset, $solrLimit,
+            isset($params['set']) ? $params['set'] : ''
         );
         $nonDeletedCount = $result->getResultTotal();
         $format = $params['metadataPrefix'];
@@ -659,7 +660,7 @@ class Server
             if (empty($facets) || !isset($facets[$this->setField]['data']['list'])) {
                 $this->unexpectedError('Cannot find sets');
             }
-    
+
             // Extract facet values from the Solr response:
             foreach ($facets[$this->setField]['data']['list'] as $x) {
                 $set = $xml->addChild('set');
@@ -730,7 +731,7 @@ class Server
             if (isset($this->setQueries[$set])) {
                 // use hidden filter here to allow for complex queries;
                 // plain old addFilter expects simple field:value queries.
-                $params->getOptions()->addHiddenFilter($this->setQueries[$set]);
+                $params->addHiddenFilter($this->setQueries[$set]);
             } else if (null !== $this->setField) {
                 $params->addFilter(
                     $this->setField . ':"' . addcslashes($set, '"') . '"'
@@ -842,7 +843,7 @@ class Server
         } else if (strpos($until, 'T') && strpos($until, 'Z')) {
             return true;
         }
-        
+
         $from_time = $this->normalizeDate($from);
         $until_time = $this->normalizeDate($until, '23:59:59');
         if ($from_time > $until_time) {

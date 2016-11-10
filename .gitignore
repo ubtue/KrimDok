@@ -3,6 +3,7 @@ ChangeLog
 .\#*
 TAGS
 *~
+
 vendor/.git
 local/cache/*
 
@@ -37,3 +38,8 @@ TuelibSolrmarcMixin.jar
 FacetPrefixSortComponent.jar
 
 solr/logs/
+/vendor
+composer.lock
+composer.phar
+import/solrmarc.log
+node_modules

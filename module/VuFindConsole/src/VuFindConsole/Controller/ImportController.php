@@ -17,13 +17,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind2
+ * @category VuFind
  * @package  Controller
  * @author   Chris Hallberg <challber@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:building_a_controller Wiki
+ * @link     https://vufind.org/wiki/development:plugins:controllers Wiki
  */
 namespace VuFindConsole\Controller;
 use VuFind\XSLT\Importer, Zend\Console\Console;
@@ -31,11 +31,11 @@ use VuFind\XSLT\Importer, Zend\Console\Console;
 /**
  * This controller handles various command-line tools
  *
- * @category VuFind2
+ * @category VuFind
  * @package  Controller
  * @author   Chris Hallberg <challber@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:building_a_controller Wiki
+ * @link     https://vufind.org/wiki/development:plugins:controllers Wiki
  */
 class ImportController extends AbstractBase
 {
@@ -88,8 +88,7 @@ class ImportController extends AbstractBase
             );
             Console::writeLine("");
             Console::writeLine(
-                "Note: See vudl.properties and ojs.properties "
-                . "for configuration examples."
+                "Note: See ojs.properties for configuration examples."
             );
             return $this->getFailureResponse();
         }

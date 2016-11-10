@@ -10,17 +10,19 @@
   // Set up search box:
   $this->layout()->searchbox = $this->context($this)->renderInContext(
       'search/searchbox.phtml',
-      array(
+      [
         'lookfor' => $lookfor,
         'searchIndex' => $this->params->getSearchHandler(),
         'searchType' => $this->params->getSearchType(),
         'searchId' => $this->results->getSearchId(),
-        'searchClassId' => $this->params->getsearchClassId(),
+        'searchClassId' => $this->params->getSearchClassId(),
         'checkboxFilters' => $this->params->getCheckboxFacets(),
         'filterList' => $this->params->getFilters(),
         'hasDefaultsApplied' => $this->params->hasDefaultsApplied(),
-        'selectedShards' => $this->params->getSelectedShards()
-      )
+        'selectedShards' => $this->params->getSelectedShards(),
+        'ignoreHiddenFiltersInRequest' => isset($this->ignoreHiddenFiltersInRequest) ? $this->ignoreHiddenFiltersInRequest : false,
+        'ignoreHiddenFilterMemory' => isset($this->ignoreHiddenFilterMemory) ? $this->ignoreHiddenFilterMemory : false,
+      ]
   );
 
   // Set up breadcrumbs:
@@ -34,6 +36,12 @@
   $this->showCartControls = $this->params->getOptions()->supportsCart() && $this->cart()->isActive();
   // Enable bulk options if appropriate:
   $this->showBulkOptions = $this->params->getOptions()->supportsCart() && $this->showBulkOptions;
+
+  // Load Javascript only if list view parameter is NOT full:
+  if ($this->params->getOptions()->getListViewOption() != "full") {
+    $this->headScript()->appendFile("record.js");
+    $this->headScript()->appendFile("embedded_record.js");
+  }
 
   // Load Javascript dependencies into header:
   $this->headScript()->appendFile("check_item_statuses.js");
@@ -54,6 +62,7 @@
           <?=$this->transEsc("Showing")?>
           <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
           <? if (!isset($this->skipTotalCount)): ?>
+            <? $this->layout()->srmessage = $this->transEsc('result_count', ['%%count%%' => $this->localizedNumber($recordTotal)]); ?>
             <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($recordTotal)?></strong>
           <? endif; ?>
           <? /*
@@ -86,7 +95,8 @@
         <? if (isset($this->overrideEmptyMessage)): ?>
           <?=$this->overrideEmptyMessage?>
         <? else: ?>
-          <?=$this->transEsc('nohit_prefix')?> - <strong><?=$this->escapeHtml($lookfor)?></strong> - <?=$this->transEsc('nohit_suffix')?>
+          <? $this->layout()->srmessage = $this->transEsc('nohit_prefix') . ' - ' . $this->escapeHtml($lookfor) . ' - ' . $this->transEsc('nohit_suffix'); ?>
+          <?=$this->layout()->srmessage ?>
         <? endif; ?>
       </p>
       <div class="noresult">
@@ -109,16 +119,16 @@
         <? endif; ?>
       <? endforeach; ?>
     <? else: ?>
-      <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-home')?>">
+      <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-searchresultsbulk')?>" data-lightbox data-lightbox-onsubmit="bulkFormHandler">
         <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => ''))?>
         <?=$this->render('search/list-' . $this->params->getView() . '.phtml')?>
         <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_'))?>
-        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results, 'options' => isset($this->paginationOptions) ? $this->paginationOptions : []))?>
       </form>
 <? if(false):?>
       <div class="searchtools hidden-print">
         <strong><?=$this->transEsc('Search Tools')?>:</strong>
-        <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><i class="fa fa-bell"></i> <?=$this->transEsc('Get RSS Feed')?></a>
+        <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><i class="fa fa-bell" aria-hidden="true"></i> <?=$this->transEsc('Get RSS Feed')?></a>
         &mdash;
         <? if (is_numeric($this->results->getSearchId())): ?>
           <? if ($this->results->isSavedSearch()): ?>
