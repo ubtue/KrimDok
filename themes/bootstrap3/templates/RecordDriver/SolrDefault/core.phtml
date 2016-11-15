@@ -214,6 +214,7 @@
               <? $subject = trim($subject . ' ' . $subfield); ?>
               <a title="<?=$this->escapeHtmlAttr($subject)?>" href="<?=$this->record($this->driver)->getLink('subject', $subject)?>" rel="nofollow"><?=trim($this->escapeHtml($subfield))?></a>
             <? endforeach; ?>
+            <? endforeach; ?>
           </td>
         </tr>
       <? endif; ?>
