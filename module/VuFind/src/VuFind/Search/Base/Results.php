@@ -17,13 +17,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind2
+ * @category VuFind
  * @package  Search_Base
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://www.vufind.org  Main Page
+ * @link     https://vufind.org Main Page
  */
 namespace VuFind\Search\Base;
 use VuFind\Search\UrlQueryHelper, Zend\Paginator\Paginator,
@@ -36,11 +36,11 @@ use VuFindSearch\Service as SearchService;
  *
  * This abstract class defines the results methods for modeling a search in VuFind.
  *
- * @category VuFind2
+ * @category VuFind
  * @package  Search_Base
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://www.vufind.org  Main Page
+ * @link     https://vufind.org Main Page
  */
 abstract class Results implements ServiceLocatorAwareInterface
 {
@@ -620,5 +620,53 @@ abstract class Results implements ServiceLocatorAwareInterface
         return call_user_func_array(
             [$this->getOptions(), 'translate'], func_get_args()
         );
+    }
+
+    /**
+     * Get complete facet counts for several index fields
+     *
+     * @param array  $facetfields  name of the Solr fields to return facets for
+     * @param bool   $removeFilter Clear existing filters from selected fields (true)
+     * or retain them (false)?
+     * @param int    $limit        A limit for the number of facets returned, this
+     * may be useful for very large amounts of facets that can break the JSON parse
+     * method because of PHP out of memory exceptions (default = -1, no limit).
+     * @param string $facetSort    A facet sort value to use (null to retain current)
+     *
+     * @return array an array with the facet values for each index field
+     */
+    public function getFullFieldFacets($facetfields, $removeFilter = true,
+        $limit = -1, $facetSort = null
+    ) {
+        if (!method_exists($this, 'getPartialFieldFacets')) {
+            throw new \Exception('getPartialFieldFacets not implemented');
+        }
+        $page = 1;
+        $facets = [];
+        do {
+            $facetpage = $this->getPartialFieldFacets(
+                $facetfields, $removeFilter, $limit, $facetSort, $page
+            );
+            $nextfields = [];
+            foreach ($facetfields as $field) {
+                if (!empty($facetpage[$field]['data']['list'])) {
+                    if (!isset($facets[$field])) {
+                        $facets[$field] = $facetpage[$field];
+                        $facets[$field]['more'] = false;
+                    } else {
+                        $facets[$field]['data']['list'] = array_merge(
+                            $facets[$field]['data']['list'],
+                            $facetpage[$field]['data']['list']
+                        );
+                    }
+                    if ($facetpage[$field]['more'] !== false) {
+                        $nextfields[] = $field;
+                    }
+                }
+            }
+            $facetfields = $nextfields;
+            $page++;
+        } while ($limit == -1 && !empty($facetfields));
+        return $facets;
     }
 }

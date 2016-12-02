@@ -17,24 +17,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind2
+ * @category VuFind
  * @package  Statistics
  * @author   Chris Hallberg <challber@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ * @link     https://vufind.org/wiki/development Wiki
  */
 namespace VuFind\Statistics;
 
 /**
  * VuFind Statistics Class for Record Views
  *
- * @category VuFind2
+ * @category VuFind
  * @package  Statistics
  * @author   Chris Hallberg <challber@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ * @link     https://vufind.org/wiki/development Wiki
  */
 class Record extends AbstractBase
 {
@@ -51,7 +51,7 @@ class Record extends AbstractBase
         $this->save(
             [
                 'recordId'     => $data->getUniqueId(),
-                'recordSource' => $data->getResourceSource()
+                'recordSource' => $data->getSourceIdentifier()
             ],
             $request
         );
@@ -61,8 +61,8 @@ class Record extends AbstractBase
      * Returns a set of basic statistics including total records
      * and most commonly viewed records.
      *
-     * @param integer $listLength How long the top list is
-     * @param bool    $bySource   Sort record views by source?
+     * @param int  $listLength How long the top list is
+     * @param bool $bySource   Sort record views by source?
      *
      * @return array
      */
