@@ -201,23 +201,6 @@
           </td>
         </tr>
       <? endif; ?>
-      <? $subjects = $this->driver->getAllSubjectHeadings(); if (!empty($subjects)): ?>
-      <tr>
-        <th><?=$this->transEsc('Subjects')?>: </th>
-        <td>
-          <? foreach ($subjects as $field): ?>
-          <div class="subject-line" property="keywords">
-            <? $subject = ''; ?>
-            <? if(count($field) == 1) $field = explode('--', $field[0]); ?>
-            <? $i = 0; foreach ($field as $subfield): ?>
-              <?=($i++ == 0) ? '' : ' &gt; '?>
-              <? $subject = trim($subject . ' ' . $subfield); ?>
-              <a title="<?=$this->escapeHtmlAttr($subject)?>" href="<?=$this->record($this->driver)->getLink('subject', $subject)?>" rel="nofollow"><?=trim($this->escapeHtml($subfield))?></a>
-            <? endforeach; ?>
-            <? endforeach; ?>
-          </td>
-        </tr>
-      <? endif; ?>
 
       <? $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
       <? if (!empty($urls_and_material_types)): ?>
