@@ -36,6 +36,8 @@ KeywordChainParser.jar
 BibleRangeParser.jar
 TuelibSolrmarcMixin.jar
 FacetPrefixSortComponent.jar
+MultiLanguageDocTransformerFactory.jar
+MultiLanguageQueryParser.jar
 
 solr/logs/
 /vendor
