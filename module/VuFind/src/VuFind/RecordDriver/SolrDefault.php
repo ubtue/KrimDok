@@ -1353,7 +1353,7 @@ class SolrDefault extends AbstractBase
 
         if (isset($this->fields['container_ids_and_titles']) && !empty($this->fields['container_ids_and_titles'])) {
             foreach ($this->fields['container_ids_and_titles'] as $id_title_and_volume) {
-                $a = explode("#31;", $id_title_and_volume, 3);
+                $a = explode(hex2bin("1f"), $id_title_and_volume, 3);
                 if (count($a) == 3) {
                     $retval[$a[0]] = [$a[1], $a[2]];
                 }
