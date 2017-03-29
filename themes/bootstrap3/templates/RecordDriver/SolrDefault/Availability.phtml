@@ -8,7 +8,7 @@ if ($this->driver->isAvailableInTuebingen() || !empty($signatures)) {
     echo "<td>";
     echo $this->transEsc('Available in Tubingen') . ".<br>";
     foreach ($this->driver->getLocalSignature() as $signature) {
-          echo $signature . "<br>";
+        echo $this->escapeHtml($signature) . "<br>";
     }
     echo "</td>";
     echo "</tr>";
