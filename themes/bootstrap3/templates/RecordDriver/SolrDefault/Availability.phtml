@@ -1,17 +1,16 @@
-<tr>
-    <th>
-        <?= $this->transEsc('Availability') . ":"; ?>
-    </th>
-    <td>
-        <?php
-        $signatures = $this->driver->getLocalSignature();
-        if ($this->driver->isAvailableInTuebingen() || !empty($signatures)) {
-            echo $this->transEsc('Available in Tubingen') . ".<br>";
-            foreach ($this->driver->getLocalSignature() as $signature) {
-                echo $signature . "<br>";
-            }
-        } else {
-            echo $this->transEsc('Not available in Tubingen') . ".";
-        } ?>
-    </td>
-</tr>
+<?
+$signatures = $this->driver->getLocalSignature();
+if ($this->driver->isAvailableInTuebingen() || !empty($signatures)) {
+    echo "<tr>";
+    echo "<th>";
+    echo $this->transEsc('Availability') . ":";
+    echo "</th>";
+    echo "<td>";
+    echo $this->transEsc('Available in Tubingen') . ".<br>";
+    foreach ($this->driver->getLocalSignature() as $signature) {
+        echo $this->escapeHtml($signature) . "<br>";
+    }
+    echo "</td>";
+    echo "</tr>";
+}
+?>
