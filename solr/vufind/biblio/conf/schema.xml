@@ -215,6 +215,8 @@
    <field name="container_issue" type="text" indexed="true" stored="true"/>
    <field name="container_start_page" type="text" indexed="true" stored="true"/>
    <field name="container_reference" type="text" indexed="true" stored="true"/>
+   <field name="is_superior_work" type="boolean" indexed="false" stored="true" multiValued="false"/>
+   <field name="superior_ppn" type="string" indexed="true" stored="true" multiValued="true"/>
    <!-- Hierarchy Fields -->
    <field name="hierarchytype" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="hierarchy_top_id" type="string" indexed="true" stored="true" multiValued="true"/>
