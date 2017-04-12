@@ -217,6 +217,7 @@
 
       <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
       <? include(realpath(dirname(__FILE__) . "/Availability.phtml")); ?>
+      <? include(realpath(dirname(__FILE__) . "/HBZ.phtml")); ?>
 
       <? $issn = $this->driver->getCleanISSN(); $isbn = $this->driver->getCleanISBN();
       if (!empty($issn) || !empty($isbn)):
@@ -236,6 +237,15 @@
             <? foreach ($summ as $field): ?>
               <?=$this->escapeHtml($field)?><br/>
             <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? if($this->driver->isSuperiorWork()): ?>
+        <tr>
+          <th><?=$this->transEsc('Volumes / Articles')?>: </th>
+          <td>
+            <a href="<?=$this->url("search-results", array(), array('query' => array('lookfor' => 'superior_ppn:' . $this->driver->getRecordId())))?>"><?=$this->transEsc('Show Volumes / Articles');?>.</a>
           </td>
         </tr>
       <? endif; ?>
