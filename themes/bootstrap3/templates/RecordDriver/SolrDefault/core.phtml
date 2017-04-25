@@ -230,17 +230,6 @@
         </tr>
       <? endif; ?>
 
-      <? $summ = $this->driver->getSummary(); if (!empty($summ)): ?>
-        <tr>
-          <th><?=$this->transEsc('Summary')?>: </th>
-          <td>
-            <? foreach ($summ as $field): ?>
-              <?=$this->escapeHtml($field)?><br/>
-            <? endforeach; ?>
-          </td>
-        </tr>
-      <? endif; ?>
-
       <? if($this->driver->isSuperiorWork()): ?>
         <tr>
           <th><?=$this->transEsc('Volumes / Articles')?>: </th>
