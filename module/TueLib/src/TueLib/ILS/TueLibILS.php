@@ -53,7 +53,7 @@ class TueLibILS extends NoILS
      */
     public function getNewItems($page, $limit, $daysOld, $fundId = null)
     {
-        $query = new Query(' bsz_indexed_date:[NOW-' . ($daysOld + 20) . 'DAY TO NOW]');
+        $query = new Query(' tue_local_indexed_date:[NOW-' . ($daysOld + 20) . 'DAY TO NOW]');
         $offset = ($page - 1) * $limit;
         $search_results = $this->searchService->search("Solr", $query, $offset, $limit, new ParamBag(['fl' => 'id']));
         $records = $search_results->getRecords();
