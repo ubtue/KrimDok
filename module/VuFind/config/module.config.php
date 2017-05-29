@@ -667,7 +667,7 @@ $config = [
                     'Reviews' => 'Reviews', 'Excerpt' => 'Excerpt',
                     'Preview' => 'preview',
                     'HierarchyTree' => 'HierarchyTree', 'Map' => 'Map',
-                    //'Similar' => 'SimilarItemsCarousel',
+                    'Similar' => 'SimilarItemsCarousel',
                     'Details' => 'StaffViewMARC',
                 ],
                 'defaultTab' => null,

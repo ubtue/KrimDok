@@ -49,7 +49,14 @@ $config = array(
                     'solrmarc' => 'TueLib\RecordDriver\Factory::getSolrMarc',
                 )
             )
-        )
+        ),
+        'recorddriver_tabs' => [
+            'VuFind\RecordDriver\SolrMarc' => [
+                'tabs' => [
+                    'Similar' => null,
+                ],
+            ],
+        ],
     )
 );
 
