@@ -4,7 +4,44 @@
     <span class="sr-only">Toggle navigation</span>
     <i class="fa fa-bars" aria-hidden="true"></i>
   </button>
-  <a class="navbar-brand lang-<?=$this->layout()->userLang ?>" href="<?=$this->url('home')?>">VuFind</a>
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <a role="logo" href="http://www.uni-tuebingen.de/">
+        <img class="img-responsive" src="<?=$this->url('home') ?>themes/krimDokTheme/images/logo-uni-tuebingen.png"
+             width="260" height="85" border="0"
+             alt="Logo Universität Tübingen" title="Logo Universität Tübingen" />
+      </a>
+    </div> <!--/col-->
+    <div class="col-xs-12 col-md-6">
+      <div class="row">
+        <div class="col-xs-12 col-md-12">
+          <a role="logo" href="http://www.ub.uni-tuebingen.de/">
+            <img class="img-responsive" src="<?=$this->url('home') ?>themes/krimDokTheme/images/unibibliothek.png"
+                 width="333" height="27" border="0"
+                 alt="Logo UB Tübingen" title="Logo UB Tübingen" />
+          </a>
+        </div> <!--/col-->
+      </div> <!--/row-->
+      <div class="row">
+        <div class="col-xs-12 col-md-offset-3 col-md-12">
+          <a role="logo" href="<?=$this->url('home')?>">
+            <img class="img-responsive" src="<?=$this->url('home') ?>themes/krimDokTheme/images/krimdok.png"
+                 width="132" height="27" border="0"
+                 alt="Logo KrimDok" title="Logo KrimDok" />
+          </a>
+        </div> <!--/col-->
+      </div> <!--/row-->
+      <div class="row">
+        <div class="col-xs-12 col-md-offset-0 col-md-12">
+          <a role="logo" href="http://www.ifk.jura.uni-tuebingen.de/">
+            <img class="img-responsive" src="<?=$this->url('home') ?>themes/krimDokTheme/images/ifk.png"
+                 width="389" height="27" border="0"
+                 alt="Institut für Kriminologie" title="Logo Institut für Kriminologie" />
+          </a>
+        </div> <!--/col-->
+      </div> <!--/row-->
+    </div> <!--/col-->
+  </div> <!--/row-->
 </div>
 <? if ($this->layout()->searchbox !== false): ?>
   <section class="visible-lg">
