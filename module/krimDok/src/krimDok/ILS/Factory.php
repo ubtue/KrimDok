@@ -1,15 +1,15 @@
 <?php
 
-namespace TueLib\ILS;
+namespace krimDok\ILS;
 
 
 use Zend\ServiceManager\ServiceManager;
 
 class Factory extends \VuFind\ILS\Driver\Factory
 {
-    public static function getTueLibILS(ServiceManager $sm)
+    public static function getKrimDokILS(ServiceManager $sm)
     {
-        return new TueLibILS(
+        return new krimDokILS(
             $sm->getServiceLocator()->get('VuFind\RecordLoader'),
             $sm->getServiceLocator()->get('VuFind\Search')
         );

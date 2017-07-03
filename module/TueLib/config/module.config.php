@@ -39,11 +39,6 @@ $config = array(
     ),
     'vufind' => array(
         'plugin_managers' => array(
-            'ils_driver' => array(
-                'factories' => array(
-                    'TueLibILS' => 'TueLib\ILS\Factory::getTueLibILS'
-                )
-            ),
             'recorddriver' => array(
                 'factories' => array(
                     'solrmarc' => 'TueLib\RecordDriver\Factory::getSolrMarc',

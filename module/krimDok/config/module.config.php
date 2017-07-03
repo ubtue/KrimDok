@@ -8,6 +8,15 @@ $config = array(
             'fidsystematik' => 'krimDok\Controller\FIDSystematikController',
         ],
     ],
+    'vufind' => [
+        'plugin_managers' => [
+            'ils_driver' => [
+                'factories' => [
+                    'krimDokILS' => 'krimDok\ILS\Factory::getKrimDokILS'
+                ],
+            ],
+        ],
+    ],
 );
 
 $recordRoutes = array();

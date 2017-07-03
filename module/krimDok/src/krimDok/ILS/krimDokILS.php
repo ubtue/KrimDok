@@ -6,7 +6,7 @@
  * Time: 11:27
  */
 
-namespace TueLib\ILS;
+namespace krimDok\ILS;
 
 use VuFind\ILS\Driver\NoILS;
 use ArrayObject, VuFind\Exception\Date as DateException,
@@ -16,7 +16,7 @@ use ArrayObject, VuFind\Exception\Date as DateException,
 use VuFind\Record\Loader;
 use VuFindSearch\ParamBag;
 
-class TueLibILS extends NoILS
+class krimDokILS extends NoILS
 {
     protected $searchService;
 
