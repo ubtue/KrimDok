@@ -1,6 +1,6 @@
 <?php
 
-namespace TueLib\RecordDriver;
+namespace krimDok\RecordDriver;
 use VuFind\Exception\LoginRequired as LoginRequiredException;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;

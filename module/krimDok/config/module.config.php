@@ -35,6 +35,18 @@ $config = array(
                     'krimDokILS' => 'krimDok\ILS\Factory::getKrimDokILS'
                 ],
             ],
+            'recorddriver' => [
+                'factories' => [
+                    'solrmarc' => 'krimDok\RecordDriver\Factory::getSolrMarc'
+                ],
+            ],
+            'recorddriver_tabs' => [
+                'VuFind\RecordDriver\SolrMarc' => [
+                    'tabs' => [
+                        'Similar' => null,
+                    ],
+                ],
+            ],
         ],
     ],
 );

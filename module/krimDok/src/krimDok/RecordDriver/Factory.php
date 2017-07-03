@@ -1,6 +1,6 @@
 <?php
 
-namespace TueLib\RecordDriver;
+namespace krimDok\RecordDriver;
 
 class Factory
 {
@@ -14,7 +14,7 @@ class Factory
      */
     public static function getSolrMarc(\Zend\ServiceManager\ServiceManager $sm)
     {
-        $driver = new \TueLib\RecordDriver\SolrMarc(
+        $driver = new \krimDok\RecordDriver\SolrMarc(
             $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
             null,
             $sm->getServiceLocator()->get('VuFind\Config')->get('searches')

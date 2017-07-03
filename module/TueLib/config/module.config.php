@@ -21,22 +21,6 @@ $config = array(
             ),
         )
     ),
-    'vufind' => array(
-        'plugin_managers' => array(
-            'recorddriver' => array(
-                'factories' => array(
-                    'solrmarc' => 'TueLib\RecordDriver\Factory::getSolrMarc',
-                )
-            )
-        ),
-        'recorddriver_tabs' => [
-            'VuFind\RecordDriver\SolrMarc' => [
-                'tabs' => [
-                    'Similar' => null,
-                ],
-            ],
-        ],
-    )
 );
 
 return $config;
