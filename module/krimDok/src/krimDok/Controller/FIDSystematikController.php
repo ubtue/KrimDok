@@ -10,7 +10,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org   Main Site
  */
-namespace VuFind\Controller;
+namespace krimDok\Controller;
 
 /**
  * FIDSystematikController Class
@@ -22,7 +22,7 @@ namespace VuFind\Controller;
  * @author   Dr. Johannes Ruscheinski <johannes.ruscheinski@uni-tuebingen.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  */
-class FIDSystematikController extends AbstractBase
+class FIDSystematikController extends \VuFind\Controller\AbstractBase
 {
     /**
      * Display Feedback home form.
