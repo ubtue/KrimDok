@@ -1,5 +1,5 @@
 <?php
-namespace TueLib\Controller\Plugin;
+namespace krimDok\Controller\Plugin;
 use Zend\ServiceManager\ServiceManager;
 
 class Factory extends \VuFind\Controller\Plugin\Factory

@@ -8,6 +8,11 @@ $config = array(
             'fidsystematik' => 'krimDok\Controller\FIDSystematikController',
         ],
     ],
+    'controller_plugins' => [
+        'factories' => [
+            'newitems' => 'krimDok\Controller\Plugin\Factory::getNewItems',
+        ],
+    ],
     'vufind' => [
         'plugin_managers' => [
             'ils_driver' => [

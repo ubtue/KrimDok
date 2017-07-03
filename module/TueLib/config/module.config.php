@@ -8,11 +8,6 @@ $config = array(
             'static_pages' => 'TueLib\Controller\StaticPagesController',
         ),
     ),
-    'controller_plugins' => [
-        'factories' => [
-            'newitems' => 'TueLib\Controller\Plugin\Factory::getNewItems',
-        ],
-    ],
     'router' => array(
         'routes' => array(
             'proxy-load' => array(

@@ -1,5 +1,5 @@
 <?php
-namespace TueLib\Controller\Plugin;
+namespace krimDok\Controller\Plugin;
 
 use \Zend\ServiceManager\ServiceLocatorAwareTrait;
 use \Zend\ServiceManager\ServiceLocatorAwareInterface;
