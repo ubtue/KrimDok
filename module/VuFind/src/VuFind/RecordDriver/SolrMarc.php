@@ -129,47 +129,7 @@ class SolrMarc extends SolrDefault
                 }
             }
         }
-        $results = $this->getMarcRecord()->getFields('689');
-        if ($results) {
-            $current = [];
-            $currentID = 0;
-            foreach ($results as $result) {
-                $id = $result->getIndicator(1);
-                if ($id != $currentID && !empty($current)) {
-                    $retval[] = $current;
-                    $current = [];
-                }
-                $subfields = $result->getSubfields();
-                if ($subfields) {
-                    foreach ($subfields as $subfield) {
-                        if (!is_numeric($subfield->getCode()) && strlen($subfield->getData()) > 2) {
-                            $current[] = $subfield->getData();
-                        }
-                    }
-                }
-                $currentID = $id;
-            }
-            if (!empty($current)) {
-                $retval[] = $current;
-            }
-        }
-        $results = $this->getMarcRecord()->getFields('LOK');
-        if ($results) {
-            foreach ($results as $result) {
-                $current = [];
-                $subfields = $result->getSubfields();
-                if ($subfields && $subfields->bottom()->getData() === '689  ') {
-                    foreach ($subfields as $subfield) {
-                        if ($subfield->getCode() === 'a' && strlen($subfield->getData()) > 1) {
-                            $current[] = $subfield->getData();
-                        }
-                    }
-                }
-                if (!empty($current)) {
-                    $retval[] = $current;
-                }
-            }
-        }
+
         // Remove duplicates and then send back everything we collected:
         return array_map(
             'unserialize', array_unique(array_map('serialize', $retval))
@@ -549,7 +509,7 @@ class SolrMarc extends SolrDefault
         // Loop through all subfields, collecting results that match the whitelist;
         // note that it is important to retain the original MARC order here!
         $allSubfields = $currentField->getSubfields();
-        if (count($allSubfields) > 0) {
+        if (!empty($allSubfields)) {
             foreach ($allSubfields as $currentSubfield) {
                 if (in_array($currentSubfield->getCode(), $subfields)) {
                     // Grab the current subfield value and act on it if it is
@@ -563,7 +523,7 @@ class SolrMarc extends SolrDefault
         }
 
         // Send back the data in a different format depending on $concat mode:
-        return $concat ? [implode($separator, $matches)] : $matches;
+        return $concat && $matches ? [implode($separator, $matches)] : $matches;
     }
 
     /**
@@ -695,6 +655,7 @@ class SolrMarc extends SolrDefault
             '856' => ['y', 'z', '3'],   // Standard URL
             '555' => ['a']         // Cumulative index/finding aids
         ];
+
         foreach ($fieldsToCheck as $field => $subfields) {
             $urls = $this->getMarcRecord()->getFields($field);
             if ($urls) {

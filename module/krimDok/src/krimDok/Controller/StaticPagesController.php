@@ -6,7 +6,7 @@
  * @author      Johannes Ruscheinski <johannes.ruscheinski@uni-tuebingen.de>
  * @copyright   2015-2017 Universtitätsbibliothek Tübingen
  */
-namespace TueLib\Controller;
+namespace krimDok\Controller;
 
 use VuFind\Exception\Forbidden as ForbiddenException;
 
