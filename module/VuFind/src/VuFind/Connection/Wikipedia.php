@@ -81,7 +81,7 @@ class Wikipedia implements TranslatorAwareInterface
      */
     public function setLanguage($lang)
     {
-        $this->lang = explode('-', $lang, 2)[0]; // To handle, e.g. "en-gb" etc.
+        $this->lang = substr($lang, 0, 2); // strip off regional suffixes
     }
 
     /**
@@ -434,6 +434,7 @@ class Wikipedia implements TranslatorAwareInterface
         $info = [
             'name' => $name,
             'description' => $this->sanitizeWikipediaBody($bodyStr),
+            'wiki_lang' => $this->lang,
         ];
 
         /* Image */
