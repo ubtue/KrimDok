@@ -5,7 +5,6 @@ $config = array(
     'controllers' => array(
         'invokables' => array(
             'proxy' => 'TueLib\Controller\ProxyController',
-            'static_pages' => 'TueLib\Controller\StaticPagesController',
         ),
     ),
     'router' => array(
@@ -20,16 +19,6 @@ $config = array(
                     )
                 )
             ),
-            'static-catalogs' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/static/catalogs',
-                    'defaults' => array(
-                        'controller' => 'static_pages',
-                        'action'     => 'catalogs',
-                    )
-                )
-            )
         )
     ),
     'vufind' => array(
