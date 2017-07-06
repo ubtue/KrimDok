@@ -6,6 +6,7 @@ $config = array(
         'invokables' => [
             'fidsystematik' => 'krimDok\Controller\FIDSystematikController',
             'help' => 'krimDok\Controller\HelpController',
+            'search' => 'krimDok\Controller\SearchController',
             'static_pages' => 'krimDok\Controller\StaticPagesController',
         ],
     ],
@@ -46,6 +47,9 @@ $config = array(
                         'Similar' => null,
                     ],
                 ],
+            ],
+            'search_params' => [
+                'abstract_factories' => ['krimDok\Search\Params\PluginFactory'],
             ],
         ],
     ],

@@ -1,0 +1,20 @@
+<?php
+
+namespace krimDok\Controller;
+
+use VuFind\Exception\Mail as MailException;
+
+class SearchController extends \VuFind\Controller\AbstractSearch
+{
+    /**
+     * overwrite, only use "results" without additional params
+     *
+     * @return mixed
+     */
+    public function homeAction()
+    {
+        return $this->createViewModel(
+            ['results' => null]
+        );
+    }
+}
