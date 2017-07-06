@@ -6,6 +6,7 @@ TAGS
 
 vendor/.git
 local/cache/*
+local/krimdok/cache/*
 
 # SOLR index files:
 _*
