@@ -283,7 +283,12 @@ class SearchController extends AbstractSearch
     public function homeAction()
     {
         return $this->createViewModel(
-            array('results' => null)
+            [
+                'results' => $this->getHomePageFacets(),
+                'hierarchicalFacets' => $this->getHierarchicalFacets(),
+                'hierarchicalFacetSortOptions'
+                    => $this->getHierarchicalFacetSortSettings()
+            ]
         );
     }
 
@@ -404,6 +409,17 @@ class SearchController extends AbstractSearch
                 'courseList' =>  $catalog->getCourses()
             ]
         );
+    }
+
+    /**
+     * Show facet list for Solr-driven reserves.
+     *
+     * @return mixed
+     */
+    public function reservesfacetlistAction()
+    {
+        $this->searchClassId = 'SolrReserves';
+        return $this->facetListAction();
     }
 
     /**

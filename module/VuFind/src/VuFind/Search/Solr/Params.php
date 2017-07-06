@@ -441,7 +441,7 @@ class Params extends \VuFind\Search\Base\Params
             'year' => ['field' => 'publishDateSort', 'order' => 'desc'],
             'publishDateSort' => ['field' => 'publishDateSort', 'order' => 'desc'],
             'author' => ['field' => 'author_sort', 'order' => 'asc'],
-            'author_facet' => ['field' => 'author_sort', 'order' => 'asc'],
+            'authorStr' => ['field' => 'author_sort', 'order' => 'asc'],
             'title' => ['field' => 'title_sort', 'order' => 'asc'],
             'relevance' => ['field' => 'score', 'order' => 'desc'],
             'callnumber' => ['field' => 'callnumber-sort', 'order' => 'asc'],
