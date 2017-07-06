@@ -55,11 +55,12 @@ $config = array(
     ],
 );
 
-$recordRoutes = array();
-$dynamicRoutes = array();
-$staticRoutes = array(
+$recordRoutes = [];
+$dynamicRoutes = [];
+$staticRoutes = [
     'FIDSystematik/Home',
-);
+    'Help/FAQ',
+];
 
 $routeGenerator = new \VuFind\Route\RouteGenerator();
 $routeGenerator->addRecordRoutes($config, $recordRoutes);

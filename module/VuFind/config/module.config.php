@@ -746,8 +746,8 @@ $dynamicRoutes = [
 
 // Define static routes -- Controller/Action strings
 $staticRoutes = [
-    'Alphabrowse/Home', 'Author/Home', 'Author/Search',
-    'Authority/Home', 'Authority/Record', 'Authority/Search',
+    'Alphabrowse/Home', 'Author/FacetList', 'Author/Home', 'Author/Search',
+    'Authority/FacetList', 'Authority/Home', 'Authority/Record', 'Authority/Search',
     'Browse/Author', 'Browse/Dewey', 'Browse/Era', 'Browse/Genre', 'Browse/Home',
     'Browse/LCC', 'Browse/Region', 'Browse/Tag', 'Browse/Topic', 'Cart/doExport',
     'Cart/Email', 'Cart/Export', 'Cart/Home', 'Cart/MyResearchBulk',
@@ -756,7 +756,7 @@ $staticRoutes = [
     'Confirm/Confirm', 'Cover/Show', 'Cover/Unavailable',
     'EDS/Advanced', 'EDS/Home', 'EDS/Search',
     'EIT/Advanced', 'EIT/Home', 'EIT/Search',
-    'Error/Unavailable', 'Feedback/Email', 'Feedback/Home', 'Help/Home',  'Help/FAQ',
+    'Error/Unavailable', 'Feedback/Email', 'Feedback/Home', 'Help/Home',
     'Install/Done', 'Install/FixBasicConfig', 'Install/FixCache',
     'Install/FixDatabase', 'Install/FixDependencies', 'Install/FixILS',
     'Install/FixSecurity', 'Install/FixSolr', 'Install/FixSSLCerts', 'Install/Home',
@@ -764,6 +764,8 @@ $staticRoutes = [
     'LibGuides/Home', 'LibGuides/Results',
     'LibraryCards/Home', 'LibraryCards/SelectCard',
     'LibraryCards/DeleteCard',
+
+    'MyResearch/Home',
 /*
    User accounts are deactivated!
 
@@ -782,7 +784,7 @@ $staticRoutes = [
     'OAI/Server', 'Pazpar2/Home', 'Pazpar2/Search', 'Records/Home',
     'Search/Advanced', 'Search/Email', 'Search/FacetList', 'Search/History',
     'Search/Home', 'Search/NewItem', 'Search/OpenSearch', 'Search/Reserves',
-    'Search/Results', 'Search/Suggest',
+    'Search/ReservesFacetList', 'Search/Results', 'Search/Suggest',
     'Summon/Advanced', 'Summon/FacetList', 'Summon/Home', 'Summon/Search',
     'Tag/Home',
     'Upgrade/Home', 'Upgrade/FixAnonymousTags', 'Upgrade/FixDuplicateTags',
@@ -790,7 +792,7 @@ $staticRoutes = [
     'Upgrade/GetDBCredentials', 'Upgrade/GetDbEncodingPreference',
     'Upgrade/GetSourceDir', 'Upgrade/GetSourceVersion', 'Upgrade/Reset',
     'Upgrade/ShowSQL',
-    'Web/Home', 'Web/Results',
+    'Web/Home', 'Web/FacetList', 'Web/Results',
     'Worldcat/Advanced', 'Worldcat/Home', 'Worldcat/Search'
 ];
 
