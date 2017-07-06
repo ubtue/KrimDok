@@ -3,7 +3,10 @@
   $this->headTitle($this->translate('Search History'));
 
   // Set up breadcrumbs:
-  $this->layout()->breadcrumbs = '<li class="active">' . $this->transEsc('History') . '</li>';
+  $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li>'
+    . '<li class="active">' . $this->transEsc('History') . '</li>';
+
+  $saveSupported = $this->accountCapabilities()->getSavedSearchSetting() === 'enabled';
 ?>
 
 <div class="row">
@@ -22,4 +25,15 @@
       <?=$this->transEsc("history_no_searches")?>
     <? endif; ?>
   </div>
+
+  <? if ($saveSupported): ?>
+    <div class="<?=$this->layoutClass('sidebar')?>">
+      <?=$this->context($this)->renderInContext(
+          "myresearch/menu.phtml",
+          // Only activate search history in account menu if user is logged in.
+          $this->auth()->isLoggedIn() ? array('active' => 'history') : array()
+       );
+       ?>
+    </div>
+  <? endif; ?>
 </div>

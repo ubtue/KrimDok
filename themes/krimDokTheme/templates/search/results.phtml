@@ -56,8 +56,8 @@
       <? endforeach; ?>
     <? endif; ?>
     <?=$this->flashmessages()?>
-    <div class="hidden-print search-controls row">
-      <div class="col-sm-6">
+    <div class="hidden-print search-controls row" style="margin-top:10px; margin-bottom:10px;">
+      <div class="col-sm-7">
         <? if ($recordTotal > 0): ?>
           <?=$this->transEsc("Showing")?>
           <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
@@ -65,6 +65,7 @@
             <? $this->layout()->srmessage = $this->transEsc('result_count', ['%%count%%' => $this->localizedNumber($recordTotal)]); ?>
             <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($recordTotal)?></strong>
           <? endif; ?>
+          <? /*
           <? if (isset($this->overrideSearchHeading)): ?>
             <?=$this->overrideSearchHeading?>
           <? elseif ($this->params->getSearchType() == 'basic'): ?>
@@ -73,13 +74,14 @@
           <? if ($qtime = $this->results->getQuerySpeed()): ?>
             <?=$this->transEsc('query time')?>: <?=$this->localizedNumber($qtime, 2).$this->transEsc('seconds_abbrev')?>
           <? endif; ?>
+        */ ?>
         <? else: ?>
           <h2><?=$this->transEsc('nohit_heading')?></h2>
         <? endif; ?>
       </div>
 
       <? if ($recordTotal > 0): ?>
-        <div class="col-sm-6 text-right">
+        <div class="col-sm-5 text-right">
           <?=$this->render('search/controls/limit.phtml')?>
           <?=$this->render('search/controls/sort.phtml')?>
           <?=$this->render('search/controls/view.phtml')?>
@@ -97,6 +99,14 @@
           <?=$this->layout()->srmessage ?>
         <? endif; ?>
       </p>
+      <div class="noresult">
+        <?=$this->transEsc('no_result_header');?>:
+        <ul class="noresult">
+          <li><a href="https://www.worldcat.org/search?qt=worldcat_org_all&q=<?=$this->escapeHtml($lookfor)?>"><?=$this->transEsc('no_result_worldcat_link');?></a></li>
+          <li><a href="http://m.subito-doc.de/"><?=$this->transEsc('no_result_subito_link');?></a></li>
+          <li><a href="http://www.krimz.de/dokumentation/krimlit-datenbank/"><?=$this->transEsc('no_result_krimlit_link');?></a></li>
+        </ul>
+      </div>
       <? if (isset($this->parseError)): ?>
         <p class="alert alert-danger"><?=$this->transEsc('nohit_parse_error')?></p>
       <? endif; ?>
@@ -115,25 +125,20 @@
         <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_'))?>
         <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results, 'options' => isset($this->paginationOptions) ? $this->paginationOptions : []))?>
       </form>
-
+<? if(false):?>
       <div class="searchtools hidden-print">
         <strong><?=$this->transEsc('Search Tools')?>:</strong>
         <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><i class="fa fa-bell" aria-hidden="true"></i> <?=$this->transEsc('Get RSS Feed')?></a>
         &mdash;
-        <a href="<?=$this->url('search-email')?>" class="mailSearch" data-lightbox id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>">
-          <i class="fa fa-envelope" aria-hidden="true"></i> <?=$this->transEsc('Email this Search')?>
-        </a>
-        <? if ($this->accountCapabilities()->getSavedSearchSetting() === 'enabled'): ?>
-          &mdash;
-          <? if (is_numeric($this->results->getSearchId())): ?>
-            <? if ($this->results->isSavedSearch()): ?>
-              <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-remove" aria-hidden="true"></i> <?=$this->transEsc('save_search_remove')?></a>
-            <? else: ?>
-              <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-save" aria-hidden="true"></i> <?=$this->transEsc('save_search')?></a>
-            <? endif; ?>
+        <? if (is_numeric($this->results->getSearchId())): ?>
+          <? if ($this->results->isSavedSearch()): ?>
+            <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-remove"></i> <?=$this->transEsc('save_search_remove')?></a>
+          <? else: ?>
+            <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-save"></i> <?=$this->transEsc('save_search')?></a>
           <? endif; ?>
         <? endif; ?>
       </div>
+<? endif; ?>
     <? endif; ?>
   </div>
   <? /* End Main Listing */ ?>
@@ -144,5 +149,4 @@
       <?=$this->recommend($current)?>
     <? endforeach; ?>
   </div>
-  <? /* End Narrow Search Options */ ?>
 </div>
