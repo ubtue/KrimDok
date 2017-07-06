@@ -154,7 +154,15 @@
           <input class="btn btn-default clear-btn" type="button" value="<?= $this->transEsc('Clear')?>">
           <input class="btn btn-primary pull-right flip" type="submit" value="<?= $this->transEsc('Find')?>">
         </div>
+        <? if (isset($this->extraAdvancedControls)): ?>
+          <?=$this->extraAdvancedControls ?>
+          <div class="clearfix">
+            <input class="btn btn-default clear-btn" type="button" value="<?= $this->transEsc('Clear')?>">
+            <input class="btn btn-primary pull-right flip" type="submit" value="<?= $this->transEsc('Find')?>">
+          </div>
+        <? endif; ?>
       </div>
+
       <div class="<?=$this->layoutClass('sidebar')?>">
         <? if ($hasDefaultsApplied): ?>
           <input type="hidden" name="dfApplied" value="1" />
@@ -179,9 +187,8 @@
         <div class="sidegroup">
           <h4><?=$this->transEsc("Search Tips")?></h4>
           <div class="list-group">
-            <a class="list-group-item help-link" href="<?=$this->url('help-home')?>?topic=advsearch" title="<?=$this->transEsc('Help with Advanced Search')?>"><?=$this->transEsc("Help with Advanced Search")?></a>
-            <a class="list-group-item help-link" href="<?=$this->url('help-home')?>?topic=search" title="<?=$this->transEsc('Help with Search Operators')?>"><?=$this->transEsc("Help with Search Operators")?></a>
-            <a class="list-group-item help-link" href="<?=$this->url('help-home')?>?topic=example" title="<?=$this->transEsc('A criminological example')?>"><?=$this->transEsc("A criminological example")?></a>
+            <a class="list-group-item help-link" data-lightbox href="<?=$this->url('help-home')?>?topic=advsearch&amp;_=<?=time() ?>"><?=$this->transEsc("Help with Advanced Search")?></a>
+            <a class="list-group-item help-link" data-lightbox href="<?=$this->url('help-home')?>?topic=search&amp;_=<?=time() ?>"><?=$this->transEsc("Help with Search Operators")?></a>
           </div>
         </div>
       </div>
