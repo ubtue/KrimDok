@@ -215,9 +215,9 @@
         </tr>
       <? endif; ?>
 
-      <? include(realpath(dirname(__FILE__) . "/JOP.phtml")); ?>
-      <? include(realpath(dirname(__FILE__) . "/Availability.phtml")); ?>
-      <? include(realpath(dirname(__FILE__) . "/HBZ.phtml")); ?>
+      <?=$this->render('RecordDriver/SolrDefault/JOP.phtml'); ?>
+      <?=$this->render('RecordDriver/SolrDefault/Availability.phtml'); ?>
+      <?=$this->render('RecordDriver/SolrDefault/HBZ.phtml'); ?>
 
       <? $issn = $this->driver->getCleanISSN(); $isbn = $this->driver->getCleanISBN();
       if (!empty($issn) || !empty($isbn)):
