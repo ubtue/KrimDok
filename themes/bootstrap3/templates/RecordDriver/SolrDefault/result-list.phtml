@@ -63,7 +63,7 @@
           <? endif; ?>
         </div>
 
-        <? if(!$this->driver->isCollection()): ?>
+        <? if (!$this->driver->isCollection()): ?>
           <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
             <? if (!empty($snippet['caption'])): ?>
               <strong><?=$this->transEsc($snippet['caption']) ?>:</strong> ';
