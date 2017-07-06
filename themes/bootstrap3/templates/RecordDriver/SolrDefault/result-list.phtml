@@ -27,7 +27,7 @@
         </div>
 
         <div>
-          <? if($this->driver->isCollection()): ?>
+          <? if ($this->driver->isCollection()): ?>
             <?=implode('<br>', array_map(array($this, 'escapeHtml'), $this->driver->getSummary())); ?>
           <? else: ?>
             <? $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting(); if (!empty($summAuthors)): ?>
