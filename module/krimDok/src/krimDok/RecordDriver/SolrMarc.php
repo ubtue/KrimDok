@@ -101,7 +101,7 @@ class SolrMarc extends \TueLib\RecordDriver\SolrMarc
             'unserialize', array_unique(array_map('serialize', $retval))
         );
     }
-    
+
     /**
      * Return an associative array of all containee IDs (children) mapped to their titles containing the record.
      *
@@ -122,7 +122,7 @@ class SolrMarc extends \TueLib\RecordDriver\SolrMarc
 
         return $retval;
     }
-    
+
     /**
      * Return an associative array of all container IDs (parents) mapped to their titles containing the record.
      *
@@ -194,9 +194,15 @@ class SolrMarc extends \TueLib\RecordDriver\SolrMarc
             $this->fields['issue'] : '';
     }
 
-    public function getLocalSignature()
+    /**
+     * Get local signatures of the current record.
+     *
+     * @return array
+     */
+    public function getLocalSignatures()
     {
-        return $this->fields['local_signature'];
+        return isset($this->fields['local_signature']) && is_array($this->fields['local_signature']) ?
+            $this->fields['local_signature'] : [];
     }
 
     /**
@@ -209,7 +215,7 @@ class SolrMarc extends \TueLib\RecordDriver\SolrMarc
         return isset($this->fields['pages']) ?
             $this->fields['pages'] : '';
     }
-    
+
     /**
      * Get the start page of the item that contains this record (i.e. MARC 773q of a
      * journal).
@@ -230,17 +236,6 @@ class SolrMarc extends \TueLib\RecordDriver\SolrMarc
         return isset($this->fields['page_range']) ? $this->fields['page_range'] : '';
     }
 
-    /**
-     * Get the signatures of the record.
-     *
-     * @return array
-     */
-    public function getSignatures()
-    {
-        return isset($this->fields['local_signature']) && is_array($this->fields['local_signature']) ?
-            $this->fields['local_signature'] : [];
-    }
-    
     /**
      * Return an array of non-empty subfield values found in the provided MARC
      * field.  If $concat is true, the array will contain either zero or one
@@ -285,7 +280,7 @@ class SolrMarc extends \TueLib\RecordDriver\SolrMarc
     {
         return isset($this->fields['topic']) ? $this->fields['topic'] : array();
     }
-    
+
     /**
      * Return an associative array of URL's mapped to their material types.
      *
