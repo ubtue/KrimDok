@@ -6,17 +6,14 @@
  * Time: 11:27
  */
 
-namespace krimDok\ILS;
+namespace krimDok\ILS\Driver;
 
 use VuFind\ILS\Driver\NoILS;
-use ArrayObject, VuFind\Exception\Date as DateException,
-    VuFind\Exception\ILS as ILSException,
-    VuFindSearch\Query\Query as Query, VuFindSearch\Service as SearchService,
-    Zend\Session\Container as SessionContainer;
 use VuFind\Record\Loader;
+use VuFindSearch\Query\Query as Query, VuFindSearch\Service as SearchService;
 use VuFindSearch\ParamBag;
 
-class krimDokILS extends NoILS
+class krimDok extends NoILS
 {
     protected $searchService;
 
