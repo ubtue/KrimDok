@@ -234,6 +234,7 @@ $config = [
             'session'        => ['id', 'session_id_seq'],
             'tags'           => ['id', 'tags_id_seq'],
             'user'           => ['id', 'user_id_seq'],
+            'user_card'      => ['id', 'user_card_id_seq'],
             'user_list'      => ['id', 'user_list_id_seq'],
             'user_resource'  => ['id', 'user_resource_id_seq'],
         ],
@@ -764,11 +765,6 @@ $staticRoutes = [
     'LibGuides/Home', 'LibGuides/Results',
     'LibraryCards/Home', 'LibraryCards/SelectCard',
     'LibraryCards/DeleteCard',
-
-    'MyResearch/Home',
-/*
-   User accounts are deactivated!
-
     'MyResearch/Account', 'MyResearch/ChangePassword', 'MyResearch/CheckedOut',
     'MyResearch/Delete', 'MyResearch/DeleteList', 'MyResearch/Edit',
     'MyResearch/Email', 'MyResearch/Favorites', 'MyResearch/Fines',
@@ -778,7 +774,6 @@ $staticRoutes = [
     'MyResearch/Recover', 'MyResearch/SaveSearch',
     'MyResearch/StorageRetrievalRequests', 'MyResearch/UserLogin',
     'MyResearch/Verify',
-*/
     'Primo/Advanced', 'Primo/Home', 'Primo/Search',
     'QRCode/Show', 'QRCode/Unavailable',
     'OAI/Server', 'Pazpar2/Home', 'Pazpar2/Search', 'Records/Home',
