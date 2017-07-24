@@ -147,10 +147,6 @@ public class VuFindIndexer extends SolrIndexer
             vuFindConfigs, "vufind.config.relative_path", "config/vufind"
         );
 
-        System.out.println("Seach config in: " + vufindLocal + "/" + relativeConfigPath);
-        System.out.println("Seach config in: " + vufindHome + "/" + relativeConfigPath);
-        System.out.println("Seach config in: " + vufindHome + "/web/conf/");
-
         // Try several different locations for the file -- VuFind 2 local dir,
         // VuFind 2 base dir, VuFind 1 base dir.
         File file;
