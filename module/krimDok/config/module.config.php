@@ -3,6 +3,9 @@ namespace krimDok\Module\Config;
 
 $config = array(
     'controllers' => [
+        'factories' => [
+            'browse' => 'krimDok\Controller\Factory::getBrowseController',
+        ],
         'invokables' => [
             'fidsystematik' => 'krimDok\Controller\FIDSystematikController',
             'help' => 'krimDok\Controller\HelpController',
