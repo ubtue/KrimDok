@@ -44,15 +44,15 @@ $config = array(
                     'solrmarc' => 'krimDok\RecordDriver\Factory::getSolrMarc'
                 ],
             ],
-            'recorddriver_tabs' => [
-                'VuFind\RecordDriver\SolrMarc' => [
-                    'tabs' => [
-                        'Similar' => null,
-                    ],
-                ],
-            ],
             'search_params' => [
                 'abstract_factories' => ['krimDok\Search\Params\PluginFactory'],
+            ],
+        ],
+        'recorddriver_tabs' => [
+            'VuFind\RecordDriver\SolrMarc' => [
+                'tabs' => [
+                    'Similar' => null,
+                ],
             ],
         ],
     ],
