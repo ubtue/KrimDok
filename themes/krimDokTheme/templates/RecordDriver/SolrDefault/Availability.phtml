@@ -6,7 +6,9 @@ if ($this->driver->isAvailableInTuebingen() || !empty($signatures)) {
     echo $this->transEsc('Availability') . ":";
     echo "</th>";
     echo "<td>";
-    echo $this->transEsc('Available in Tubingen') . ".<br>";
+    if (!OnlyOrdered($signatures)) {
+        echo $this->transEsc('Available in Tubingen') . ".<br>";
+    }
     foreach ($signatures as $signature) {
         echo $this->escapeHtml($signature) . "<br>";
     }
