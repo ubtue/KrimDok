@@ -16,6 +16,19 @@
     };
     return ' (' . implode(', ', array_unique(array_map($translate, $roles))) . ')';
   };
+
+  function StartsWith($prefix, $str) {
+     return (substr($str, 0, strlen($prefix)) === $prefix);
+  }
+
+  function OnlyOrdered($signatures) {
+    foreach ($signatures as $signature) {
+      if (StartsWith("IFK: bestellt", $signature)) {
+        return true;
+      }
+    }
+    return false;
+  }
 ?>
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
   <? $QRCode = $this->record($this->driver)->getQRCode("core");
