@@ -100,21 +100,6 @@
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
     <!-- add geo field to handle geographic search and display capabilities -->
     <fieldType name="geo" class="solr.SpatialRecursivePrefixTreeFieldType" distErrPct="0.025" maxDistErr="0.000009" distanceUnits="degrees" />
-
-    <fieldType name="textFacetRaw" class="solr.TextField" sortMissingLast="true" omitNorms="true">
-      <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <!-- this is just like textFacet but without punctuation stripping. -->
-      </analyzer>
-    </fieldType>
-    <!-- Search signatures; ignore cases, remove whitespace -->
-    <fieldType name="signaturestring" class="solr.TextField" sortMissingLast="true" >
-      <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="solr.PatternReplaceFilterFactory" pattern="[^\w]+" replacement="" replace="all"/>
-        <filter class="solr.LowerCaseFilterFactory" />
-      </analyzer>
-    </fieldType>
   </types>
  <fields>
    <!-- Required by Solr 4.x -->
@@ -215,8 +200,6 @@
    <field name="container_issue" type="text" indexed="true" stored="true"/>
    <field name="container_start_page" type="text" indexed="true" stored="true"/>
    <field name="container_reference" type="text" indexed="true" stored="true"/>
-   <field name="is_superior_work" type="boolean" indexed="false" stored="true" multiValued="false"/>
-   <field name="superior_ppn" type="string" indexed="true" stored="true" multiValued="true"/>
    <!-- Hierarchy Fields -->
    <field name="hierarchytype" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="hierarchy_top_id" type="string" indexed="true" stored="true" multiValued="true"/>
@@ -250,54 +233,6 @@
    <dynamicField name="*_boolean" type="boolean" indexed="true" stored="true"/>
    <!-- add geo field to handle geographic search and display capabilities -->
    <dynamicField name="*_geo" type="geo" indexed="true" stored="true" multiValued="true" />
-   
-   <field name="article_page_range" type="string" indexed="true" stored="true"/>
-   <field name="urls_and_material_types" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="containee_ids_and_titles" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="container_ids_and_titles" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="journal_issue" type="textProper" indexed="true" stored="true" multiValued="true"/>
-   <field name="journal_year" type="textProper" indexed="true" stored="true" multiValued="false"/>
-
-   <!--  RVK -->
-   <field name="rvk" type="textFacet" indexed="true" stored="true" multiValued="true"/>
-   <field name="rvk-notation" type="textFacet" indexed="true" stored="true" multiValued="true"/>
-
-   <!-- Normdaten -->
-   <field name="pndnum" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="gkdnum" type="string" indexed="true" stored="true" multiValued="true"/>
-
-   <!-- Local Data -->
-   <field name="local_signature" type="text" indexed="true" stored="true" multiValued="true"/>
-   <field name="local_recoding_date" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="signature" type="signaturestring" indexed="true" stored="true" multiValued="true"/>
-   <field name="local_subject" type="text" indexed="true" stored="true" multiValued="true"/>
-   <field name="instituts_systematik1" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
-   <field name="instituts_systematik2" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
-   <field name="fid_systematik" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
-   <field name="fid_systematik1" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
-   <field name="fid_systematik2" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
-   <field name="fid_systematik3" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
-   <field name="fid_systematik4" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
-   <field name="fid_systematik5" type="textFacetRaw" indexed="false" stored="true" multiValued="true"/>
-   <field name="available_in_tubingen" type="boolean" indexed="false" stored="true" multiValued="false"/>
-
-   <!--  Multipart  -->
-   <field name="multipart_set" type="string" indexed="true" stored="true"/>
-   <field name="multipart_link" type="string" indexed="true" stored="true" multiValued="true" termVectors="true"/>
-   <field name="multipart_part" type="string" indexed="true" stored="true"  multiValued="true"/>
-
-   <!-- SWB: Abrufzeichen und Formate -->
-   <field name="abr" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="media" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="content" type="string" indexed="true" stored="true" multiValued="true"/>
-
-   <!-- Miscellaneous -->
-   <field name="issue" type="string" indexed="false" stored="true" multiValued="false"/>
-   <field name="pages" type="string" indexed="false" stored="true" multiValued="false"/>
-   <field name="volume" type="string" indexed="false" stored="true" multiValued="false"/>
-   <field name="year" type="string" indexed="false" stored="true" multiValued="false"/>
-   <field name="tue_local_indexed_date" type="date" indexed="true" stored="true"/>
-   <field name="isil" type="string" indexed="true" stored="true" multiValued="true"/>
  </fields>
  <uniqueKey>id</uniqueKey>
  <defaultSearchField>allfields</defaultSearchField>
@@ -333,4 +268,8 @@
  <copyField source="callnumber-raw" dest="callnumber-search"/>
  <!-- Default Boolean Operator -->
  <solrQueryParser defaultOperator="AND"/>
+
+  <!-- ubtue custom field types and fields -->
+  <xi:include href="schema_local_types.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+  <xi:include href="schema_local_fields.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </schema>
