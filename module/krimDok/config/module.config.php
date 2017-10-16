@@ -7,6 +7,7 @@ $config = array(
             'browse' => 'krimDok\Controller\Factory::getBrowseController',
         ],
         'invokables' => [
+            'acquisition_request' => 'krimDok\Controller\AcquisitionRequestController',
             'fidsystematik' => 'krimDok\Controller\FIDSystematikController',
             'help' => 'krimDok\Controller\HelpController',
             'search' => 'krimDok\Controller\SearchController',
@@ -61,6 +62,8 @@ $config = array(
 $recordRoutes = [];
 $dynamicRoutes = [];
 $staticRoutes = [
+    'AcquisitionRequest/Create',
+    'AcquisitionRequest/Send',
     'FIDSystematik/Home',
     'Help/FAQ',
 ];
