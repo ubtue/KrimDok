@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fields>
     <!-- COMMON -->
+    <field name="available_for_pda" type="boolean" indexed="true" stored="true" multiValued="false"/>
     <field name="containee_ids_and_titles" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="container_ids_and_titles" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="is_superior_work" type="boolean" indexed="false" stored="true" multiValued="false"/>
